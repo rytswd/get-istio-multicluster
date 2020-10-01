@@ -1,0 +1,110 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: armadillo-istio
+spec:
+  profile: minimal
+  addonComponents:
+    istiocoredns:
+      enabled: true
+  components:
+    egressGateways:
+      - enabled: true
+        name: armadillo-external-egressgateway
+      - enabled: true
+        name: armadillo-multicluster-egressgateway
+        # k8s:
+        #   env:
+        #     - name: ISTIO_META_REQUESTED_NETWORK_VIEW
+        #       value: external
+    ingressGateways:
+      - enabled: true
+        name: armadillo-external-ingressgateway
+        label:
+          app: armadillo-external-ingressgateway
+        k8s:
+          # service:
+          #   loadBalancerIP: TBC
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app: armadillo-external-ingressgateway
+                  topologyKey: kubernetes.io/hostname
+          # hpaSpec:
+          #   maxReplicas: 5
+          #   metrics:
+          #     - resource:
+          #         name: cpu
+          #         targetAverageUtilization: 80
+          #       type: Resource
+          #   minReplicas: 3
+          #   scaleTargetRef:
+          #     apiVersion: apps/v1
+          #     kind: Deployment
+          #     name: armadillo-external-ingressgateway
+
+      - enabled: true
+        name: armadillo-multicluster-ingressgateway
+        label:
+          app: armadillo-multicluster-ingressgateway
+        k8s:
+          # service:
+          #   loadBalancerIP: TBC
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app: armadillo-multicluster-ingressgateway
+                  topologyKey: kubernetes.io/hostname
+          # hpaSpec:
+          #   maxReplicas: 4
+          #   metrics:
+          #     - resource:
+          #         name: cpu
+          #         targetAverageUtilization: 80
+          #       type: Resource
+          #   minReplicas: 2
+          #   scaleTargetRef:
+          #     apiVersion: apps/v1
+          #     kind: Deployment
+          #     name: armadillo-multicluster-ingressgateway
+    pilot:
+      k8s:
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app: istiod
+                topologyKey: kubernetes.io/hostname
+        resources:
+          limits:
+            cpu: 200m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+        # hpaSpec:
+        #   maxReplicas: 5
+        #   metrics:
+        #     - resource:
+        #         name: cpu
+        #         targetAverageUtilization: 80
+        #       type: Resource
+        #   minReplicas: 3
+        #   scaleTargetRef:
+        #     apiVersion: apps/v1
+        #     kind: Deployment
+        #     name: istiod
+  meshConfig:
+    accessLogFile: /dev/stdout
+  values:
+    global:
+      controlPlaneSecurityEnabled: true
+      multiCluster:
+        enabled: true
+      podDNSSearchNamespaces:
+        - global

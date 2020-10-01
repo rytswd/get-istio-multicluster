@@ -1,0 +1,110 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: bison-istio
+spec:
+  profile: minimal
+  addonComponents:
+    istiocoredns:
+      enabled: true
+  components:
+    egressGateways:
+      - enabled: true
+        name: bison-external-egressgateway
+      - enabled: true
+        name: bison-multicluster-egressgateway
+        # k8s:
+        #   env:
+        #     - name: ISTIO_META_REQUESTED_NETWORK_VIEW
+        #       value: external
+    ingressGateways:
+      - enabled: true
+        name: bison-external-ingressgateway
+        label:
+          app: bison-external-ingressgateway
+        k8s:
+          # service:
+          #   loadBalancerIP: TBC
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app: bison-external-ingressgateway
+                  topologyKey: kubernetes.io/hostname
+          # hpaSpec:
+          #   maxReplicas: 5
+          #   metrics:
+          #     - resource:
+          #         name: cpu
+          #         targetAverageUtilization: 80
+          #       type: Resource
+          #   minReplicas: 3
+          #   scaleTargetRef:
+          #     apiVersion: apps/v1
+          #     kind: Deployment
+          #     name: bison-external-ingressgateway
+
+      - enabled: true
+        name: bison-multicluster-ingressgateway
+        label:
+          app: bison-multicluster-ingressgateway
+        k8s:
+          # service:
+          #   loadBalancerIP: TBC
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app: bison-multicluster-ingressgateway
+                  topologyKey: kubernetes.io/hostname
+          # hpaSpec:
+          #   maxReplicas: 4
+          #   metrics:
+          #     - resource:
+          #         name: cpu
+          #         targetAverageUtilization: 80
+          #       type: Resource
+          #   minReplicas: 2
+          #   scaleTargetRef:
+          #     apiVersion: apps/v1
+          #     kind: Deployment
+          #     name: bison-multicluster-ingressgateway
+    pilot:
+      k8s:
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app: istiod
+                topologyKey: kubernetes.io/hostname
+        resources:
+          limits:
+            cpu: 200m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+        # hpaSpec:
+        #   maxReplicas: 5
+        #   metrics:
+        #     - resource:
+        #         name: cpu
+        #         targetAverageUtilization: 80
+        #       type: Resource
+        #   minReplicas: 3
+        #   scaleTargetRef:
+        #     apiVersion: apps/v1
+        #     kind: Deployment
+        #     name: istiod
+  meshConfig:
+    accessLogFile: /dev/stdout
+  values:
+    global:
+      controlPlaneSecurityEnabled: true
+      multiCluster:
+        enabled: true
+      podDNSSearchNamespaces:
+        - global
