@@ -2,7 +2,7 @@
 
 Istio Multicluster is by no means simple. This repository tries to show involved example, but with simple configurations.
 
-# Clusters
+## Clusters
 
 The directories here are some clusters.
 
@@ -22,3 +22,18 @@ The directories here are some clusters.
 ### `zebra`: cluster without Istio, as external cluster
 
 
+## Tools
+
+### `httpbin` 
+
+```bash
+$ kubectl label namespace default istio-injection=enabled
+$ kubectl apply -f tools/httpbin/httpbin.yaml
+```
+
+### `toolkit-alpine`
+
+```bash
+$ kubectl label namespace default istio-injection=enabled
+$ kubectl apply -f tools/toolkit-alpine/toolkit-alpine.yaml
+```
