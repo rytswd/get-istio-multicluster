@@ -35,5 +35,6 @@ spec:
     spec:
       serviceAccountName: toolkit-alpine
       containers:
-        - image: docker.io/rytswd/toolkit-alpine
+        - image: docker.io/rytswd/toolkit-alpine:0.1.0
           name: toolkit-alpine
+          command: ["/bin/sleep", "3650d"]
