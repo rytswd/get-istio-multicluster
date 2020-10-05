@@ -18,7 +18,7 @@ spec:
     - address: REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS
       network: external
       ports:
-        http1: 15443 # Do not change this port value
+        http1: 15443 # Istio Ingress Gateway port
     - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
       ports:
         http1: 15443
