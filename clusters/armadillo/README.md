@@ -30,5 +30,5 @@ $ export ARMADILLO_ISTIOCOREDNS_CLUSTER_IP=$(kubectl get svc --context kind-kind
 $ echo $ARMADILLO_ISTIOCOREDNS_CLUSTER_IP
 10.xx.xx.xx
 
-$ sed -i '' -e "s/REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP/$ARMADILLO_ISTIOCOREDNS_CLUSTER_IP/"
+$ sed -i '' -e "s/REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP/$ARMADILLO_ISTIOCOREDNS_CLUSTER_IP/" clusters/armadillo/coredns-configmap.yaml
 ```
