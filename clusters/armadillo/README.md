@@ -26,7 +26,7 @@ Before proceeding to the next step, all of the Istio components must be up and r
 ### 2. Add `istiocoredns` as a part of CoreDNS ConfigMap
 
 ```bash
-$ export ARMADILLO_ISTIOCOREDNS_CLUSTER_IP=$(kubectl get svc -n istio-system istiocoredns -o jsonpath={.spec.clusterIP})
+$ export ARMADILLO_ISTIOCOREDNS_CLUSTER_IP=$(kubectl get svc --context kind-kind-armadillo -n istio-system istiocoredns -o jsonpath={.spec.clusterIP})
 $ echo $ARMADILLO_ISTIOCOREDNS_CLUSTER_IP
 10.xx.xx.xx
 
