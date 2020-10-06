@@ -6,3 +6,7 @@ nodes:
     image: kindest/node:v1.17.5@sha256:ab3f9e6ec5ad8840eeb1f76c89bb7948c77bbf76bcebe1a8b59790b8ae9a283a
   - role: worker
     image: kindest/node:v1.17.5@sha256:ab3f9e6ec5ad8840eeb1f76c89bb7948c77bbf76bcebe1a8b59790b8ae9a283a
+    extraPortMappings:
+      - containerPort: 32001
+        hostPort: 32001
+        protocol: TCP
