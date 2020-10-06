@@ -60,4 +60,6 @@ $ {
         sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" clusters/armadillo/bison-service-entries.yaml
     fi
 }
+
+$ kubectl apply -f clusters/armadillo/bison-service-entries.yaml
 ```
