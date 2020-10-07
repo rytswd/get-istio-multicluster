@@ -10,7 +10,7 @@ If you are testing with KinD, you can run the following command:
 $ pwd
 /some/path/at/simple-istio-multicluster
 
-$ kind create cluster --config ./tools/kind-config/config-2-nodes.yaml --name kind-bison
+$ kind create cluster --config ./tools/kind-config/config-2-nodes.yaml --name bison
 ```
 
 ### 1. Install Istio
@@ -18,7 +18,7 @@ $ kind create cluster --config ./tools/kind-config/config-2-nodes.yaml --name ki
 Using `istioctl-input.yaml`, install Istio to the cluster.
 
 ```bash
-$ istioctl install --context kind-kind-bison -f clusters/bison/istioctl-input.yaml
+$ istioctl install --context kind-bison -f clusters/bison/istioctl-input.yaml
 ```
 
 Before proceeding to the next step, all of the Istio components must be up and running.
@@ -26,13 +26,13 @@ Before proceeding to the next step, all of the Istio components must be up and r
 ### 2. Add `istiocoredns` as a part of CoreDNS ConfigMap
 
 ```bash
-$ export BISON_ISTIOCOREDNS_CLUSTER_IP=$(kubectl get svc --context kind-kind-bison -n istio-system istiocoredns -o jsonpath={.spec.clusterIP})
+$ export BISON_ISTIOCOREDNS_CLUSTER_IP=$(kubectl get svc --context kind-bison -n istio-system istiocoredns -o jsonpath={.spec.clusterIP})
 $ echo $BISON_ISTIOCOREDNS_CLUSTER_IP
 10.xx.xx.xx
 
 $ sed -i '' -e "s/REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP/$BISON_ISTIOCOREDNS_CLUSTER_IP/" clusters/bison/coredns-configmap.yaml
 
-$ kubectl create --context kind-kind-bison -f clusters/bison/coredns-configmap.yaml
+$ kubectl create --context kind-bison -f clusters/bison/coredns-configmap.yaml
 ```
 
 ### 3. Add ServiceEntry for Armadillo
@@ -41,7 +41,7 @@ Before completing this, make sure the cluster Armadillo is also started, and has
 
 ```bash
 $ export BISON_EGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
-    --context=kind-kind-bison \
+    --context=kind-bison \
     -n istio-system \
     --selector=app=istio-egressgateway \
     -o jsonpath='{.items[0].spec.clusterIP}')
