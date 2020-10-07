@@ -36,8 +36,8 @@ $ pwd
 /some/path/at/simple-istio-multicluster
 
 $ {
-    istioctl install --context armadillo -f clusters/armadillo/istioctl-input.yaml
-    istioctl install --context bison -f clusters/bison/istioctl-input.yaml
+    istioctl install --context kind-armadillo -f clusters/armadillo/istioctl-input.yaml
+    istioctl install --context kind-bison -f clusters/bison/istioctl-input.yaml
 }
 ```
 
