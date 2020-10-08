@@ -78,5 +78,6 @@ $ {
     }
 }
 
-$ kubectl apply -f clusters/armadillo/bison-service-entries.yaml
+$ kubectl apply --context kind-armadillo \
+    -f clusters/armadillo/bison-service-entries.yaml
 ```
