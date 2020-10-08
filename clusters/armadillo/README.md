@@ -43,6 +43,8 @@ $ {
     kubectl apply --context kind-armadillo -f clusters/armadillo/coredns-configmap.yaml
 }
 
+Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
+configmap/coredns configured
 ```
 
 ### 3. Add ServiceEntry for Bison
@@ -61,6 +63,8 @@ $ {
         clusters/armadillo/bison-service-entries.yaml
 }
 
+10.102.107.207
+
 $ {
     export BISON_INGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
         --context=kind-kind-bison \
@@ -78,6 +82,10 @@ $ {
     }
 }
 
+127.0.0.1
+
 $ kubectl apply --context kind-armadillo \
     -f clusters/armadillo/bison-service-entries.yaml
+
+serviceentry.networking.istio.io/bison-services created
 ```
