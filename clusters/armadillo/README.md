@@ -100,7 +100,7 @@ $ {
     }
 }
 
-127.0.0.1
+172.18.0.1
 
 $ kubectl apply --context kind-armadillo \
     -f clusters/armadillo/bison-service-entries.yaml
