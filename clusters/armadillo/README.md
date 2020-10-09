@@ -1,8 +1,13 @@
 # Cluster `armadillo`
 
-## Setup Steps
+## Prep
 
-### 0. Start up cluster
+The below steps are only copied from [KinD based setup](https://github.com/rytswd/simple-istio-multicluster/tree/master/docs/kind-based/README.md).
+
+<details>
+<summary>Steps</summary>
+
+### Start up cluster
 
 If you are testing with KinD, you can run the following command:
 
@@ -13,7 +18,7 @@ $ pwd
 $ kind create cluster --config ./tools/kind-config/config-2-nodes.yaml --name armadillo
 ```
 
-### 1. Install Istio
+### Install Istio
 
 Using `istioctl-input.yaml`, install Istio to the cluster.
 
@@ -23,7 +28,11 @@ $ istioctl install --context kind-armadillo -f clusters/armadillo/istioctl-input
 
 Before proceeding to the next step, all of the Istio components must be up and running.
 
-### 2. Add `istiocoredns` as a part of CoreDNS ConfigMap
+</details>
+
+## Steps
+
+### 1. Add `istiocoredns` as a part of CoreDNS ConfigMap
 
 ```bash
 $ {
@@ -47,7 +56,16 @@ Warning: kubectl apply should be used on resource created by either kubectl crea
 configmap/coredns configured
 ```
 
-### 3. Add ServiceEntry for Bison
+<details>
+<summary>Details</summary>
+
+To be updated
+
+</details>
+
+---
+
+### 2. Add ServiceEntry for Bison
 
 Before completing this, make sure the cluster Bison is also started, and has completed Istio installation.
 
@@ -70,7 +88,7 @@ $ {
         --context=kind-kind-bison \
         -n istio-system \
         --selector=app=istio-ingressgateway \
-        -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo '127.0.0.1')
+        -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo '172.18.0.1')
     echo $BISON_INGRESS_GATEWAY_ADDRESS
     {
         sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/" \
@@ -89,3 +107,12 @@ $ kubectl apply --context kind-armadillo \
 
 serviceentry.networking.istio.io/bison-services created
 ```
+
+<details>
+<summary>Details</summary>
+
+To be updated
+
+</details>
+
+---
