@@ -93,7 +93,7 @@ $ {
     {
         sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/" \
             clusters/armadillo/bison-service-entries.yaml
-        if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '127.0.0.1' ]]; then
+        if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
             sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
                 clusters/armadillo/bison-service-entries.yaml
         fi
