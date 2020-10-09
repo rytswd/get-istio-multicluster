@@ -6,7 +6,7 @@ spec:
   hosts:
     # must be of form name.namespace.global
     - httpbin.default.global
-    - httpbin.default.bison.global
+    # - httpbin.default.bison.global
   location: MESH_INTERNAL
   ports:
     - name: http1
