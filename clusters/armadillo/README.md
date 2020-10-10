@@ -81,7 +81,7 @@ $ {
         clusters/armadillo/bison-service-entries.yaml
 }
 
-10.102.107.207
+10.xx.xx.xx
 
 $ {
     export BISON_INGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
