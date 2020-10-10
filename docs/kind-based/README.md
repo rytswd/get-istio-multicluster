@@ -93,8 +93,11 @@ $ {
 <details>
 <summary>Details</summary>
 
-- Armadillo will set up Istio IngressGateway with 32001 NodePort
-- Bison will set up Istio IngressGateway with 32002 NodePort
+KinD clusters can be deleted with `kind delete cluster` - and you can provide `--name` to specify one.
+
+As the above steps creates multiple clusters, this step makes sure to delete all.
+
+Because all the Istio components are inside KinD cluster, deleting the cluster will remove everything that was generated / configured / deployed.
 
 </details>
 
