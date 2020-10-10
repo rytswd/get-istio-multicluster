@@ -102,3 +102,39 @@ Because all the Istio components are inside KinD cluster, deleting the cluster w
 </details>
 
 ---
+
+## Quicker Guide
+
+The below will be quicker than above if you use multiple terminals to run them in parallel.
+
+### Armadillo
+
+```bash
+$ pwd
+/some/path/at/simple-istio-multicluster
+
+$ {
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32001.yaml --name armadillo
+    istioctl install --context kind-armadillo -f clusters/armadillo/istioctl-input.yaml
+    kubectl label --context kind-armadillo namespace default istio-injection=enabled
+    kubectl apply --context kind-armadillo \
+        -f tools/httpbin/httpbin.yaml \
+        -f tools/toolkit-alpine/toolkit-alpine.yaml
+}
+```
+
+### Bison
+
+```bash
+$ pwd
+/some/path/at/simple-istio-multicluster
+
+$ {
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32002.yaml --name bison
+    istioctl install --context kind-bison -f clusters/bison/istioctl-input.yaml
+    kubectl label --context kind-bison namespace default istio-injection=enabled
+    kubectl apply --context kind-bison \
+        -f tools/httpbin/httpbin.yaml \
+        -f tools/toolkit-alpine/toolkit-alpine.yaml
+}
+```
