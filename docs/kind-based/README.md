@@ -81,28 +81,6 @@ Second action is to install the testing tools. `httpbin` is a nice Web server wh
 
 ---
 
-## Cleanup
-
-```bash
-$ {
-    kind delete cluster --name armadillo
-    kind delete cluster --name bison
-}
-```
-
-<details>
-<summary>Details</summary>
-
-KinD clusters can be deleted with `kind delete cluster` - and you can provide `--name` to specify one.
-
-As the above steps creates multiple clusters, this step makes sure to delete all.
-
-Because all the Istio components are inside KinD cluster, deleting the cluster will remove everything that was generated / configured / deployed.
-
-</details>
-
----
-
 ## Quicker Guide
 
 The below will be quicker than above if you use multiple terminals to run them in parallel.
@@ -138,3 +116,25 @@ $ {
         -f tools/toolkit-alpine/toolkit-alpine.yaml
 }
 ```
+
+---
+
+## Cleanup
+
+```bash
+$ {
+    kind delete cluster --name armadillo
+    kind delete cluster --name bison
+}
+```
+
+<details>
+<summary>Details</summary>
+
+KinD clusters can be deleted with `kind delete cluster` - and you can provide `--name` to specify one.
+
+As the above steps creates multiple clusters, this step makes sure to delete all.
+
+Because all the Istio components are inside KinD cluster, deleting the cluster will remove everything that was generated / configured / deployed.
+
+</details>
