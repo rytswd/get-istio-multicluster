@@ -44,7 +44,9 @@ $ {
 <details>
 <summary>Details</summary>
 
-Install Istio into each cluster.
+Install Istio into each cluster. Istio can be installed in a few ways, but `istioctl install` is the most standard way recommended by the official documentation. It is also possible to create a lengthy YAML definition, so that we can even have GitOps as a part of Istio installation.
+
+As to the configurations, Armadillo and Bison have almost identical cluster setup. The main difference is the name used by various components (Ingress and Egress Gateways have `armadillo-` or `bison-` prefix). Also, as the previous step created the KinD cluster with different NodePort for Istio IngressGateway, you can see the corresponding port being used in `istioctl-input.yaml`.
 
 </details>
 
@@ -55,20 +57,25 @@ Install Istio into each cluster.
 ```bash
 $ {
     kubectl label --context kind-armadillo namespace default istio-injection=enabled
-    kubectl apply --context kind-armadillo -f tools/httpbin/httpbin.yaml
-    kubectl apply --context kind-armadillo -f tools/toolkit-alpine/toolkit-alpine.yaml
+    kubectl apply --context kind-armadillo \
+        -f tools/httpbin/httpbin.yaml \
+        -f tools/toolkit-alpine/toolkit-alpine.yaml
 
     kubectl label --context kind-bison namespace default istio-injection=enabled
-    kubectl apply --context kind-bison -f tools/httpbin/httpbin.yaml
-    kubectl apply --context kind-bison -f tools/toolkit-alpine/toolkit-alpine.yaml
+    kubectl apply --context kind-bison \
+        -f tools/httpbin/httpbin.yaml \
+        -f tools/toolkit-alpine/toolkit-alpine.yaml
 }
 ```
 
 <details>
 <summary>Details</summary>
 
-- Armadillo will set up Istio IngressGateway with 32001 NodePort
-- Bison will set up Istio IngressGateway with 32002 NodePort
+There are 2 actions happening, and for 2 clusters (Armadillo and Bison).
+
+Firstly, `kubectl label namespace default istio-injection=enabled` marks that namespace (in this case `default` namespace) as Istio Sidecar enabled. This means any Pod that gets created in this namespace will go through Istio's MutatingWebhook, and Istio's Sidecar component (`istio-proxy`) will be embedded into the same Pod. Without this setup, you will need to add Sidecar separately by running `istioctl` commands, which may be ok for testing, but certainly not scalable.
+
+Second action is to install the testing tools. `httpbin` is a nice Web server which can handle incoming HTTP request and return arbitrary output based on the input path. `toolkit-alpine` is a lightweight container which has a few tools useful for testing, such as `curl`, `dig`, etc.
 
 </details>
 
