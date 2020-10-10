@@ -145,7 +145,7 @@ spec:
 
   values:
     global:
-      pilotCertProvider: kubernetes
+      # pilotCertProvider: kubernetes
       controlPlaneSecurityEnabled: true
       multiCluster:
         enabled: true
