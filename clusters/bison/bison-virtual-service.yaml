@@ -6,9 +6,48 @@ metadata:
 spec:
   hosts:
     - httpbin.default.bison.global
+    - httpbin.default.global
   gateways:
-    - bison-multicluster-ingressgateway.istio-system.svc.cluster.local
+    # - bison-multicluster-ingressgateway.istio-system.svc.cluster.local
+    - mesh
+    - istio-system/bison-multicluster-ingressgateway
   http:
     - route:
         - destination:
             host: httpbin.default.svc.cluster.local
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: external-svc-httpbin
+spec:
+  hosts:
+    - httpbin.org
+  location: MESH_EXTERNAL
+  ports:
+    - number: 80
+      name: example-http
+      protocol: HTTP
+  resolution: DNS
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: my-httpbin-rule
+spec:
+  hosts:
+    - httpbin.org
+  http:
+    - match:
+        - uri:
+            prefix: /chaos
+      rewrite:
+        uri: /status/418
+      route:
+        - destination:
+            host: httpbin.org
+      fault:
+        abort:
+          percentage:
+            value: 50
+          httpStatus: 400
