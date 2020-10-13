@@ -77,7 +77,7 @@ $ {
         --selector=app=istio-egressgateway \
         -o jsonpath='{.items[0].spec.clusterIP}')
     echo $ARMADILLO_EGRESS_GATEWAY_ADDRESS
-    sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/" \
+    sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
         clusters/armadillo/bison-service-entries.yaml
 }
 
@@ -91,7 +91,7 @@ $ {
         -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo '172.18.0.1')
     echo $BISON_INGRESS_GATEWAY_ADDRESS
     {
-        sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/" \
+        sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
             clusters/armadillo/bison-service-entries.yaml
         if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
             sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
