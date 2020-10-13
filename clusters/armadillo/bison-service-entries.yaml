@@ -1,13 +1,14 @@
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
   name: bison-services
 spec:
   hosts:
-    # must be of form name.namespace.global
     - httpbin.default.global
     # - httpbin.default.bison.global
   location: MESH_INTERNAL
+  exportTo:
+    - "."
   ports:
     - name: http1
       number: 8000
@@ -23,3 +24,43 @@ spec:
     - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
       ports:
         http1: 15443
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: httpbin-org
+spec:
+  hosts:
+    - httpbin.some.global
+    - httpbin.default.bison.global
+  location: MESH_EXTERNAL
+  ports:
+    - name: http1
+      number: 8000
+      protocol: http
+  resolution: DNS
+  addresses:
+    - 240.0.0.2
+  endpoints:
+    - address: "httpbin.org"
+      network: external
+      ports:
+        http1: 15443 # Istio Ingress Gateway port
+    - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
+      ports:
+        http1: 15443
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: external-svc-wildcard-example
+spec:
+  hosts:
+    - "*.httpbin.org"
+  location: MESH_EXTERNAL
+  ports:
+    - number: 80
+      name: http
+      protocol: HTTP
+  resolution: NONE
