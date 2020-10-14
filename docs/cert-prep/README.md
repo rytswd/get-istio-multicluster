@@ -1,5 +1,7 @@
 # Certificate Preparation
 
+**NOTE**: This document is work in progress.
+
 ## Prerequisites
 
 - openssl
