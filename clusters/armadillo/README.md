@@ -78,7 +78,7 @@ $ {
         -o jsonpath='{.items[0].spec.clusterIP}')
     echo $ARMADILLO_EGRESS_GATEWAY_ADDRESS
     sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
-        clusters/armadillo/bison-service-entries.yaml
+        clusters/armadillo/bison-connections.yaml
 }
 
 10.xx.xx.xx
@@ -92,10 +92,10 @@ $ {
     echo $BISON_INGRESS_GATEWAY_ADDRESS
     {
         sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
-            clusters/armadillo/bison-service-entries.yaml
+            clusters/armadillo/bison-connections.yaml
         if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
             sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
-                clusters/armadillo/bison-service-entries.yaml
+                clusters/armadillo/bison-connections.yaml
         fi
     }
 }
@@ -103,7 +103,8 @@ $ {
 172.18.0.1
 
 $ kubectl apply --context kind-armadillo \
-    -f clusters/armadillo/bison-service-entries.yaml
+    -f clusters/armadillo/armadillo-other-services.yaml \
+    -f clusters/armadillo/bison-connections.yaml
 
 serviceentry.networking.istio.io/bison-services created
 ```
