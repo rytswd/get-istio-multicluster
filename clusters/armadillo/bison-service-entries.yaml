@@ -1,29 +1,3 @@
-apiVersion: networking.istio.io/v1beta1
-kind: ServiceEntry
-metadata:
-  name: bison-services
-spec:
-  hosts:
-    - httpbin.default.global
-    # - httpbin.default.bison.global
-  location: MESH_INTERNAL
-  exportTo:
-    - "."
-  ports:
-    - name: http1
-      number: 8000
-      protocol: http
-  resolution: STATIC
-  addresses:
-    - 240.0.0.1
-  endpoints:
-    - address: REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS
-      network: external
-      ports:
-        http1: 15443 # Istio Ingress Gateway port
-    - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
-      ports:
-        http1: 15443
 # ---
 # apiVersion: networking.istio.io/v1beta1
 # kind: ServiceEntry
