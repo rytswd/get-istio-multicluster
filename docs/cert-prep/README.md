@@ -87,7 +87,8 @@ $ {
         -sha256 \
         -config ext.config \
         -key /tmp/istio-input/intermediate-ca-passphrase.key \
-        -out /tmp/istio-input/intermediate-ca.csr
+        -out /tmp/istio-input/intermediate-ca.csr \
+        -subj "/C=GB/ST=London/L=London/O=Some Dev Inc./OU=Some Dev Intermediate CA/CN=some.dev"
     openssl ca \
         -config ext.config \
         -extensions v3_intermediate_ca \
