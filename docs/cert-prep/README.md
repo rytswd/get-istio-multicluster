@@ -1,6 +1,23 @@
 # Certificate Preparation
 
-**NOTE**: This document is work in progress.
+**NOTE**: This document is work in progress.  
+For now, you can run the following command:
+
+```bash
+$ pwd
+/some/path/at/simple-istio-multicluster
+
+$ {
+    kubectl create namespace istio-system
+    kubectl create secret generic cacerts -n istio-system \
+        --from-file=./sample-certs/ca-cert.pem \
+        --from-file=./sample-certs/ca-key.pem \
+        --from-file=./sample-certs/root-cert.pem \
+        --from-file=./sample-certs/cert-chain.pem
+}
+```
+
+This is NOT appropriate for production usage.
 
 ## Prerequisites
 
