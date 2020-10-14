@@ -8,8 +8,16 @@ $ pwd
 /some/path/at/simple-istio-multicluster
 
 $ {
-    kubectl create namespace istio-system
-    kubectl create secret generic cacerts -n istio-system \
+    kubectl create namespace --context kind-armadillo istio-system
+    kubectl create secret --context kind-armadillo \
+        generic cacerts -n istio-system \
+        --from-file=./sample-certs/ca-cert.pem \
+        --from-file=./sample-certs/ca-key.pem \
+        --from-file=./sample-certs/root-cert.pem \
+        --from-file=./sample-certs/cert-chain.pem
+    kubectl create namespace --context kind-bison istio-system
+    kubectl create secret --context kind-bison \
+        generic cacerts -n istio-system \
         --from-file=./sample-certs/ca-cert.pem \
         --from-file=./sample-certs/ca-key.pem \
         --from-file=./sample-certs/root-cert.pem \
