@@ -7,14 +7,26 @@ spec:
   hosts:
     - httpbin.default.bison.global
     - httpbin.default.global
+    - httpbin.default.svc.cluster.local
   gateways:
     # - bison-multicluster-ingressgateway.istio-system.svc.cluster.local
     - mesh
     - istio-system/bison-multicluster-ingressgateway
   http:
-    - route:
+    - match:
+        - uri:
+            prefix: /chaos
+      rewrite:
+        uri: /status/418
+      route:
         - destination:
             host: httpbin.default.svc.cluster.local
+      fault:
+        abort:
+          percentage:
+            value: 50
+          httpStatus: 400
+
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
@@ -51,3 +63,23 @@ spec:
           percentage:
             value: 50
           httpStatus: 400
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: bison-multicluster-ingressgateway
+  namespace: istio-system
+  labels:
+    app: bison-multicluster-ingressgateway
+spec:
+  selector:
+    app: bison-multicluster-ingressgateway
+  servers:
+    - hosts:
+        - "*.global"
+      port:
+        name: tls
+        number: 15443
+        protocol: TLS
+      tls:
+        mode: AUTO_PASSTHROUGH

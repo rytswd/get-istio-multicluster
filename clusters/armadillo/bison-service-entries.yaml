@@ -54,13 +54,35 @@ spec:
 apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
-  name: external-svc-wildcard-example
+  name: external-svc-httpbin
 spec:
   hosts:
-    - "*.httpbin.org"
+    - httpbin.org
   location: MESH_EXTERNAL
   ports:
     - number: 80
-      name: http
+      name: example-http
       protocol: HTTP
-  resolution: NONE
+  resolution: DNS
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: my-httpbin-rule
+spec:
+  hosts:
+    - httpbin.org
+  http:
+    - match:
+        - uri:
+            prefix: /chaos
+      rewrite:
+        uri: /status/418
+      route:
+        - destination:
+            host: httpbin.org
+      fault:
+        abort:
+          percentage:
+            value: 50
+          httpStatus: 400
