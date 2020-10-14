@@ -77,6 +77,43 @@ _To be updated_
 
 ---
 
+### 3. Intermediate CA prep
+
+```bash
+$ {
+    openssl genrsa -des3 -out /tmp/istio-input/intermediate-ca-passphrase.key 4096
+    openssl req \
+        -new \
+        -sha256 \
+        -config ext.config \
+        -key /tmp/istio-input/intermediate-ca-passphrase.key \
+        -out /tmp/istio-input/intermediate-ca.csr
+    openssl ca \
+        -config ext.config \
+        -extensions v3_intermediate_ca \
+        -days 2650 \
+        -notext \
+        -batch \
+        -in /tmp/istio-input/intermediate-ca.csr \
+        -out /tmp/istio-input/intermediate-ca.crt
+}
+```
+
+<details>
+<summary>Details</summary>
+
+Verification
+
+```bash
+openssl x509 -noout -text -in /tmp/istio-input/intermediate-ca.crt
+```
+
+_To be updated_
+
+</details>
+
+---
+
 ### 3. Sign Client CA
 
 ```bash
