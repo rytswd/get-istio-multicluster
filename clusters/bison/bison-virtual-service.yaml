@@ -63,23 +63,53 @@ spec:
           percentage:
             value: 50
           httpStatus: 400
----
-apiVersion: networking.istio.io/v1beta1
-kind: Gateway
-metadata:
-  name: bison-multicluster-ingressgateway
-  namespace: istio-system
-  labels:
-    app: bison-multicluster-ingressgateway
-spec:
-  selector:
-    app: bison-multicluster-ingressgateway
-  servers:
-    - hosts:
-        - "*.global"
-      port:
-        name: tls
-        number: 15443
-        protocol: TLS
-      tls:
-        mode: AUTO_PASSTHROUGH
+# ---
+# apiVersion: networking.istio.io/v1beta1
+# kind: Gateway
+# metadata:
+#   name: bison-multicluster-ingressgateway
+#   namespace: istio-system
+#   labels:
+#     app: bison-multicluster-ingressgateway
+# spec:
+#   selector:
+#     app: bison-multicluster-ingressgateway
+#   servers:
+#     - hosts:
+#         # - "*.global"
+#         - "*.bison.global"
+#       port:
+#         name: tls
+#         number: 15443
+#         protocol: TLS
+#       tls:
+#         mode: AUTO_PASSTHROUGH
+
+# ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: EnvoyFilter
+# metadata:
+#   labels:
+#     app: bison-external-ingressgateway
+#   name: bison-multicluster-ingressgateway
+#   namespace: istio-system
+# spec:
+#   configPatches:
+#     - applyTo: NETWORK_FILTER
+#       match:
+#         context: GATEWAY
+#         listener:
+#           filterChain:
+#             filter:
+#               name: envoy.filters.network.sni_cluster
+#           portNumber: 15443
+#       patch:
+#         operation: INSERT_AFTER
+#         value:
+#           config:
+#             cluster_pattern: \.bison.global$
+#             cluster_replacement: .svc.cluster.local
+#           name: envoy.filters.network.tcp_cluster_rewrite
+#   workloadSelector:
+#     labels:
+#       app: bison-multicluster-ingressgateway
