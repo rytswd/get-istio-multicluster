@@ -29,7 +29,22 @@ $ {
 
 ---
 
-### 2. Install Istio into clusters
+### 2. Prepare CA Certs
+
+The steps are detailed at [Certificate Preparation steps](https://github.com/rytswd/simple-istio-multicluster/tree/master/docs/cert-prep/README.md).
+
+You need to complete this step before installing Istio to the cluster.
+
+<details>
+<summary>Details</summary>
+
+If you do not create the certificate before Istio is installed to the cluster, Istio will fall back to use its own certificate. This will cause an issue when you try to use your custom cert later on. It's best to get the cert ready first - otherwise you will likely need to run through a bunch of restarts of Istio components to ensure the correct cert is picked up.
+
+</details>
+
+---
+
+### 3. Install Istio into clusters
 
 ```bash
 $ pwd
@@ -52,7 +67,7 @@ As to the configurations, Armadillo and Bison have almost identical cluster setu
 
 ---
 
-### 3. Install Debug Processes
+### 4. Install Debug Processes
 
 ```bash
 $ {
@@ -85,6 +100,9 @@ Second action is to install the testing tools. `httpbin` is a nice Web server wh
 
 The below will be quicker than above if you use multiple terminals to run them in parallel.
 
+<details>
+<summary>Details</summary>
+
 ### Armadillo
 
 ```bash
@@ -116,6 +134,8 @@ $ {
         -f tools/toolkit-alpine/toolkit-alpine.yaml
 }
 ```
+
+</details>
 
 ---
 
