@@ -51,32 +51,7 @@ _To be updated_
 
 ---
 
-### 1. Client cert prep
-
-```bash
-$ {
-    openssl genrsa -out /tmp/istio-input/client-tls.key 2048
-    openssl req \
-        -new \
-        -sha256 \
-        -days 365 \
-        -config ./ext.config \
-        -key /tmp/istio-input/client-tls.key \
-        -out /tmp/istio-input/client-tls.csr \
-        -subj "/C=GB/ST=London/L=London/O=Some Dev Inc./OU=Some Dev Client/CN=some.dev"
-}
-```
-
-<details>
-<summary>Details</summary>
-
-_To be updated_
-
-</details>
-
----
-
-### 2. Root CA prep
+### 1. Root CA prep
 
 ```bash
 $ {
@@ -85,7 +60,7 @@ $ {
         -new \
         -x509 \
         -days 365 \
-        -config ext.config \
+        -config configs/openssl.config \
         -key /tmp/istio-input/root-ca-passphrase.key \
         -out /tmp/istio-input/root-ca.crt \
         -subj "/C=GB/ST=London/L=London/O=Some Dev Inc./OU=Some Dev Root CA/CN=some.dev"
@@ -104,6 +79,8 @@ _To be updated_
 
 ---
 
+<!--
+Likely not needed
 ### 3. Intermediate CA prep
 
 ```bash
@@ -112,18 +89,33 @@ $ {
     openssl req \
         -new \
         -sha256 \
-        -config ext.config \
+        -config configs/openssl.config \
         -key /tmp/istio-input/intermediate-ca-passphrase.key \
-        -out /tmp/istio-input/intermediate-ca.csr \
-        -subj "/C=GB/ST=London/L=London/O=Some Dev Inc./OU=Some Dev Intermediate CA/CN=some.dev"
+        -out /tmp/istio-input/intermediate-ca-passphrase.csr \
+        -subj "/C=GB/ST=London/L=London/O=Some Dev Inc./OU=Some Dev Intermediate CA/CN=some-intermediate.dev"
+
     openssl ca \
-        -config ext.config \
+        -config configs/openssl.config \
         -extensions v3_intermediate_ca \
-        -days 2650 \
+        -days 3650 \
         -notext \
-        -batch \
-        -in /tmp/istio-input/intermediate-ca.csr \
+        -md sha256 \
+        -cert /tmp/istio-input/root-ca/cert.pem \
+        -keyfile /tmp/istio-input/root-ca/key.pem \
+        -in /tmp/istio-input/intermediate-ca-passphrase.csr \
         -out /tmp/istio-input/intermediate-ca.crt
+
+
+    openssl req \
+        -new \
+        -x509 \
+        -days 365 \
+        -config configs/openssl.config \
+        -key /tmp/istio-input/root-ca-passphrase.key \
+        -out /tmp/istio-input/intermediate-ca.crt \
+    openssl rsa \
+        -in /tmp/istio-input/intermediate-ca-passphrase.key \
+        -out /tmp/istio-input/intermediate-ca.key
 }
 ```
 
@@ -135,6 +127,50 @@ Verification
 ```bash
 openssl x509 -noout -text -in /tmp/istio-input/intermediate-ca.crt
 ```
+
+```bash
+openssl verify -CAfile certs/ca.cert.pem \
+      intermediate/certs/intermediate.cert.pem
+```
+
+_To be updated_
+
+</details>
+
+--- -->
+
+### 2. Client cert prep
+
+Create certs for all clusters
+
+```bash
+$ {
+    mkdir /tmp/istio-input/armadillo/
+    openssl genrsa -out /tmp/istio-input/armadillo/ca-key.pem 2048
+    openssl req \
+        -new \
+        -sha256 \
+        -days 365 \
+        -config ./configs/openssl.config \
+        -key /tmp/istio-input/armadillo/ca-key.pem \
+        -out /tmp/istio-input/armadillo/ca.csr \
+        -subj "/C=GB/ST=London/L=London/O=Some Dev Inc./OU=Armadillo/CN=some-armadillo.dev"
+
+    mkdir /tmp/istio-input/bison/
+    openssl genrsa -out /tmp/istio-input/bison/ca-key.pem 2048
+    openssl req \
+        -new \
+        -sha256 \
+        -days 365 \
+        -config ./configs/openssl.config \
+        -key /tmp/istio-input/bison/ca-key.pem \
+        -out /tmp/istio-input/bison/ca.csr \
+        -subj "/C=GB/ST=London/L=London/O=Some Dev Inc./OU=Bison/CN=some-bison.dev"
+}
+```
+
+<details>
+<summary>Details</summary>
 
 _To be updated_
 
@@ -153,10 +189,21 @@ _To be updated_
         -CA /tmp/istio-input/root-ca.crt \
         -CAkey /tmp/istio-input/root-ca.key \
         -CAcreateserial \
-        -extfile ext.config \
+        -extfile configs/openssl.config \
         -extensions client_cert \
-        -in /tmp/istio-input/client-tls.csr \
-        -out /tmp/istio-input/client-tls.crt
+        -in /tmp/istio-input/armadillo/ca.csr \
+        -out /tmp/istio-input/armadillo/ca-cert.pem
+    openssl x509 \
+        -req \
+        -sha256 \
+        -days 365 \
+        -CA /tmp/istio-input/root-ca.crt \
+        -CAkey /tmp/istio-input/root-ca.key \
+        -CAcreateserial \
+        -extfile configs/openssl.config \
+        -extensions client_cert \
+        -in /tmp/istio-input/bison/ca.csr \
+        -out /tmp/istio-input/bison/ca-cert.pem
 }
 ```
 
@@ -169,3 +216,23 @@ _To be updated_
 </details>
 
 ---
+
+### 4. Create Kubernetes Secrets
+
+```bash
+$ {
+    kubectl create namespace --context kind-armadillo istio-system
+    kubectl create secret --context kind-armadillo \
+        generic cacerts -n istio-system \
+        --from-file=/tmp/istio-input/armadillo/ca-cert.pem \
+        --from-file=/tmp/istio-input/armadillo/ca-key.pem \
+        --from-file=/tmp/istio-input/armadillo/root-cert.pem
+
+    kubectl create namespace --context kind-bison istio-system
+    kubectl create secret --context kind-bison \
+        generic cacerts -n istio-system \
+        --from-file=/tmp/istio-input/bison/ca-cert.pem \
+        --from-file=/tmp/istio-input/bison/ca-key.pem \
+        --from-file=/tmp/istio-input/bison/root-cert.pem
+}
+```
