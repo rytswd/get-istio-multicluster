@@ -62,11 +62,11 @@ $ {
         -days 365 \
         -config configs/openssl.config \
         -key /tmp/istio-input/root-ca-passphrase.key \
-        -out /tmp/istio-input/root-ca.crt \
+        -out /tmp/istio-input/root-cert.pem \
         -subj "/C=GB/ST=London/L=London/O=Some Dev Inc./OU=Some Dev Root CA/CN=some.dev"
     openssl rsa \
         -in /tmp/istio-input/root-ca-passphrase.key \
-        -out /tmp/istio-input/root-ca.key
+        -out /tmp/istio-input/root-key.pem
 }
 ```
 
@@ -186,8 +186,8 @@ _To be updated_
         -req \
         -sha256 \
         -days 365 \
-        -CA /tmp/istio-input/root-ca.crt \
-        -CAkey /tmp/istio-input/root-ca.key \
+        -CA /tmp/istio-input/root-cert.pem \
+        -CAkey /tmp/istio-input/root-key.pem \
         -CAcreateserial \
         -extfile configs/openssl.config \
         -extensions client_cert \
@@ -197,8 +197,8 @@ _To be updated_
         -req \
         -sha256 \
         -days 365 \
-        -CA /tmp/istio-input/root-ca.crt \
-        -CAkey /tmp/istio-input/root-ca.key \
+        -CA /tmp/istio-input/root-cert.pem \
+        -CAkey /tmp/istio-input/root-key.pem \
         -CAcreateserial \
         -extfile configs/openssl.config \
         -extensions client_cert \
@@ -226,13 +226,13 @@ $ {
         generic cacerts -n istio-system \
         --from-file=/tmp/istio-input/armadillo/ca-cert.pem \
         --from-file=/tmp/istio-input/armadillo/ca-key.pem \
-        --from-file=/tmp/istio-input/armadillo/root-cert.pem
+        --from-file=/tmp/istio-input/root-cert.pem
 
     kubectl create namespace --context kind-bison istio-system
     kubectl create secret --context kind-bison \
         generic cacerts -n istio-system \
         --from-file=/tmp/istio-input/bison/ca-cert.pem \
         --from-file=/tmp/istio-input/bison/ca-key.pem \
-        --from-file=/tmp/istio-input/bison/root-cert.pem
+        --from-file=/tmp/istio-input/root-cert.pem
 }
 ```
