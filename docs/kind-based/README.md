@@ -103,7 +103,7 @@ Each cluster has different resources. Check out the documentation one by one.
 <details>
 <summary>For Armadillo</summary>
 
-### 1. Add `istiocoredns` as a part of CoreDNS ConfigMap
+#### 5.1. Add `istiocoredns` as a part of CoreDNS ConfigMap
 
 ```bash
 $ pwd
@@ -139,7 +139,7 @@ To be updated
 
 ---
 
-### 2. Add ServiceEntry for Bison
+#### 5.2. Add ServiceEntry for Bison
 
 Before completing this, make sure the cluster Bison is also started, and has completed Istio installation.
 
@@ -208,6 +208,13 @@ $ kubectl apply --context kind-bison \
     -f clusters/bison/bison-virtual-service.yaml \
     -f clusters/bison/bison-exposed-services.yaml
 ```
+
+<details>
+<summary>Details</summary>
+
+To be updated
+
+</details>
 
 </details>
 
