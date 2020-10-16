@@ -70,7 +70,6 @@ $ {
         --from-file=./armadillo/root-cert.pem \
         --from-file=./armadillo/cert-chain.pem
 
-    cp /tmp/istio-input/bison/ca-cert.pem /tmp/istio-input/bison/cert-chain.pem
     kubectl create namespace --context kind-bison istio-system
     kubectl create secret --context kind-bison \
         generic cacerts -n istio-system \
