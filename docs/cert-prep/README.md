@@ -16,7 +16,10 @@ Ref: https://github.com/istio/istio/tree/master/tools/certs
 $ pwd
 /some/path/at/simple-istio-multicluster
 
-$ make -f ./tools/certs/Makefile.selfsigned.mk root-ca
+$ cd certs
+/some/path/at/simple-istio-multicluster/certs
+
+$ make -f ../tools/certs/Makefile.selfsigned.mk root-ca
 ```
 
 ---
@@ -28,8 +31,8 @@ $ pwd
 /some/path/at/simple-istio-multicluster
 
 $ {
-    make -f ./tools/certs/Makefile.selfsigned.mk armadillo-cacerts
-    make -f ./tools/certs/Makefile.selfsigned.mk bison-cacerts
+    make -f ../tools/certs/Makefile.selfsigned.mk armadillo-cacerts
+    make -f ../tools/certs/Makefile.selfsigned.mk bison-cacerts
 }
 ```
 
