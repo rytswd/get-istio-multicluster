@@ -19,19 +19,3 @@ The directories here are some clusters.
 ### `dolphin`: cluster with dedicated Istio Control Plane
 
 ### `zebra`: cluster without Istio, as external cluster
-
-## Tools
-
-### `httpbin`
-
-```bash
-$ kubectl label namespace default istio-injection=enabled
-$ kubectl apply -f tools/httpbin/httpbin.yaml
-```
-
-### `toolkit-alpine`
-
-```bash
-$ kubectl label namespace default istio-injection=enabled
-$ kubectl apply -f tools/toolkit-alpine/toolkit-alpine.yaml
-```
