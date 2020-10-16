@@ -58,6 +58,31 @@ $ {
 
 ---
 
+### 3. Create Kubernetes Secrets
+
+```bash
+$ {
+    kubectl create namespace --context kind-armadillo istio-system
+    kubectl create secret --context kind-armadillo \
+        generic cacerts -n istio-system \
+        --from-file=./armadillo/ca-cert.pem \
+        --from-file=./armadillo/ca-key.pem \
+        --from-file=./armadillo/root-cert.pem \
+        --from-file=./armadillo/cert-chain.pem
+
+    cp /tmp/istio-input/bison/ca-cert.pem /tmp/istio-input/bison/cert-chain.pem
+    kubectl create namespace --context kind-bison istio-system
+    kubectl create secret --context kind-bison \
+        generic cacerts -n istio-system \
+        --from-file=./bison/ca-cert.pem \
+        --from-file=./bison/ca-key.pem \
+        --from-file=./bison/root-cert.pem \
+        --from-file=./bison/cert-chain.pem
+}
+```
+
+---
+
 ## Steps (Detailed Commands)
 
 _To be completed_
@@ -248,7 +273,6 @@ _To be updated_
 
 ```bash
 $ {
-    cp /tmp/istio-input/armadillo/ca-cert.pem /tmp/istio-input/armadillo/cert-chain.pem
     kubectl create namespace --context kind-armadillo istio-system
     kubectl create secret --context kind-armadillo \
         generic cacerts -n istio-system \
@@ -257,7 +281,6 @@ $ {
         --from-file=/tmp/istio-input/root-cert.pem \
         --from-file=/tmp/istio-input/cert-chain.pem
 
-    cp /tmp/istio-input/bison/ca-cert.pem /tmp/istio-input/bison/cert-chain.pem
     kubectl create namespace --context kind-bison istio-system
     kubectl create secret --context kind-bison \
         generic cacerts -n istio-system \
