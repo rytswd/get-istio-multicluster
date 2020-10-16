@@ -33,7 +33,34 @@ This is NOT appropriate for production usage.
 
 ## Steps
 
-### 0. Prepare CA Certs
+### 1. Create Root CA
+
+```bash
+$ pwd
+/some/path/at/simple-istio-multicluster
+
+$ make -f ./tools/certs/Makefile.selfsigned.mk root-ca
+```
+
+---
+
+### 2. Create Intermediate CA for each cluster
+
+```bash
+$ pwd
+/some/path/at/simple-istio-multicluster
+
+$ {
+    make -f ./tools/certs/Makefile.selfsigned.mk armadillo-cacerts
+    make -f ./tools/certs/Makefile.selfsigned.mk bison-cacerts
+}
+```
+
+---
+
+## Steps (Detailed Commands)
+
+_To be completed_
 
 ```bash
 $ pwd
