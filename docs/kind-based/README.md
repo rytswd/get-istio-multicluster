@@ -33,7 +33,38 @@ $ {
 
 The steps are detailed at [Certificate Preparation steps](https://github.com/rytswd/simple-istio-multicluster/tree/master/docs/cert-prep/README.md).
 
-You need to complete this step before installing Istio to the cluster.
+You need to complete this step before installing Istio to the cluster. Essentially, you need to run the following:
+
+```bash
+$ pwd
+/some/path/at/simple-istio-multicluster
+
+$ {
+    pushd certs
+    make -f ../tools/certs/Makefile.selfsigned.mk root-ca
+
+    make -f ../tools/certs/Makefile.selfsigned.mk armadillo-cacerts
+    make -f ../tools/certs/Makefile.selfsigned.mk bison-cacerts
+
+    kubectl create namespace --context kind-armadillo istio-system
+    kubectl create secret --context kind-armadillo \
+        generic cacerts -n istio-system \
+        --from-file=./armadillo/ca-cert.pem \
+        --from-file=./armadillo/ca-key.pem \
+        --from-file=./armadillo/root-cert.pem \
+        --from-file=./armadillo/cert-chain.pem
+
+    kubectl create namespace --context kind-bison istio-system
+    kubectl create secret --context kind-bison \
+        generic cacerts -n istio-system \
+        --from-file=./bison/ca-cert.pem \
+        --from-file=./bison/ca-key.pem \
+        --from-file=./bison/root-cert.pem \
+        --from-file=./bison/cert-chain.pem
+
+    popd
+}
+```
 
 <details>
 <summary>Details</summary>
