@@ -27,9 +27,6 @@ $ make -f ../tools/certs/Makefile.selfsigned.mk root-ca
 ### 2. Create Intermediate CA for each cluster
 
 ```bash
-$ pwd
-/some/path/at/simple-istio-multicluster
-
 $ {
     make -f ../tools/certs/Makefile.selfsigned.mk armadillo-cacerts
     make -f ../tools/certs/Makefile.selfsigned.mk bison-cacerts
