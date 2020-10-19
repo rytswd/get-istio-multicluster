@@ -319,6 +319,18 @@ $ kubectl exec \
     -- curl -vvv httpbin.default.bison.global:8000/status/418
 ```
 
+For logs
+
+```bash
+$ kubectl logs \
+    --context kind-armadillo \
+    $(kubectl get pod \
+        --context kind-armadillo \
+        -l app=toolkit-alpine \
+        -o jsonpath='{.items[0].metadata.name}') \
+    | less
+```
+
 <details>
 <summary>Details</summary>
 
