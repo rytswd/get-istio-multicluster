@@ -328,6 +328,7 @@ $ kubectl logs \
         --context kind-armadillo \
         -l app=toolkit-alpine \
         -o jsonpath='{.items[0].metadata.name}') \
+    -c istio-proxy \
     | less
 ```
 
