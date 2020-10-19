@@ -40,7 +40,7 @@ $ pwd
 /some/path/at/simple-istio-multicluster
 
 $ {
-    pushd certs
+    pushd certs > /dev/null
     make -f ../tools/certs/Makefile.selfsigned.mk root-ca
 
     make -f ../tools/certs/Makefile.selfsigned.mk armadillo-cacerts
@@ -62,7 +62,7 @@ $ {
         --from-file=./bison/root-cert.pem \
         --from-file=./bison/cert-chain.pem
 
-    popd
+    popd > /dev/null
 }
 ```
 
