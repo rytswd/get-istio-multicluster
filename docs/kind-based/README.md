@@ -312,7 +312,7 @@ $ kubectl exec \
     --context kind-armadillo \
     -it \
     $(kubectl get pod \
-        --context kind-armadillo
+        --context kind-armadillo \
         -l app=toolkit-alpine \
         -o jsonpath='{.items[0].metadata.name}') \
     -c toolkit-alpine \
