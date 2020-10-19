@@ -7,6 +7,15 @@
 
 ## Steps
 
+### 0. Clone this repository
+
+```bash
+$ pwd
+/some/path/at
+
+$ git clone https://github.com/rytswd/simple-istio-multicluster.git
+```
+
 ### 1. Start local Kubernetes clusters with KinD
 
 ```bash
