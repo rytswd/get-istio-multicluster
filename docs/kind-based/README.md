@@ -311,7 +311,7 @@ To be updated
 $ kubectl exec \
     --context kind-armadillo \
     -it \
-    $(kubectl get pod -l app=toolkit-alpine -o jsonpath={.items[0].metadata.name})) \
+    $(kubectl get pod -l app=toolkit-alpine -o jsonpath={.items[0].metadata.name}) \
     -c toolkit-alpine \
     -- curl -vvv httpbin.default.bison.global:8000/status/418
 ```
