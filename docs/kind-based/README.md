@@ -305,6 +305,26 @@ To be updated
 
 ---
 
+### 6. Verify
+
+```bash
+$ kubectl exec \
+    --context kind-armadillo \
+    -it \
+    -l app=toolkit-alpine \
+    -c toolkit-alpine \
+    -- curl -vvv httpbin.default.bison.global:8000/status/418
+```
+
+<details>
+<summary>Details</summary>
+
+To be updated
+
+</details>
+
+---
+
 ## Quicker Guide
 
 The below will be quicker than above if you use multiple terminals to run them in parallel.
