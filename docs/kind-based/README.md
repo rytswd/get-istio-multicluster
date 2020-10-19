@@ -80,6 +80,49 @@ $ {
 
 If you do not create the certificate before Istio is installed to the cluster, Istio will fall back to use its own certificate. This will cause an issue when you try to use your custom cert later on. It's best to get the cert ready first - otherwise you will likely need to run through a bunch of restarts of Istio components to ensure the correct cert is picked up.
 
+The each command is associated with some comments to clarify what they do:
+
+```bash
+{
+    # Get into certs directory
+    pushd certs > /dev/null
+
+    # Create Root CA, which would then be used to sign Intermediate CAs.
+    make -f ../tools/certs/Makefile.selfsigned.mk root-ca
+
+    # Create Intermediate CA for each cluster. All clusters have their own
+    # certs for security reason.
+    make -f ../tools/certs/Makefile.selfsigned.mk armadillo-cacerts
+    make -f ../tools/certs/Makefile.selfsigned.mk bison-cacerts
+
+    # Create a secret `cacerts`, which is used by Istio.
+    # Istio's component `istiod` will use this, and if there is no secret in
+    # place before `istiod` starts up, it would fall back to use Istio's
+    # default CA which is only menat to be used for testing.
+    #
+    # The below commands are for Armadillo cluster.
+    kubectl create namespace --context kind-armadillo istio-system
+    kubectl create secret --context kind-armadillo \
+        generic cacerts -n istio-system \
+        --from-file=./armadillo/ca-cert.pem \
+        --from-file=./armadillo/ca-key.pem \
+        --from-file=./armadillo/root-cert.pem \
+        --from-file=./armadillo/cert-chain.pem
+    #
+    # The below commands are for Bison cluster.
+    kubectl create namespace --context kind-bison istio-system
+    kubectl create secret --context kind-bison \
+        generic cacerts -n istio-system \
+        --from-file=./bison/ca-cert.pem \
+        --from-file=./bison/ca-key.pem \
+        --from-file=./bison/root-cert.pem \
+        --from-file=./bison/cert-chain.pem
+
+    # Get back to previous directory
+    popd > /dev/null
+}
+```
+
 </details>
 
 ---
