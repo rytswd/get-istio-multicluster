@@ -236,7 +236,7 @@ $ {
     export ARMADILLO_EGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
         --context=kind-armadillo \
         -n istio-system \
-        --selector=app=istio-egressgateway \
+        --selector=app=armadillo-multicluster-egressgateway \
         -o jsonpath='{.items[0].spec.clusterIP}')
     echo $ARMADILLO_EGRESS_GATEWAY_ADDRESS
     sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
