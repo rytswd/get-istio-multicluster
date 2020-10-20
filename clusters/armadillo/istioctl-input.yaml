@@ -16,8 +16,12 @@ spec:
     egressGateways:
       - enabled: true
         name: armadillo-external-egressgateway
+        label:
+          app: armadillo-external-egressgateway
       - enabled: true
         name: armadillo-multicluster-egressgateway
+        label:
+          app: armadillo-multicluster-egressgateway
         # k8s:
         #   env:
         #     - name: ISTIO_META_REQUESTED_NETWORK_VIEW

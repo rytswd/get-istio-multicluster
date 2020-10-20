@@ -16,8 +16,12 @@ spec:
     egressGateways:
       - enabled: true
         name: bison-external-egressgateway
+        label:
+          app: bison-external-egressgateway
       - enabled: true
         name: bison-multicluster-egressgateway
+        label:
+          app: bison-multicluster-egressgateway
         # k8s:
         #   env:
         #     - name: ISTIO_META_REQUESTED_NETWORK_VIEW
