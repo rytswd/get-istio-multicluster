@@ -1,7 +1,3 @@
-# =============================================================================
-#   Replicating `spec.values.global.multiCluster`, with IngressGateway
-#     specified instead of `istio: ingressgateway`
-#
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
@@ -34,9 +30,12 @@ metadata:
   namespace: istio-system
 spec:
   configPatches:
+    # Istio 1.6 or below - map `.global` to `.svc.cluster.local`
     - applyTo: NETWORK_FILTER
       match:
         context: GATEWAY
+        proxy:
+          proxyVersion: ^1\.6.*
         listener:
           filterChain:
             filter:
@@ -49,9 +48,32 @@ spec:
             cluster_pattern: \.global$
             cluster_replacement: .svc.cluster.local
           name: envoy.filters.network.tcp_cluster_rewrite
+    # Istio 1.7 - map `.global` to `.svc.cluster.local`
     - applyTo: NETWORK_FILTER
       match:
         context: GATEWAY
+        proxy:
+          proxyVersion: ^1\.7.*
+        listener:
+          filterChain:
+            filter:
+              name: envoy.filters.network.sni_cluster
+          portNumber: 15443
+      patch:
+        operation: INSERT_AFTER
+        value:
+          name: envoy.filters.network.tcp_cluster_rewrite
+          typed_config:
+            "@type": "type.googleapis.com/istio.envoy.config.filter.network.tcp_cluster_rewrite.v2alpha1.TcpClusterRewrite"
+            cluster_pattern: \.global$
+            cluster_replacement: .svc.cluster.local
+
+    # Istio 1.6 or below - map `.bison.global` to `.svc.cluster.local`
+    - applyTo: NETWORK_FILTER
+      match:
+        context: GATEWAY
+        proxy:
+          proxyVersion: ^1\.6.*
         listener:
           filterChain:
             filter:
@@ -64,6 +86,25 @@ spec:
             cluster_pattern: \.bison.global$
             cluster_replacement: .svc.cluster.local
           name: envoy.filters.network.tcp_cluster_rewrite
+    # Istio 1.7 - map `.bison.global` to `.svc.cluster.local`
+    - applyTo: NETWORK_FILTER
+      match:
+        context: GATEWAY
+        proxy:
+          proxyVersion: ^1\.7.*
+        listener:
+          filterChain:
+            filter:
+              name: envoy.filters.network.sni_cluster
+          portNumber: 15443
+      patch:
+        operation: INSERT_AFTER
+        value:
+          name: envoy.filters.network.tcp_cluster_rewrite
+          typed_config:
+            "@type": "type.googleapis.com/istio.envoy.config.filter.network.tcp_cluster_rewrite.v2alpha1.TcpClusterRewrite"
+            cluster_pattern: \.bison.global$
+            cluster_replacement: .svc.cluster.local
   workloadSelector:
     labels:
       app: bison-multicluster-ingressgateway
