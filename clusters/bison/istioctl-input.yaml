@@ -152,6 +152,7 @@ spec:
       # pilotCertProvider: kubernetes
       controlPlaneSecurityEnabled: true
       multiCluster:
+        clusterName: bison
         enabled: true
       podDNSSearchNamespaces:
         - global
