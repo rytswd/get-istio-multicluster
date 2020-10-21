@@ -307,6 +307,8 @@ To be updated
 
 ### 6. Verify
 
+Simple curl to verify connection
+
 ```bash
 $ kubectl exec \
     --context kind-armadillo \
@@ -317,6 +319,17 @@ $ kubectl exec \
         -o jsonpath='{.items[0].metadata.name}') \
     -c toolkit-alpine \
     -- curl -vvv httpbin.default.bison.global:8000/status/418
+```
+
+Interactive shell from Armadillo cluster
+
+```bash
+$ kubectl exec \
+    --context kind-armadillo \
+    -it \
+    $(kubectl get pod --context kind-armadillo -l app=toolkit-alpine -o jsonpath='{.items[0].metadata.name}') \
+    -c toolkit-alpine \
+    -- bash
 ```
 
 For logs
@@ -335,7 +348,11 @@ $ kubectl logs \
 <details>
 <summary>Details</summary>
 
-To be updated
+`kubectl exec -it` is used to execute some command from the main container deployed from 4. Install Debug Processes.
+
+The verification uses `curl` to connect from Armadillo's "toolkit" to Bison's "httpbin". The address here `httpbin.default.bison.global` is intentionally different from the Istio's official guidance of `httpbin.default.global`, as this would be important if you need to connect more than 2 clusters to form the mesh. This address of `httpbin.default.bison.global` can be pretty much anything you want, as long as you have the proper conversion logic defined in the target cluster - in this case Bison.
+
+_TODO: More to be added_
 
 </details>
 
