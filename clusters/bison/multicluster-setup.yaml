@@ -24,10 +24,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  labels:
-    app: bison-multicluster-ingressgateway
   name: bison-multicluster-ingressgateway
   namespace: istio-system
+  labels:
+    app: bison-multicluster-ingressgateway
 spec:
   configPatches:
     # Istio 1.6 or below - map `.global` to `.svc.cluster.local`
@@ -107,19 +107,18 @@ spec:
             cluster_replacement: .svc.cluster.local
   workloadSelector:
     labels:
-      app: bison-multicluster-ingressgateway
+      app: bison-multicluster-ingressgateway # As there are multiple ingressGateway, this ensures correct one being used
 
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
-  labels:
-    app: bison-multicluster-ingressgateway
   name: bison-multicluster-ingressgateway
   namespace: istio-system
+  labels:
+    app: bison-multicluster-ingressgateway
 spec:
   host: "*.global"
   trafficPolicy:
     tls:
       mode: ISTIO_MUTUAL
-# =============================================================================

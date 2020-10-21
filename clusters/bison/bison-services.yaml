@@ -2,13 +2,17 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: armadillo-httpbin-chaos-routing
+  name: bison-httpbin-chaos-routing
+  # namespace: istio-system
 spec:
   hosts:
+    - httpbin.default.bison.global
+    - httpbin.default.global
     - httpbin.default.svc.cluster.local
   gateways:
+    - bison-multicluster-ingressgateway.istio-system.svc.cluster.local
     - mesh
-    # - istio-system/armadillo-multicluster-ingressgateway
+    - istio-system/bison-multicluster-ingressgateway
   http:
     - match:
         - uri:
