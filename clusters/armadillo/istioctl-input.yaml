@@ -153,6 +153,6 @@ spec:
       controlPlaneSecurityEnabled: true
       multiCluster:
         clusterName: armadillo
-        enabled: true
+        # enabled: true
       podDNSSearchNamespaces:
         - global

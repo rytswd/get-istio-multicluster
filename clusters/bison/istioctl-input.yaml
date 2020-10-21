@@ -153,6 +153,6 @@ spec:
       controlPlaneSecurityEnabled: true
       multiCluster:
         clusterName: bison
-        enabled: true
+        # enabled: true
       podDNSSearchNamespaces:
         - global
