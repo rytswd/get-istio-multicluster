@@ -267,7 +267,7 @@ $ {
 172.18.0.1
 
 $ kubectl apply --context kind-armadillo \
-    -f clusters/armadillo/armadillo-other-services.yaml \
+    -f clusters/armadillo/armadillo-services.yaml \
     -f clusters/armadillo/bison-connections.yaml
 
 serviceentry.networking.istio.io/bison-services created
@@ -307,14 +307,14 @@ $ pwd
 /some/path/at/simple-istio-multicluster
 
 $ kubectl apply --context kind-bison \
-    -f clusters/bison/bison-virtual-service.yaml \
-    -f clusters/bison/bison-exposed-services.yaml
+    -f clusters/bison/bison-services.yaml \
+    -f clusters/bison/multicluster-setup.yaml
 ```
 
 <details>
 <summary>Details</summary>
 
-To be updated
+Bison
 
 </details>
 
@@ -375,6 +375,7 @@ _TODO: More to be added_
 
 ---
 
+<!-- Commenting out for now
 ## Quicker Guide
 
 The below will be quicker than above if you use multiple terminals to run them in parallel.
@@ -416,7 +417,7 @@ $ {
 
 </details>
 
----
+--- -->
 
 ## Cleanup
 
