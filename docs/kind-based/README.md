@@ -1,5 +1,7 @@
 # KinD based setup
 
+NOTE: As of Oct 2020, this write-up only covers replicated control plane, and uses Istio v1.6 or v1.7.
+
 ## Prerequisites
 
 - Docker
@@ -218,7 +220,7 @@ configmap/coredns configured
 
 Istio's `istiocoredns` handles DNS lookup, and thus, you need to let Kubernetes know that `istiocoredns` gets the DNS request. Get the K8s Service cluster IP in `ARMADILLO_ISTIOCOREDNS_CLUSTER_IP` env variable, so that you can use that in `coredns-configmap.yaml` as the endpoint.
 
-This will then applied to `kube-system/coredns` ConfigMap. As KinD comes with CoreDNS as the default DNS and its own ConfigMap, you will see a warning about the original ConfigMap being overridden with the custom one.
+This will then be applied to `kube-system/coredns` ConfigMap. As KinD comes with CoreDNS as the default DNS and its own ConfigMap, you will see a warning about the original ConfigMap being overridden with the custom one. This is fine for testing, but you may want to carefully examine the DNS setup as that could have significant impact.
 
 </details>
 
@@ -274,7 +276,22 @@ serviceentry.networking.istio.io/bison-services created
 <details>
 <summary>Details</summary>
 
-To be updated
+**WARNING**: The current setup does NOT go through EgressGateway, and simply skips it. This needs further investigation.
+
+There are 2 places that are being updated in a single file `clusters/armadillo/bison-connections.yaml`. The first one is for Armadillo's EgressGateway, and the second is for Bison's IngressGateway. This means the traffic follows the below pattern.
+
+```
+[ Armadillo Cluster]                                  Cluster Border                                         [ Bison Cluster]
+                                                             |
+App Container A ==> Istio Sidecar Proxy ==> Egress Gateway ==|==> Ingress Gateway ==> Istio Sidecar Proxy ==> App Container B
+                                                             |
+```
+
+This means that, when you need App Container A to talk to App Container B on the other cluster, you need to provide 2 endpoints.
+
+In order for 2 KinD clusters to talk to each other, the extra `sed` takes place to fallback to use `172.18.0.1` as endpoint address (which is a mapping outside of cluster), and because Bison's Ingress Gateway is set up with NodePort of `32002`, we replace the default port of `15443` with `32002`.
+
+The command may look confusing, but the update is simple. If you cloned this repo at the step 0, you can easily see from git diff.
 
 </details>
 
