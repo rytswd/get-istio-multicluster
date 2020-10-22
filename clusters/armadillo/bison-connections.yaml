@@ -1,4 +1,3 @@
----
 apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
@@ -17,11 +16,11 @@ spec:
   addresses:
     - 240.0.0.1
   endpoints:
-    - address: 172.18.0.1
+    - address: REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS
       network: external
       ports:
-        http1: 32002
-    - address: 10.96.37.213
+        http1: 15443 # Istio Ingress Gateway port
+    - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
       ports:
         http1: 15443
 ---
@@ -43,10 +42,10 @@ spec:
   addresses:
     - 240.0.0.2
   endpoints:
-    - address: 172.18.0.1
+    - address: REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS
       network: external
       ports:
-        http-bison: 32002
-    - address: 10.96.37.213
+        http-bison: 15443 # Istio Ingress Gateway port
+    - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
       ports:
         http-bison: 15443
