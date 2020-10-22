@@ -1,6 +1,22 @@
 # Simple Istio Multicluster
 
-Istio Multicluster is by no means simple. This repository tries to show involved example with multiple key configurations used in Istio, but with simple steps to follow.
+Istio Multicluster is by no means simple. This repository tries to showcase with the following:
+
+- Simple configurations
+- Simple processes / containers
+- Simple steps to reproduce
+
+But as this repository aims to provide complex scenarios and how Istio can handle them, you will also find:
+
+- Involved cluster / mesh setup
+- Detailed description on each step
+
+## Versions
+
+This repository is tested with the following versions of Istio:
+
+- v1.6.8
+- v1.7.3
 
 ## Steps
 
