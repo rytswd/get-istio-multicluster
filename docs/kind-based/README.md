@@ -472,7 +472,7 @@ $ pwd
 /some/path/at/simple-istio-multicluster
 
 $ {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32001.yaml --name armadillo
+    kind create cluster --config ./tools/kind-config/config-1-node-port-32001.yaml --name armadillo
 
     kubectl create namespace --context kind-armadillo istio-system
     kubectl create secret --context kind-armadillo \
@@ -529,7 +529,7 @@ $ pwd
 /some/path/at/simple-istio-multicluster
 
 $ {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32002.yaml --name bison
+    kind create cluster --config ./tools/kind-config/config-1-node-port-32002.yaml --name bison
 
     kubectl create namespace --context kind-bison istio-system
     kubectl create secret --context kind-bison \
@@ -559,7 +559,7 @@ $ pwd
 /some/path/at/simple-istio-multicluster
 
 $ {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32004.yaml --name dolphin
+    kind create cluster --config ./tools/kind-config/config-1-node-port-32004.yaml --name dolphin
 
     kubectl create namespace --context kind-dolphin istio-system
     kubectl create secret --context kind-dolphin \
