@@ -1,7 +1,7 @@
 apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 metadata:
-  name: armadillo-istio
+  name: bison-istio
 spec:
   # The minimal profile is a good place to start for testing
   profile: minimal
