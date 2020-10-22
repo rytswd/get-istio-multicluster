@@ -2,6 +2,14 @@
 
 NOTE: As of Oct 2020, this write-up only covers replicated control plane, and uses Istio v1.6 or v1.7.
 
+## What you get
+
+After following all the steps below, you would get
+
+- 3 clusters (`armadillo`, `bison`, `dolphin`)
+- 1 mesh
+- `armadillo` to send request to `bison` and `dolphin`
+
 ## Prerequisites
 
 - Docker
@@ -27,13 +35,14 @@ $ pwd
 $ {
     kind create cluster --config ./tools/kind-config/config-2-nodes-port-32001.yaml --name armadillo
     kind create cluster --config ./tools/kind-config/config-2-nodes-port-32002.yaml --name bison
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32004.yaml --name dolphin
 }
 ```
 
 <details>
 <summary>Details</summary>
 
-KinD clusters are created with 2 almost identical configurations. The configuration ensures the Kubernetes version is v1.17 with 2 nodes in place (1 for control plane, 1 for worker).
+KinD clusters are created with 3 almost identical configurations. The configuration ensures the Kubernetes version is v1.17 with 2 nodes in place (1 for control plane, 1 for worker).
 
 The difference between the configuration is the open port setup. Because clusters needs to talk to each other, we need them to be externally available. With KinD, external IP does not get assigned by default, and for this demo, we are using NodePort for the entry points, effectively mocking the multi-network setup.
 
@@ -41,6 +50,7 @@ As you can see `istioctl-input.yaml` in each cluster, the NodePort used are:
 
 - Armadillo will set up Istio IngressGateway with 32001 NodePort
 - Bison will set up Istio IngressGateway with 32002 NodePort
+- Dolphin will set up Istio IngressGateway with 32004 NodePort
 
 </details>
 
@@ -78,6 +88,14 @@ $ {
         --from-file=./bison/ca-key.pem \
         --from-file=./bison/root-cert.pem \
         --from-file=./bison/cert-chain.pem
+
+    kubectl create namespace --context kind-dolphin istio-system
+    kubectl create secret --context kind-dolphin \
+        generic cacerts -n istio-system \
+        --from-file=./dolphin/ca-cert.pem \
+        --from-file=./dolphin/ca-key.pem \
+        --from-file=./dolphin/root-cert.pem \
+        --from-file=./dolphin/cert-chain.pem
 
     popd > /dev/null
 }
@@ -125,6 +143,15 @@ Each command is associated with some comments to clarify what they do:
         --from-file=./bison/ca-key.pem \
         --from-file=./bison/root-cert.pem \
         --from-file=./bison/cert-chain.pem
+    #
+    # The below commands are for Dolphin cluster.
+    kubectl create namespace --context kind-dolphin istio-system
+    kubectl create secret --context kind-dolphin \
+        generic cacerts -n istio-system \
+        --from-file=./dolphin/ca-cert.pem \
+        --from-file=./dolphin/ca-key.pem \
+        --from-file=./dolphin/root-cert.pem \
+        --from-file=./dolphin/cert-chain.pem
 
     # Get back to previous directory
     popd > /dev/null
@@ -144,6 +171,7 @@ $ pwd
 $ {
     istioctl install --context kind-armadillo -f clusters/armadillo/istioctl-input.yaml
     istioctl install --context kind-bison -f clusters/bison/istioctl-input.yaml
+    istioctl install --context kind-dolphin -f clusters/dolphin/istioctl-input.yaml
 }
 ```
 
@@ -152,7 +180,7 @@ $ {
 
 Install Istio into each cluster. Istio can be installed in a few ways, but `istioctl install` is the most standard way recommended by the official documentation. It is also possible to create a lengthy YAML definition, so that we can even have GitOps as a part of Istio installation.
 
-As to the configurations, Armadillo and Bison have almost identical cluster setup. The main difference is the name used by various components (Ingress and Egress Gateways have `armadillo-` or `bison-` prefix). Also, as the previous step created the KinD cluster with different NodePort for Istio IngressGateway, you can see the corresponding port being used in `istioctl-input.yaml`.
+As to the configurations, Armadillo and Bison have almost identical cluster setup. The main difference is the name used by various components (Ingress and Egress Gateways have `armadillo-` or `bison-` prefix, and so on). Also, as the previous step created the KinD cluster with different NodePort for Istio IngressGateway, you can see the corresponding port being used in `istioctl-input.yaml`.
 
 </details>
 
@@ -171,13 +199,18 @@ $ {
     kubectl apply --context kind-bison \
         -f tools/httpbin/httpbin.yaml \
         -f tools/toolkit-alpine/toolkit-alpine.yaml
+
+    kubectl label --context kind-dolphin namespace default istio-injection=enabled
+    kubectl apply --context kind-dolphin \
+        -f tools/httpbin/httpbin.yaml \
+        -f tools/toolkit-alpine/toolkit-alpine.yaml
 }
 ```
 
 <details>
 <summary>Details</summary>
 
-There are 2 actions happening, and for 2 clusters (Armadillo and Bison).
+There are 3 actions happening, and for 3 clusters (Armadillo, Bison, and Dolphin).
 
 Firstly, `kubectl label namespace default istio-injection=enabled` marks that namespace (in this case `default` namespace) as Istio Sidecar enabled. This means any Pod that gets created in this namespace will go through Istio's MutatingWebhook, and Istio's Sidecar component (`istio-proxy`) will be embedded into the same Pod. Without this setup, you will need to add Sidecar separately by running `istioctl` commands, which may be ok for testing, but certainly not scalable.
 
@@ -320,7 +353,28 @@ $ kubectl apply --context kind-bison \
 <details>
 <summary>Details</summary>
 
-Bison
+To be updated
+
+</details>
+
+</details>
+
+<details>
+<summary>For Dolphin</summary>
+
+```bash
+$ pwd
+/some/path/at/simple-istio-multicluster
+
+$ kubectl apply --context kind-dolphin \
+    -f clusters/dolphin/dolphin-services.yaml \
+    -f clusters/dolphin/multicluster-setup.yaml
+```
+
+<details>
+<summary>Details</summary>
+
+To be updated
 
 </details>
 
@@ -431,6 +485,7 @@ $ {
 $ {
     kind delete cluster --name armadillo
     kind delete cluster --name bison
+    kind delete cluster --name dolphin
 }
 ```
 
