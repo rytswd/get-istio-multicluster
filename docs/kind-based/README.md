@@ -121,6 +121,7 @@ Each command is associated with some comments to clarify what they do:
     # certs for security reason.
     make -f ../tools/certs/Makefile.selfsigned.mk armadillo-cacerts
     make -f ../tools/certs/Makefile.selfsigned.mk bison-cacerts
+    make -f ../tools/certs/Makefile.selfsigned.mk dolphin-cacerts
 
     # Create a secret `cacerts`, which is used by Istio.
     # Istio's component `istiod` will use this, and if there is no secret in
