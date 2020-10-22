@@ -465,6 +465,8 @@ $ {
 
 ### Armadillo
 
+**NOTE**: Armadillo has a dependency to Bison and Dolphin, so set up those clusters first.
+
 ```bash
 $ pwd
 /some/path/at/simple-istio-multicluster
