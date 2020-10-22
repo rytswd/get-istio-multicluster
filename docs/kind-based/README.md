@@ -88,7 +88,7 @@ $ {
 
 If you do not create the certificate before Istio is installed to the cluster, Istio will fall back to use its own certificate. This will cause an issue when you try to use your custom cert later on. It's best to get the cert ready first - otherwise you will likely need to run through a bunch of restarts of Istio components to ensure the correct cert is picked up.
 
-The each command is associated with some comments to clarify what they do:
+Each command is associated with some comments to clarify what they do:
 
 ```bash
 {
