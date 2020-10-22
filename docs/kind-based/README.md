@@ -408,6 +408,16 @@ $ kubectl apply --context kind-bison \
     -f clusters/bison/multicluster-setup.yaml
 ```
 
+If you are using Istio v1.6, you will get an error from the above. You need to run the following command:
+
+```bash
+$ pwd
+/some/path/at/simple-istio-multicluster
+
+$ kubectl apply --context kind-bison \
+    -f clusters/bison/multicluster-setup-1.6.yaml
+```
+
 <details>
 <summary>Details</summary>
 
@@ -427,6 +437,16 @@ $ pwd
 $ kubectl apply --context kind-dolphin \
     -f clusters/dolphin/dolphin-services.yaml \
     -f clusters/dolphin/multicluster-setup.yaml
+```
+
+If you are using Istio v1.6, you will get an error from the above. You need to run the following command:
+
+```bash
+$ pwd
+/some/path/at/simple-istio-multicluster
+
+$ kubectl apply --context kind-bison \
+    -f clusters/bison/multicluster-setup-1.6.yaml
 ```
 
 <details>
