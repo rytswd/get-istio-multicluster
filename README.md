@@ -27,10 +27,12 @@ This repository is tested with the following versions of Istio:
 
 ## Clusters
 
-The directories here are some clusters.
+The clusters used in this repository are given easily identifiable names. They are not meant to convey any meaning.
+
+For some cluster, there are some peculiarities over the others.
 
 - `armadillo`: cluster with shared Istio Control Plane (with `crocodile`)
 - `bison`: cluster with dedicated Istio Control Plane
-- `crocodile`: clustter with shared Istio Control Plane (with `armadillo`)
-- `dolphin`: cluster with dedicated Istio Control Plane
-- `zebra`: cluster without Istio, as external cluster
+- [WIP] `crocodile`: clustter with shared Istio Control Plane (with `armadillo`)
+- [WIP] `dolphin`: cluster with dedicated Istio Control Plane
+- [WIP] `zebra`: cluster without Istio, as external cluster
