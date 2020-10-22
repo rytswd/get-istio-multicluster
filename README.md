@@ -22,8 +22,8 @@ This repository is tested with the following versions of Istio:
 
 - [KinD based setup](https://github.com/rytswd/simple-istio-multicluster/tree/master/docs/kind-based/README.md)  
   This sets up multiple KinD clusters with each having some Istio installation.
-- Argo CD based setup - WIP
-- AWS EKS + GCP GKE based setup - WIP
+- [WIP] Argo CD based setup
+- [WIP] AWS EKS + GCP GKE based setup
 
 ## Clusters
 
