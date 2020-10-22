@@ -592,7 +592,7 @@ $ {
     sed -i '' -e "s/REPLACE_WITH_DOLPHIN_INGRESS_GATEWAY_ADDRESS/$DOLPHIN_INGRESS_GATEWAY_ADDRESS/g" \
         clusters/armadillo/dolphin-connections.yaml
     if [[ $DOLPHIN_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
-        sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
+        sed -i '' -e "s/15443 # Istio Ingress Gateway port/32004/" \
             clusters/armadillo/dolphin-connections.yaml
     fi
     kubectl apply --context kind-armadillo \
