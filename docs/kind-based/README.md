@@ -72,6 +72,7 @@ $ {
 
     make -f ../tools/certs/Makefile.selfsigned.mk armadillo-cacerts
     make -f ../tools/certs/Makefile.selfsigned.mk bison-cacerts
+    make -f ../tools/certs/Makefile.selfsigned.mk dolphin-cacerts
 
     kubectl create namespace --context kind-armadillo istio-system
     kubectl create secret --context kind-armadillo \
