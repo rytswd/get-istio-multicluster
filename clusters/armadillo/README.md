@@ -14,6 +14,10 @@ This file contains VirtualService definitions for Services within the cluster, a
 
 This file contains endpoint details of how to connect to Bison cluster.
 
+### `dolphin-connections.yaml`
+
+This file contains endpoint details of how to connect to Dolphin cluster.
+
 ### `coredns-configmap.yaml`
 
 This is for multicluster DNS routing. Sets up `kube-system/coredns` with `istiocoredns`.

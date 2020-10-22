@@ -249,7 +249,9 @@ $ {
 $ {
     sed -i '' -e "s/REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP/$ARMADILLO_ISTIOCOREDNS_CLUSTER_IP/" \
         clusters/armadillo/coredns-configmap.yaml
-    kubectl apply --context kind-armadillo -f clusters/armadillo/coredns-configmap.yaml
+    kubectl apply --context kind-armadillo \
+        -f clusters/armadillo/armadillo-services.yaml \
+        -f clusters/armadillo/coredns-configmap.yaml
 }
 
 Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
@@ -290,7 +292,7 @@ $ {
 
 $ {
     export BISON_INGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
-        --context=kind-kind-bison \
+        --context=kind-bison \
         -n istio-system \
         --selector=app=istio-ingressgateway \
         -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo '172.18.0.1')
@@ -308,7 +310,6 @@ $ {
 172.18.0.1
 
 $ kubectl apply --context kind-armadillo \
-    -f clusters/armadillo/armadillo-services.yaml \
     -f clusters/armadillo/bison-connections.yaml
 
 serviceentry.networking.istio.io/bison-services created
@@ -333,6 +334,61 @@ This means that, when you need App Container A to talk to App Container B on the
 In order for 2 KinD clusters to talk to each other, the extra `sed` takes place to fallback to use `172.18.0.1` as endpoint address (which is a mapping outside of cluster), and because Bison's Ingress Gateway is set up with NodePort of `32002`, we replace the default port of `15443` with `32002`.
 
 The command may look confusing, but the update is simple. If you cloned this repo at the step 0, you can easily see from git diff.
+
+</details>
+
+---
+
+#### 5.3. Add ServiceEntry for Dolphin
+
+Before completing this, make sure the cluster Dolphin is also started, and has completed Istio installation.
+
+```bash
+$ pwd
+/some/path/at/simple-istio-multicluster
+
+$ {
+    export ARMADILLO_EGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
+        --context=kind-armadillo \
+        -n istio-system \
+        --selector=app=armadillo-multicluster-egressgateway \
+        -o jsonpath='{.items[0].spec.clusterIP}')
+    echo $ARMADILLO_EGRESS_GATEWAY_ADDRESS
+    sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
+        clusters/armadillo/dolphin-connections.yaml
+}
+
+10.xx.xx.xx
+
+$ {
+    export DOLPHIN_INGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
+        --context=kind-dolphin \
+        -n istio-system \
+        --selector=app=istio-ingressgateway \
+        -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo '172.18.0.1')
+    echo $DOLPHIN_INGRESS_GATEWAY_ADDRESS
+    {
+        sed -i '' -e "s/REPLACE_WITH_DOLPHIN_INGRESS_GATEWAY_ADDRESS/$DOLPHIN_INGRESS_GATEWAY_ADDRESS/g" \
+            clusters/armadillo/dolphin-connections.yaml
+        if [[ $DOLPHIN_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
+            sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
+                clusters/armadillo/dolphin-connections.yaml
+        fi
+    }
+}
+
+172.18.0.1
+
+$ kubectl apply --context kind-armadillo \
+    -f clusters/armadillo/dolphin-connections.yaml
+
+serviceentry.networking.istio.io/dolphin-services created
+```
+
+<details>
+<summary>Details</summary>
+
+To be updated
 
 </details>
 
@@ -496,7 +552,9 @@ $ {
         -o jsonpath={.spec.clusterIP})
     sed -i '' -e "s/REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP/$ARMADILLO_ISTIOCOREDNS_CLUSTER_IP/" \
         clusters/armadillo/coredns-configmap.yaml
-    kubectl apply --context kind-armadillo -f clusters/armadillo/coredns-configmap.yaml
+    kubectl apply --context kind-armadillo \
+        -f clusters/armadillo/armadillo-services.yaml \
+        -f clusters/armadillo/coredns-configmap.yaml
 
     export ARMADILLO_EGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
         --context=kind-armadillo \
@@ -506,7 +564,7 @@ $ {
     sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
         clusters/armadillo/bison-connections.yaml
     export BISON_INGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
-        --context=kind-kind-bison \
+        --context=kind-bison \
         -n istio-system \
         --selector=app=istio-ingressgateway \
         -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo '172.18.0.1')
@@ -517,8 +575,28 @@ $ {
             clusters/armadillo/bison-connections.yaml
     fi
     kubectl apply --context kind-armadillo \
-        -f clusters/armadillo/armadillo-services.yaml \
         -f clusters/armadillo/bison-connections.yaml
+
+    export ARMADILLO_EGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
+        --context=kind-armadillo \
+        -n istio-system \
+        --selector=app=armadillo-multicluster-egressgateway \
+        -o jsonpath='{.items[0].spec.clusterIP}')
+    sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
+        clusters/armadillo/dolphin-connections.yaml
+    export DOLPHIN_INGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
+        --context=kind-dolphin \
+        -n istio-system \
+        --selector=app=istio-ingressgateway \
+        -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo '172.18.0.1')
+    sed -i '' -e "s/REPLACE_WITH_DOLPHIN_INGRESS_GATEWAY_ADDRESS/$DOLPHIN_INGRESS_GATEWAY_ADDRESS/g" \
+        clusters/armadillo/dolphin-connections.yaml
+    if [[ $DOLPHIN_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
+        sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
+            clusters/armadillo/dolphin-connections.yaml
+    fi
+    kubectl apply --context kind-armadillo \
+        -f clusters/armadillo/dolphin-connections.yaml
 }
 ```
 
