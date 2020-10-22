@@ -14,7 +14,7 @@ spec:
       protocol: http
   resolution: STATIC
   addresses:
-    - 240.0.0.1
+    - 240.0.0.5
   endpoints:
     - address: REPLACE_WITH_DOLPHIN_INGRESS_GATEWAY_ADDRESS
       network: external
@@ -40,7 +40,7 @@ spec:
       protocol: http
   resolution: STATIC
   addresses:
-    - 240.0.0.2
+    - 240.0.0.6
   endpoints:
     - address: REPLACE_WITH_DOLPHIN_INGRESS_GATEWAY_ADDRESS
       network: external
