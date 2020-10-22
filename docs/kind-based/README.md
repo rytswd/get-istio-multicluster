@@ -74,31 +74,31 @@ $ {
     make -f ../tools/certs/Makefile.selfsigned.mk bison-cacerts
     make -f ../tools/certs/Makefile.selfsigned.mk dolphin-cacerts
 
+    popd > /dev/null
+
     kubectl create namespace --context kind-armadillo istio-system
     kubectl create secret --context kind-armadillo \
         generic cacerts -n istio-system \
-        --from-file=./armadillo/ca-cert.pem \
-        --from-file=./armadillo/ca-key.pem \
-        --from-file=./armadillo/root-cert.pem \
-        --from-file=./armadillo/cert-chain.pem
+        --from-file=./certs/armadillo/ca-cert.pem \
+        --from-file=./certs/armadillo/ca-key.pem \
+        --from-file=./certs/armadillo/root-cert.pem \
+        --from-file=./certs/armadillo/cert-chain.pem
 
     kubectl create namespace --context kind-bison istio-system
     kubectl create secret --context kind-bison \
         generic cacerts -n istio-system \
-        --from-file=./bison/ca-cert.pem \
-        --from-file=./bison/ca-key.pem \
-        --from-file=./bison/root-cert.pem \
-        --from-file=./bison/cert-chain.pem
+        --from-file=./certs/bison/ca-cert.pem \
+        --from-file=./certs/bison/ca-key.pem \
+        --from-file=./certs/bison/root-cert.pem \
+        --from-file=./certs/bison/cert-chain.pem
 
     kubectl create namespace --context kind-dolphin istio-system
     kubectl create secret --context kind-dolphin \
         generic cacerts -n istio-system \
-        --from-file=./dolphin/ca-cert.pem \
-        --from-file=./dolphin/ca-key.pem \
-        --from-file=./dolphin/root-cert.pem \
-        --from-file=./dolphin/cert-chain.pem
-
-    popd > /dev/null
+        --from-file=./certs/dolphin/ca-cert.pem \
+        --from-file=./certs/dolphin/ca-key.pem \
+        --from-file=./certs/dolphin/root-cert.pem \
+        --from-file=./certs/dolphin/cert-chain.pem
 }
 ```
 
@@ -123,6 +123,9 @@ Each command is associated with some comments to clarify what they do:
     make -f ../tools/certs/Makefile.selfsigned.mk bison-cacerts
     make -f ../tools/certs/Makefile.selfsigned.mk dolphin-cacerts
 
+    # Get back to previous directory
+    popd > /dev/null
+
     # Create a secret `cacerts`, which is used by Istio.
     # Istio's component `istiod` will use this, and if there is no secret in
     # place before `istiod` starts up, it would fall back to use Istio's
@@ -132,31 +135,28 @@ Each command is associated with some comments to clarify what they do:
     kubectl create namespace --context kind-armadillo istio-system
     kubectl create secret --context kind-armadillo \
         generic cacerts -n istio-system \
-        --from-file=./armadillo/ca-cert.pem \
-        --from-file=./armadillo/ca-key.pem \
-        --from-file=./armadillo/root-cert.pem \
-        --from-file=./armadillo/cert-chain.pem
+        --from-file=./certs/armadillo/ca-cert.pem \
+        --from-file=./certs/armadillo/ca-key.pem \
+        --from-file=./certs/armadillo/root-cert.pem \
+        --from-file=./certs/armadillo/cert-chain.pem
     #
     # The below commands are for Bison cluster.
     kubectl create namespace --context kind-bison istio-system
     kubectl create secret --context kind-bison \
         generic cacerts -n istio-system \
-        --from-file=./bison/ca-cert.pem \
-        --from-file=./bison/ca-key.pem \
-        --from-file=./bison/root-cert.pem \
-        --from-file=./bison/cert-chain.pem
+        --from-file=./certs/bison/ca-cert.pem \
+        --from-file=./certs/bison/ca-key.pem \
+        --from-file=./certs/bison/root-cert.pem \
+        --from-file=./certs/bison/cert-chain.pem
     #
     # The below commands are for Dolphin cluster.
     kubectl create namespace --context kind-dolphin istio-system
     kubectl create secret --context kind-dolphin \
         generic cacerts -n istio-system \
-        --from-file=./dolphin/ca-cert.pem \
-        --from-file=./dolphin/ca-key.pem \
-        --from-file=./dolphin/root-cert.pem \
-        --from-file=./dolphin/cert-chain.pem
-
-    # Get back to previous directory
-    popd > /dev/null
+        --from-file=./certs/dolphin/ca-cert.pem \
+        --from-file=./certs/dolphin/ca-key.pem \
+        --from-file=./certs/dolphin/root-cert.pem \
+        --from-file=./certs/dolphin/cert-chain.pem
 }
 ```
 
@@ -437,13 +437,31 @@ _TODO: More to be added_
 
 ---
 
-<!-- Commenting out for now
 ## Quicker Guide
 
 The below will be quicker than above if you use multiple terminals to run them in parallel.
 
 <details>
 <summary>Details</summary>
+
+### Prep - run before all
+
+```bash
+$ pwd
+/some/path/at/simple-istio-multicluster
+
+$ {
+    pushd certs > /dev/null
+
+    make -f ../tools/certs/Makefile.selfsigned.mk root-ca
+
+    make -f ../tools/certs/Makefile.selfsigned.mk armadillo-cacerts
+    make -f ../tools/certs/Makefile.selfsigned.mk bison-cacerts
+    make -f ../tools/certs/Makefile.selfsigned.mk dolphin-cacerts
+
+    popd > /dev/null
+}
+```
 
 ### Armadillo
 
@@ -453,11 +471,52 @@ $ pwd
 
 $ {
     kind create cluster --config ./tools/kind-config/config-2-nodes-port-32001.yaml --name armadillo
+
+    kubectl create namespace --context kind-armadillo istio-system
+    kubectl create secret --context kind-armadillo \
+        generic cacerts -n istio-system \
+        --from-file=./certs/armadillo/ca-cert.pem \
+        --from-file=./certs/armadillo/ca-key.pem \
+        --from-file=./certs/armadillo/root-cert.pem \
+        --from-file=./certs/armadillo/cert-chain.pem
+
     istioctl install --context kind-armadillo -f clusters/armadillo/istioctl-input.yaml
+
     kubectl label --context kind-armadillo namespace default istio-injection=enabled
     kubectl apply --context kind-armadillo \
         -f tools/httpbin/httpbin.yaml \
         -f tools/toolkit-alpine/toolkit-alpine.yaml
+
+    export ARMADILLO_ISTIOCOREDNS_CLUSTER_IP=$(kubectl get svc \
+        --context kind-armadillo \
+        -n istio-system \
+        istiocoredns \
+        -o jsonpath={.spec.clusterIP})
+    sed -i '' -e "s/REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP/$ARMADILLO_ISTIOCOREDNS_CLUSTER_IP/" \
+        clusters/armadillo/coredns-configmap.yaml
+    kubectl apply --context kind-armadillo -f clusters/armadillo/coredns-configmap.yaml
+
+    export ARMADILLO_EGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
+        --context=kind-armadillo \
+        -n istio-system \
+        --selector=app=armadillo-multicluster-egressgateway \
+        -o jsonpath='{.items[0].spec.clusterIP}')
+    sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
+        clusters/armadillo/bison-connections.yaml
+    export BISON_INGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
+        --context=kind-kind-bison \
+        -n istio-system \
+        --selector=app=istio-ingressgateway \
+        -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo '172.18.0.1')
+    sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
+        clusters/armadillo/bison-connections.yaml
+    if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
+        sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
+            clusters/armadillo/bison-connections.yaml
+    fi
+    kubectl apply --context kind-armadillo \
+        -f clusters/armadillo/armadillo-services.yaml \
+        -f clusters/armadillo/bison-connections.yaml
 }
 ```
 
@@ -469,22 +528,71 @@ $ pwd
 
 $ {
     kind create cluster --config ./tools/kind-config/config-2-nodes-port-32002.yaml --name bison
+
+    kubectl create namespace --context kind-bison istio-system
+    kubectl create secret --context kind-bison \
+        generic cacerts -n istio-system \
+        --from-file=./certs/bison/ca-cert.pem \
+        --from-file=./certs/bison/ca-key.pem \
+        --from-file=./certs/bison/root-cert.pem \
+        --from-file=./certs/bison/cert-chain.pem
+
     istioctl install --context kind-bison -f clusters/bison/istioctl-input.yaml
+
     kubectl label --context kind-bison namespace default istio-injection=enabled
     kubectl apply --context kind-bison \
         -f tools/httpbin/httpbin.yaml \
         -f tools/toolkit-alpine/toolkit-alpine.yaml
+
+    kubectl apply --context kind-bison \
+        -f clusters/bison/bison-services.yaml \
+        -f clusters/bison/multicluster-setup.yaml
+}
+```
+
+### Dolphin
+
+```bash
+$ pwd
+/some/path/at/simple-istio-multicluster
+
+$ {
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32004.yaml --name dolphin
+
+    kubectl create namespace --context kind-dolphin istio-system
+    kubectl create secret --context kind-dolphin \
+        generic cacerts -n istio-system \
+        --from-file=./certs/dolphin/ca-cert.pem \
+        --from-file=./certs/dolphin/ca-key.pem \
+        --from-file=./certs/dolphin/root-cert.pem \
+        --from-file=./certs/dolphin/cert-chain.pem
+
+    istioctl install --context kind-dolphin -f clusters/dolphin/istioctl-input.yaml
+
+    kubectl label --context kind-dolphin namespace default istio-injection=enabled
+    kubectl apply --context kind-dolphin \
+        -f tools/httpbin/httpbin.yaml \
+        -f tools/toolkit-alpine/toolkit-alpine.yaml
+
+    kubectl apply --context kind-dolphin \
+        -f clusters/dolphin/dolphin-services.yaml \
+        -f clusters/dolphin/multicluster-setup.yaml
 }
 ```
 
 </details>
 
---- -->
+---
 
 ## Cleanup
 
 ```bash
+$ pwd
+/some/path/at/simple-istio-multicluster
+
 $ {
+    rm -rf certs
+    git reset --hard
     kind delete cluster --name armadillo
     kind delete cluster --name bison
     kind delete cluster --name dolphin
@@ -493,6 +601,8 @@ $ {
 
 <details>
 <summary>Details</summary>
+
+Remove the entire `certs` directory, and `git reset --hard` to remove all the changes.
 
 KinD clusters can be deleted with `kind delete cluster` - and you can provide `--name` to specify one.
 
