@@ -14,7 +14,7 @@ But as this repository aims to provide practical use cases, you will also find:
 ### 📍 NOTE 📍
 
 > This repository does not aim to be exhaustive by any means. The examples here set out the foundation for multicluster communication, and use some features such as fault injections. You are expected to be somewhat familiar with Istio's features.  
-> Also, it is worth noting that most of the examples focus on traffic management features as of Oct 2020.
+> Also, it is worth noting that most of the examples focus on traffic management features as of Oct 2020. You can find more in the [official documentation of Istio concepts](https://istio.io/latest/docs/concepts/).
 
 ## Contents
 
