@@ -24,7 +24,7 @@ But as this repository aims to provide practical use cases, you will also find:
 | Argo CD      |      WIP      | Set up GitOps cluster setup using Argo CD. This setup also uses KinD clusters, but at the same time you would need a remote Git repo to connect to.  |
 | Public Cloud |      WIP      | WIP                                                                    |
 
-[kind-based]: https://github.com/rytswd/simple-istio-multicluster/tree/master/docs/kind-based/README.md
+[kind-based]: https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/kind-based/README.md
 
 ### ⚙️ Prerequisites
 

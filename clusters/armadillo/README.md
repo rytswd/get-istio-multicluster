@@ -2,7 +2,7 @@
 
 ## Prep
 
-For the detailed steps of how these files are used, please check out [KinD based setup](https://github.com/rytswd/simple-istio-multicluster/tree/master/docs/kind-based/README.md).
+For the detailed steps of how these files are used, please check out [KinD based setup](https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/kind-based/README.md).
 
 ## Configuration Files
 
