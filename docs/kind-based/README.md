@@ -30,13 +30,12 @@ $ pwd
 $ git clone https://github.com/rytswd/simple-istio-multicluster.git
 ```
 
+From here on, all the steps are assumed to be run from `/some/path/at/simple-istio-multicluster`.
+
 ### 1. Start local Kubernetes clusters with KinD
 
 ```bash
-$ pwd
-/some/path/at/simple-istio-multicluster
-
-$ {
+{
     kind create cluster --config ./tools/kind-config/config-2-nodes-port-32001.yaml --name armadillo
     kind create cluster --config ./tools/kind-config/config-2-nodes-port-32002.yaml --name bison
     kind create cluster --config ./tools/kind-config/config-2-nodes-port-32004.yaml --name dolphin
@@ -67,10 +66,7 @@ The steps are detailed at [Certificate Preparation steps](https://github.com/ryt
 You need to complete this step before installing Istio to the cluster. Essentially, you need to run the following:
 
 ```bash
-$ pwd
-/some/path/at/simple-istio-multicluster
-
-$ {
+{
     pushd certs > /dev/null
     make -f ../tools/certs/Makefile.selfsigned.mk root-ca
 
@@ -171,10 +167,7 @@ Each command is associated with some comments to clarify what they do:
 ### 3. Install Istio into clusters
 
 ```bash
-$ pwd
-/some/path/at/simple-istio-multicluster
-
-$ {
+{
     istioctl install --context kind-armadillo -f clusters/armadillo/istioctl-input.yaml
     istioctl install --context kind-bison -f clusters/bison/istioctl-input.yaml
     istioctl install --context kind-dolphin -f clusters/dolphin/istioctl-input.yaml
@@ -195,7 +188,7 @@ As to the configurations, Armadillo and Bison have almost identical cluster setu
 ### 4. Install Debug Processes
 
 ```bash
-$ {
+{
     kubectl label --context kind-armadillo namespace default istio-injection=enabled
     kubectl apply --context kind-armadillo \
         -f tools/httpbin/httpbin.yaml \
@@ -236,10 +229,7 @@ Each cluster has different resources. Check out the documentation one by one.
 #### 5.1. Add `istiocoredns` as a part of CoreDNS ConfigMap
 
 ```bash
-$ pwd
-/some/path/at/simple-istio-multicluster
-
-$ {
+{
     export ARMADILLO_ISTIOCOREDNS_CLUSTER_IP=$(kubectl get svc \
         --context kind-armadillo \
         -n istio-system \
@@ -247,17 +237,25 @@ $ {
         -o jsonpath={.spec.clusterIP})
     echo $ARMADILLO_ISTIOCOREDNS_CLUSTER_IP
 }
+```
 
+```sh
+# OUTPUT
 10.xx.xx.xx
+```
 
-$ {
+```bash
+{
     sed -i '' -e "s/REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP/$ARMADILLO_ISTIOCOREDNS_CLUSTER_IP/" \
         clusters/armadillo/coredns-configmap.yaml
     kubectl apply --context kind-armadillo \
         -f clusters/armadillo/armadillo-services.yaml \
         -f clusters/armadillo/coredns-configmap.yaml
 }
+```
 
+```sh
+# OUTPUT
 Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
 configmap/coredns configured
 ```
@@ -278,10 +276,7 @@ This will then be applied to `kube-system/coredns` ConfigMap. As KinD comes with
 Before completing this, make sure the cluster Bison is also started, and has completed Istio installation.
 
 ```bash
-$ pwd
-/some/path/at/simple-istio-multicluster
-
-$ {
+{
     export ARMADILLO_EGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
         --context=kind-armadillo \
         -n istio-system \
@@ -291,10 +286,15 @@ $ {
     sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
         clusters/armadillo/bison-connections.yaml
 }
+```
 
+```sh
+# OUTPUT
 10.xx.xx.xx
+```
 
-$ {
+```bash
+{
     export BISON_INGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
         --context=kind-bison \
         -n istio-system \
@@ -310,12 +310,20 @@ $ {
         fi
     }
 }
+```
 
+```sh
+# OUTPUT
 172.18.0.1
+```
 
-$ kubectl apply --context kind-armadillo \
+```bash
+kubectl apply --context kind-armadillo \
     -f clusters/armadillo/bison-connections.yaml
+```
 
+```sh
+# OUTPUT
 serviceentry.networking.istio.io/bison-services created
 ```
 
@@ -348,10 +356,7 @@ The command may look confusing, but the update is simple. If you cloned this rep
 Before completing this, make sure the cluster Dolphin is also started, and has completed Istio installation.
 
 ```bash
-$ pwd
-/some/path/at/simple-istio-multicluster
-
-$ {
+{
     export ARMADILLO_EGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
         --context=kind-armadillo \
         -n istio-system \
@@ -361,10 +366,15 @@ $ {
     sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
         clusters/armadillo/dolphin-connections.yaml
 }
+```
 
+```sh
+# OUTPUT
 10.xx.xx.xx
+```
 
-$ {
+```bash
+{
     export DOLPHIN_INGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
         --context=kind-dolphin \
         -n istio-system \
@@ -380,12 +390,20 @@ $ {
         fi
     }
 }
+```
 
+```sh
+# OUTPUT
 172.18.0.1
+```
 
-$ kubectl apply --context kind-armadillo \
+```bash
+kubectl apply --context kind-armadillo \
     -f clusters/armadillo/dolphin-connections.yaml
+```
 
+```sh
+# OUTPUT
 serviceentry.networking.istio.io/dolphin-services created
 ```
 
@@ -404,10 +422,7 @@ To be updated
 <summary>For Bison</summary>
 
 ```bash
-$ pwd
-/some/path/at/simple-istio-multicluster
-
-$ kubectl apply --context kind-bison \
+kubectl apply --context kind-bison \
     -f clusters/bison/bison-services.yaml \
     -f clusters/bison/multicluster-setup.yaml
 ```
@@ -415,10 +430,7 @@ $ kubectl apply --context kind-bison \
 If you are using Istio v1.6, you will get an error from the above. You need to run the following command:
 
 ```bash
-$ pwd
-/some/path/at/simple-istio-multicluster
-
-$ kubectl apply --context kind-bison \
+kubectl apply --context kind-bison \
     -f clusters/bison/multicluster-setup-1.6.yaml
 ```
 
@@ -435,10 +447,7 @@ To be updated
 <summary>For Dolphin</summary>
 
 ```bash
-$ pwd
-/some/path/at/simple-istio-multicluster
-
-$ kubectl apply --context kind-dolphin \
+kubectl apply --context kind-dolphin \
     -f clusters/dolphin/dolphin-services.yaml \
     -f clusters/dolphin/multicluster-setup.yaml
 ```
@@ -446,10 +455,7 @@ $ kubectl apply --context kind-dolphin \
 If you are using Istio v1.6, you will get an error from the above. You need to run the following command:
 
 ```bash
-$ pwd
-/some/path/at/simple-istio-multicluster
-
-$ kubectl apply --context kind-bison \
+kubectl apply --context kind-bison \
     -f clusters/bison/multicluster-setup-1.6.yaml
 ```
 
@@ -469,7 +475,7 @@ To be updated
 Simple curl to verify connection
 
 ```bash
-$ kubectl exec \
+kubectl exec \
     --context kind-armadillo \
     -it \
     $(kubectl get pod \
@@ -483,7 +489,7 @@ $ kubectl exec \
 Interactive shell from Armadillo cluster
 
 ```bash
-$ kubectl exec \
+kubectl exec \
     --context kind-armadillo \
     -it \
     $(kubectl get pod --context kind-armadillo -l app=toolkit-alpine -o jsonpath='{.items[0].metadata.name}') \
@@ -494,7 +500,7 @@ $ kubectl exec \
 For logs
 
 ```bash
-$ kubectl logs \
+kubectl logs \
     --context kind-armadillo \
     $(kubectl get pod \
         --context kind-armadillo \
@@ -527,10 +533,7 @@ The below will be quicker than above if you use multiple terminals to run them i
 ### Prep - run before all
 
 ```bash
-$ pwd
-/some/path/at/simple-istio-multicluster
-
-$ {
+{
     pushd certs > /dev/null
 
     make -f ../tools/certs/Makefile.selfsigned.mk root-ca
@@ -548,10 +551,7 @@ $ {
 **NOTE**: Armadillo has a dependency to Bison and Dolphin, so set up those clusters first.
 
 ```bash
-$ pwd
-/some/path/at/simple-istio-multicluster
-
-$ {
+{
     kind create cluster --config ./tools/kind-config/config-1-node-port-32001.yaml --name armadillo
 
     kubectl create namespace --context kind-armadillo istio-system
@@ -627,10 +627,7 @@ $ {
 ### Bison
 
 ```bash
-$ pwd
-/some/path/at/simple-istio-multicluster
-
-$ {
+{
     kind create cluster --config ./tools/kind-config/config-1-node-port-32002.yaml --name bison
 
     kubectl create namespace --context kind-bison istio-system
@@ -657,10 +654,7 @@ $ {
 ### Dolphin
 
 ```bash
-$ pwd
-/some/path/at/simple-istio-multicluster
-
-$ {
+{
     kind create cluster --config ./tools/kind-config/config-1-node-port-32004.yaml --name dolphin
 
     kubectl create namespace --context kind-dolphin istio-system
@@ -691,10 +685,7 @@ $ {
 ## Cleanup
 
 ```bash
-$ pwd
-/some/path/at/simple-istio-multicluster
-
-$ {
+{
     rm -rf certs
     git reset --hard
     kind delete cluster --name armadillo
