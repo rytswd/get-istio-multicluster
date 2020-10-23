@@ -11,8 +11,16 @@ But as this repository aims to provide practical use cases, you will also find:
 - Involved cluster / mesh setup
 - Detailed description on each step
 
+```
+
+```
+
 > 📍 NOTE 📍  
 > This repository is not an exhaustive example by any means. You are expected to be somewhat familiar with Istio's features.
+
+```
+
+```
 
 | Setup        | Istio Version | Description                                                            |
 | ------------ | ------------- | ---------------------------------------------------------------------- |
