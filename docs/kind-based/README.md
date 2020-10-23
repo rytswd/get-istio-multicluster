@@ -45,7 +45,7 @@ git clone --depth 1 -b master https://github.com/rytswd/simple-istio-multicluste
 ```
 
 ```bash
-# Simple curl without any of Git
+# Simple curl without Git
 {
     curl -sL -o simple-istio-multicluster.zip https://github.com/rytswd/simple-istio-multicluster/archive/master.zip
     unzip simple-istio-multicluster.zip
