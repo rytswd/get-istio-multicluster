@@ -15,7 +15,7 @@ This setup assumes you are using Istio 1.7.3.
 | Name    | Description                                           |
 | ------- | ----------------------------------------------------- |
 | Default | This page                                             |
-| [Light] | Creates only 2 clusters - quickest and smallest       |
+| [Light] | Creates only 2 clusters - quick and light setup       |
 | [v1.6]  | The same setup as default, but uses Istio version 1.6 |
 
 [light]: https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/kind-based/light.md
