@@ -8,7 +8,7 @@ After following all the steps below, you would get
 - 1 mesh
 - `armadillo` to send request to `bison` and `dolphin`
 
-### Other Setup Options
+### Other Setup Steps
 
 | Name    | Description                                           |
 | ------- | ----------------------------------------------------- |
