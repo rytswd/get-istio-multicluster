@@ -11,14 +11,14 @@ But as this repository aims to provide practical use cases, you will also find:
 - Involved cluster / mesh setup
 - Detailed description on each step
 
-> 📍 NOTE 📍
+> 📍 NOTE 📍  
 > This repository is not an exhaustive example by any means. You are expected to be somewhat familiar with Istio's features.
 
-| Setup        | Type                | Istio Version | Description                                                            |
-| ------------ | ------------------- | ------------- | ---------------------------------------------------------------------- |
-| [KinD based] | Multi Control Plane | 1.6<br />1.7  | Set up multiple KinD clusters, each having its own Istio Control Plane |
-| Argo CD      | Multi Control Plane | WIP           | WIP                                                                    |
-| Public Cloud | Multi Control Plane | WIP           | WIP                                                                    |
+| Setup        | Istio Version | Description                                                            |
+| ------------ | ------------- | ---------------------------------------------------------------------- |
+| [KinD based] | 1.6<br />1.7  | Set up multiple KinD clusters, each having its own Istio Control Plane |
+| Argo CD      | WIP           | WIP                                                                    |
+| Public Cloud | WIP           | WIP                                                                    |
 
 [kind based]: https://github.com/rytswd/simple-istio-multicluster/tree/master/docs/kind-based/README.md
 
