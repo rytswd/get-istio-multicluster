@@ -1,4 +1,4 @@
-# KinD based setup
+# KinD-bsed Setup
 
 ## Setup Details
 
