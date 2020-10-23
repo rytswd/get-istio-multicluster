@@ -551,7 +551,7 @@ _TODO: More to be added_
 
 ---
 
-## Quicker Guide
+## ⚡️ Quicker Paralllel Steps
 
 The below will be quicker than above if you use multiple terminals to run them in parallel.
 
@@ -571,6 +571,60 @@ The below will be quicker than above if you use multiple terminals to run them i
     make -f ../tools/certs/Makefile.selfsigned.mk dolphin-cacerts
 
     popd > /dev/null
+}
+```
+
+### Bison
+
+```bash
+{
+    kind create cluster --config ./tools/kind-config/config-1-node-port-32002.yaml --name bison
+
+    kubectl create namespace --context kind-bison istio-system
+    kubectl create secret --context kind-bison \
+        generic cacerts -n istio-system \
+        --from-file=./certs/bison/ca-cert.pem \
+        --from-file=./certs/bison/ca-key.pem \
+        --from-file=./certs/bison/root-cert.pem \
+        --from-file=./certs/bison/cert-chain.pem
+
+    istioctl install --context kind-bison -f clusters/bison/istioctl-input.yaml
+
+    kubectl label --context kind-bison namespace default istio-injection=enabled
+    kubectl apply --context kind-bison \
+        -f tools/httpbin/httpbin.yaml \
+        -f tools/toolkit-alpine/toolkit-alpine.yaml
+
+    kubectl apply --context kind-bison \
+        -f clusters/bison/bison-services.yaml \
+        -f clusters/bison/multicluster-setup.yaml
+}
+```
+
+### Dolphin
+
+```bash
+{
+    kind create cluster --config ./tools/kind-config/config-1-node-port-32004.yaml --name dolphin
+
+    kubectl create namespace --context kind-dolphin istio-system
+    kubectl create secret --context kind-dolphin \
+        generic cacerts -n istio-system \
+        --from-file=./certs/dolphin/ca-cert.pem \
+        --from-file=./certs/dolphin/ca-key.pem \
+        --from-file=./certs/dolphin/root-cert.pem \
+        --from-file=./certs/dolphin/cert-chain.pem
+
+    istioctl install --context kind-dolphin -f clusters/dolphin/istioctl-input.yaml
+
+    kubectl label --context kind-dolphin namespace default istio-injection=enabled
+    kubectl apply --context kind-dolphin \
+        -f tools/httpbin/httpbin.yaml \
+        -f tools/toolkit-alpine/toolkit-alpine.yaml
+
+    kubectl apply --context kind-dolphin \
+        -f clusters/dolphin/dolphin-services.yaml \
+        -f clusters/dolphin/multicluster-setup.yaml
 }
 ```
 
@@ -652,65 +706,11 @@ The below will be quicker than above if you use multiple terminals to run them i
 }
 ```
 
-### Bison
-
-```bash
-{
-    kind create cluster --config ./tools/kind-config/config-1-node-port-32002.yaml --name bison
-
-    kubectl create namespace --context kind-bison istio-system
-    kubectl create secret --context kind-bison \
-        generic cacerts -n istio-system \
-        --from-file=./certs/bison/ca-cert.pem \
-        --from-file=./certs/bison/ca-key.pem \
-        --from-file=./certs/bison/root-cert.pem \
-        --from-file=./certs/bison/cert-chain.pem
-
-    istioctl install --context kind-bison -f clusters/bison/istioctl-input.yaml
-
-    kubectl label --context kind-bison namespace default istio-injection=enabled
-    kubectl apply --context kind-bison \
-        -f tools/httpbin/httpbin.yaml \
-        -f tools/toolkit-alpine/toolkit-alpine.yaml
-
-    kubectl apply --context kind-bison \
-        -f clusters/bison/bison-services.yaml \
-        -f clusters/bison/multicluster-setup.yaml
-}
-```
-
-### Dolphin
-
-```bash
-{
-    kind create cluster --config ./tools/kind-config/config-1-node-port-32004.yaml --name dolphin
-
-    kubectl create namespace --context kind-dolphin istio-system
-    kubectl create secret --context kind-dolphin \
-        generic cacerts -n istio-system \
-        --from-file=./certs/dolphin/ca-cert.pem \
-        --from-file=./certs/dolphin/ca-key.pem \
-        --from-file=./certs/dolphin/root-cert.pem \
-        --from-file=./certs/dolphin/cert-chain.pem
-
-    istioctl install --context kind-dolphin -f clusters/dolphin/istioctl-input.yaml
-
-    kubectl label --context kind-dolphin namespace default istio-injection=enabled
-    kubectl apply --context kind-dolphin \
-        -f tools/httpbin/httpbin.yaml \
-        -f tools/toolkit-alpine/toolkit-alpine.yaml
-
-    kubectl apply --context kind-dolphin \
-        -f clusters/dolphin/dolphin-services.yaml \
-        -f clusters/dolphin/multicluster-setup.yaml
-}
-```
-
 </details>
 
 ---
 
-## Cleanup
+## 🧹 Cleanup
 
 ```bash
 {
