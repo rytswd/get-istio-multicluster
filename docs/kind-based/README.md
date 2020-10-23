@@ -1,6 +1,6 @@
 # KinD-bsed Setup
 
-## Setup Details
+## 📝 Setup Details
 
 After following all the steps below, you would get
 
@@ -13,18 +13,13 @@ After following all the steps below, you would get
 | Name    | Description                                           |
 | ------- | ----------------------------------------------------- |
 | Default | This page                                             |
-| [Light] | Creates only 2 clusters, and quickest and smallest.   |
+| [Light] | Creates only 2 clusters - quickest and smallest       |
 | [v1.6]  | The same setup as default, but uses Istio version 1.6 |
 
 [light]: https://github.com/rytswd/simple-istio-multicluster/tree/master/docs/kind-based/light.md
 [v1.6]: https://github.com/rytswd/simple-istio-multicluster/tree/master/docs/kind-based/v1.6.md
 
-## Prerequisites
-
-- Docker
-- [KinD](https://kind.sigs.k8s.io/)
-
-## Steps
+## 🐾 Steps
 
 ### 0. Clone this repository
 
