@@ -41,15 +41,15 @@ You could use either of the following commands for even simpler usage:
 
 ```bash
 # Shallow Git clone
-git clone --depth 1 -b master https://github.com/rytswd/simple-istio-multicluster.git
+git clone --depth 1 -b main https://github.com/rytswd/simple-istio-multicluster.git
 ```
 
 ```bash
 # Simple curl without Git
 {
-    curl -sL -o simple-istio-multicluster.zip https://github.com/rytswd/simple-istio-multicluster/archive/master.zip
+    curl -sL -o simple-istio-multicluster.zip https://github.com/rytswd/simple-istio-multicluster/archive/main.zip
     unzip simple-istio-multicluster.zip
-    cd simple-istio-multicluster-master.zip
+    cd simple-istio-multicluster-main.zip
 }
 ```
 
