@@ -6,13 +6,43 @@ metadata:
   # namespace: istio-system
 spec:
   hosts:
+    - httpbin.default.svc.cluster.local
+    # TODO: Check if EnvoyFilter takes place before or after - if before, this is not useful
+    - httpbin.default.bison.global
+    - httpbin.default.global
+  gateways:
+    - mesh
+    # TODO: Below setup does not seem to work. When multicluster traffic comes in, this VS doesn't get applied.
+    - istio-system/bison-multicluster-ingressgateway
+    - istio-system/istio-multicluster-ingressgateway
+  http:
+    - match:
+        - uri:
+            prefix: /chaos
+      rewrite:
+        uri: /status/418
+      route:
+        - destination:
+            host: httpbin.default.svc.cluster.local
+      fault:
+        abort:
+          percentage:
+            value: 50
+          httpStatus: 400
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: bison-httpbin-chaos
+  namespace: istio-system
+spec:
+  hosts:
     - httpbin.default.bison.global
     - httpbin.default.global
     - httpbin.default.svc.cluster.local
   gateways:
-    - bison-multicluster-ingressgateway.istio-system.svc.cluster.local
-    - mesh
-    - istio-system/bison-multicluster-ingressgateway
+    - bison-multicluster-ingressgateway
   http:
     - match:
         - uri:
