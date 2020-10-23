@@ -32,6 +32,29 @@ $ git clone https://github.com/rytswd/simple-istio-multicluster.git
 
 From here on, all the steps are assumed to be run from `/some/path/at/simple-istio-multicluster`.
 
+<details>
+<summary>Details</summary>
+
+This repository is mostly some configuration files. Git repository is not necessarily a must-have, though the clean-up step uses Git features.
+
+You could use either of the following commands for even simpler usage:
+
+```bash
+# Shallow Git clone
+git clone --depth 1 -b master https://github.com/rytswd/simple-istio-multicluster.git
+```
+
+```bash
+# Simple curl without any of Git
+{
+    curl -sL -o simple-istio-multicluster.zip https://github.com/rytswd/simple-istio-multicluster/archive/master.zip
+    unzip simple-istio-multicluster.zip
+    cd simple-istio-multicluster-master.zip
+}
+```
+
+</details>
+
 ---
 
 ### 1. Start local Kubernetes clusters with KinD
