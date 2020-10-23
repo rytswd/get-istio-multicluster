@@ -238,7 +238,7 @@ There are 3 actions happening, and for 3 clusters (Armadillo, Bison, and Dolphin
 
 Firstly, `kubectl label namespace default istio-injection=enabled` marks that namespace (in this case `default` namespace) as Istio Sidecar enabled. This means any Pod that gets created in this namespace will go through Istio's MutatingWebhook, and Istio's Sidecar component (`istio-proxy`) will be embedded into the same Pod. Without this setup, you will need to add Sidecar separately by running `istioctl` commands, which may be ok for testing, but certainly not scalable.
 
-Second action is to install the testing tools. `httpbin` is a nice Web server which can handle incoming HTTP request and return arbitrary output based on the input path. `toolkit-alpine` is a lightweight container which has a few tools useful for testing, such as `curl`, `dig`, etc.
+Second action is to install the testing tools. `httpbin` is a nice Web server which can handle incoming HTTP request and return arbitrary output based on the input path. `toolkit-alpine` is a lightweight container which has a few tools useful for testing, such as `curl`, `dig`, etc. You can find the image definition in https://github.com/rytswd/docker-toolkit-images
 
 </details>
 
