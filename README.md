@@ -43,6 +43,6 @@ For some cluster, there are some peculiarities over the others.
 
 - `armadillo`: cluster with shared Istio Control Plane (with `cougar`)
 - `bison`: cluster with dedicated Istio Control Plane
-- ⚠️ WIP ⚠️ `cougar`: clustter with shared Istio Control Plane (with `armadillo`)
+- `cougar` ⚠️ WIP ⚠️: clustter with shared Istio Control Plane (with `armadillo`)
 - `dolphin`: cluster with dedicated Istio Control Plane
-- ⚠️ WIP ⚠️ `zebra`: cluster without Istio, as external cluster
+- `zebra` ⚠️ WIP ⚠️: cluster without Istio, as external cluster
