@@ -1,29 +1,26 @@
 # Simple Istio Multicluster
 
-Istio Multicluster is by no means simple. This repository tries to showcase with the following:
+Istio Multicluster is by no means simple, as there are so many features Istio provides. This repository tries to showcase some of Istio's capability with the following in mind:
 
 - Simple configurations
 - Simple processes / containers
 - Simple steps to reproduce
 
-But as this repository aims to provide complex scenarios and how Istio can handle them, you will also find:
+But as this repository aims to provide practical use cases, you will also find:
 
 - Involved cluster / mesh setup
 - Detailed description on each step
 
-## Versions
+> 📍 NOTE 📍
+> This repository is not an exhaustive example by any means. You are expected to be somewhat familiar with Istio's features.
 
-This repository is tested with the following versions of Istio:
+| Setup        | Type                | Istio Version | Description                                                            |
+| ------------ | ------------------- | ------------- | ---------------------------------------------------------------------- |
+| [KinD based] | Multi Control Plane | 1.6<br />1.7  | Set up multiple KinD clusters, each having its own Istio Control Plane |
+| Argo CD      | Multi Control Plane | WIP           | WIP                                                                    |
+| Public Cloud | Multi Control Plane | WIP           | WIP                                                                    |
 
-- v1.6.8
-- v1.7.3
-
-## Steps
-
-- [KinD based setup](https://github.com/rytswd/simple-istio-multicluster/tree/master/docs/kind-based/README.md)  
-  This sets up multiple KinD clusters with each having some Istio installation.
-- [WIP] Argo CD based setup
-- [WIP] AWS EKS + GCP GKE based setup
+[kind based]: https://github.com/rytswd/simple-istio-multicluster/tree/master/docs/kind-based/README.md
 
 ## Clusters
 
