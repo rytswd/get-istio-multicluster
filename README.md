@@ -13,7 +13,9 @@ But as this repository aims to provide practical use cases, you will also find:
 
 > 📍 NOTE 📍
 >
-> This repository is not an exhaustive example by any means. You are expected to be somewhat familiar with Istio's features.
+> This repository does not aim to be exhaustive by any means. Many of the examples are You are expected to be somewhat familiar with Istio's features.
+
+## Contents
 
 | Setup        | Istio Version | Description                                                            |
 | ------------ | ------------- | ---------------------------------------------------------------------- |
