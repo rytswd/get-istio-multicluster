@@ -11,9 +11,10 @@ But as this repository aims to provide practical use cases, you will also find:
 - Involved cluster / mesh setup
 - Detailed description on each step
 
-> 📍 NOTE 📍
->
-> This repository does not aim to be exhaustive by any means. Many of the examples are You are expected to be somewhat familiar with Istio's features.
+## 📍 NOTE 📍
+
+> This repository does not aim to be exhaustive by any means. The examples here set out the foundation for multicluster communication, and use some features such as fault injections. You are expected to be somewhat familiar with Istio's features.  
+> Also, it is worth noting that most of the examples focus on traffic management features as of Oct 2020.
 
 ## Contents
 
@@ -31,8 +32,8 @@ The clusters used in this repository are given easily identifiable names. They a
 
 For some cluster, there are some peculiarities over the others.
 
-- `armadillo`: cluster with shared Istio Control Plane (with `crocodile`)
+- `armadillo`: cluster with shared Istio Control Plane (with `cougar`)
 - `bison`: cluster with dedicated Istio Control Plane
-- [WIP] `crocodile`: clustter with shared Istio Control Plane (with `armadillo`)
-- [WIP] `dolphin`: cluster with dedicated Istio Control Plane
+- [WIP] `cougar`: clustter with shared Istio Control Plane (with `armadillo`)
+- `dolphin`: cluster with dedicated Istio Control Plane
 - [WIP] `zebra`: cluster without Istio, as external cluster
