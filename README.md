@@ -1,6 +1,6 @@
 # Simple Istio Multicluster
 
-Istio Multicluster is by no means simple, as there are so many features Istio provides. This repository tries to showcase some of Istio's capability with the following in mind:
+Istio Multicluster is by no means simple, as there are so many features Istio provides.This repository tries to showcase some of Istio's capability with the following in mind:
 
 - Simple configurations
 - Simple processes / containers
@@ -20,7 +20,7 @@ But as this repository aims to provide practical use cases, you will also find:
 
 | Setup        | Istio Version | Description                                                            |
 | ------------ | :-----------: | ---------------------------------------------------------------------- |
-| [KinD based] | 1.6<br />1.7  | Set up multiple KinD clusters, each having its own Istio Control Plane |
+| [KinD based] | 1.6<br />1.7  | Set up multiple KinD clusters, each having its own Istio Control Plane.<br />This is suitable for getting started and understanding multicluster setup as well as testing some features with it.<br /><br /> This setup can be run completely locally, though depending on your machine spec, you may need to adjust the setup accordingly for stable environment. |
 | Argo CD      |      WIP      | WIP                                                                    |
 | Public Cloud |      WIP      | WIP                                                                    |
 
