@@ -54,7 +54,7 @@ The below will be quicker than above if you use multiple terminals to run them i
 
 ```bash
 {
-    k3d cluster create bison --agents 1 -p "32004:32004@agent[0]"
+    k3d cluster create dolphin --agents 1 -p "32004:32004@agent[0]"
 
     kubectl create namespace --context k3d-dolphin istio-system
     kubectl create secret --context k3d-dolphin \
@@ -83,7 +83,7 @@ The below will be quicker than above if you use multiple terminals to run them i
 
 ```bash
 {
-    k3d cluster create bison --agents 1 -p "32001:32001@agent[0]"
+    k3d cluster create armadillo --agents 1 -p "32001:32001@agent[0]"
 
     kubectl create namespace --context k3d-armadillo istio-system
     kubectl create secret --context k3d-armadillo \
