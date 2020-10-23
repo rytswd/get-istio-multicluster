@@ -20,7 +20,7 @@ But as this repository aims to provide practical use cases, you will also find:
 
 | Setup        | Istio Version | Description                                                            |
 | ------------ | :-----------: | ---------------------------------------------------------------------- |
-| [KinD-based] | 1.6<br />1.7  | Set up multiple KinD clusters, each having its own Istio Control Plane.<br />This is suitable for getting started and understanding multicluster setup as well as testing some features with it.<br /><br /> This setup can be run completely locally, though depending on your machine spec, you may need to adjust the setup accordingly for stable environment. |
+| [KinD-based] | 1.6<br />1.7  | Set up multiple [KinD](https://kind.sigs.k8s.io/) clusters, each having its own Istio Control Plane.<br />This is suitable for getting started and understanding multicluster setup as well as testing some features with it.<br /><br /> This setup can be run completely locally, though depending on your machine spec, you may need to adjust the setup accordingly for stable environment. |
 | k3d-based    |      WIP      | Set up multicluster with [k3s](https://k3s.io/) clusters using [k3d](https://k3d.io/).<br /><br />This setup is about the same as KinD-based, but is lighter thanks to k3s.|
 | Argo CD      |      WIP      | Set up GitOps cluster setup using Argo CD. This setup also uses KinD clusters, but at the same time you would need a remote Git repo to connect to.  |
 | Public Cloud |      WIP      | WIP                                                                    |
