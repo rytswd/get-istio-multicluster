@@ -35,9 +35,9 @@ From here on, all the steps are assumed to be run from `/some/path/at/simple-ist
 <details>
 <summary>Details</summary>
 
-This repository is mostly some configuration files. Git repository is not necessarily a must-have, though the clean-up step uses Git features.
+This repository is mostly configuration files. Having the set of files all in directory structure makes it easier to see how multiple configurations work together.
 
-You could use either of the following commands for even simpler usage:
+Git repository is not necessarily a must-have. Although the clean-up step uses Git features, you could use either of the following commands for even simpler use cases:
 
 ```bash
 # Shallow Git clone
