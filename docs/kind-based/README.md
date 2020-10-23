@@ -32,6 +32,8 @@ $ git clone https://github.com/rytswd/simple-istio-multicluster.git
 
 From here on, all the steps are assumed to be run from `/some/path/at/simple-istio-multicluster`.
 
+---
+
 ### 1. Start local Kubernetes clusters with KinD
 
 ```bash
