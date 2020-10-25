@@ -1,6 +1,6 @@
 # Simple Istio Multicluster
 
-Istio Multicluster is by no means simple, as there are so many features Istio provides.This repository tries to showcase some of Istio's capability with the following in mind:
+Istio Multicluster is by no means simple, as there are many moving pieces, and features Istio provides. This repository tries to showcase some of Istio's capability with the following in mind:
 
 - Simple configurations
 - Simple processes / containers
@@ -10,6 +10,8 @@ But as this repository aims to provide practical use cases, you will also find:
 
 - Involved cluster / mesh setup
 - Detailed description on each step
+
+This should allow you to have a quick deep-dive into the Istio offerings. Many of the useful features are backed by real configurations that could be used with minor tweaks.
 
 #### 📍 NOTE 📍
 
