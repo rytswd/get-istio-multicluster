@@ -50,6 +50,15 @@ The below will be quicker than above if you use multiple terminals to run them i
 }
 ```
 
+If you are using Istio v1.6 or below, you would need to run the following command as EnvoyFilter change in 1.7 is not compatible.
+
+```bash
+{
+    kubectl apply --context k3d-bison \
+        -f clusters/bison/multicluster-setup-1.6.yaml
+}
+```
+
 ### Dolphin
 
 ```bash
@@ -74,6 +83,15 @@ The below will be quicker than above if you use multiple terminals to run them i
     kubectl apply --context k3d-dolphin \
         -f clusters/dolphin/dolphin-services.yaml \
         -f clusters/dolphin/multicluster-setup.yaml
+}
+```
+
+If you are using Istio v1.6 or below, you would need to run the following command as EnvoyFilter change in 1.7 is not compatible.
+
+```bash
+{
+    kubectl apply --context k3d-dolphin \
+        -f clusters/dolphin/multicluster-setup-1.6.yaml
 }
 ```
 
