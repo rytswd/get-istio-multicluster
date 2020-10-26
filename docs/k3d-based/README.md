@@ -140,10 +140,10 @@ If you are using Istio v1.6 or below, you would need to run the following comman
         --context=k3d-bison \
         -n istio-system \
         --selector=app=istio-ingressgateway \
-        -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo '172.18.0.1')
+        -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo '172.21.0.1')
     sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
         clusters/armadillo/bison-connections.yaml
-    if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
+    if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.21.0.1' ]]; then
         sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
             clusters/armadillo/bison-connections.yaml
     fi
@@ -161,10 +161,10 @@ If you are using Istio v1.6 or below, you would need to run the following comman
         --context=k3d-dolphin \
         -n istio-system \
         --selector=app=istio-ingressgateway \
-        -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo '172.18.0.1')
+        -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo '172.21.0.1')
     sed -i '' -e "s/REPLACE_WITH_DOLPHIN_INGRESS_GATEWAY_ADDRESS/$DOLPHIN_INGRESS_GATEWAY_ADDRESS/g" \
         clusters/armadillo/dolphin-connections.yaml
-    if [[ $DOLPHIN_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
+    if [[ $DOLPHIN_INGRESS_GATEWAY_ADDRESS == '172.21.0.1' ]]; then
         sed -i '' -e "s/15443 # Istio Ingress Gateway port/32004/" \
             clusters/armadillo/dolphin-connections.yaml
     fi
