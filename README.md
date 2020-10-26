@@ -41,7 +41,7 @@ For most of the setup, you will need the following tools installed:
 
 ### 🌍 Clusters
 
-The clusters used in this repository are given easily identifiable names. They are not meant to convey any meaning.
+The clusters used in this repository are given easily identifiable names. They don't convey any special meaning.
 
 For some cluster, there are some peculiarities over the others.
 
