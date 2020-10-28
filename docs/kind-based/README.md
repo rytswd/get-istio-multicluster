@@ -132,7 +132,7 @@ You need to complete this step before installing Istio to the cluster. Essential
 <details>
 <summary>Details</summary>
 
-If you do not create the certificate before Istio is installed to the cluster, Istio will fall back to use its own certificate. This will cause an issue when you try to use your custom cert later on. It's best to get the cert ready first - otherwise you will likely need to run through a bunch of restarts of Istio components to ensure the correct cert is picked up.
+If you do not create the certificate before Istio is installed to the cluster, Istio will fall back to use its own certificate. This will cause an issue when you try to use your custom cert later on. It's best to get the cert ready first - otherwise you will likely need to run through a bunch of restarts of Istio components and others to ensure the correct cert is picked up.
 
 Each command is associated with some comments to clarify what they do:
 
