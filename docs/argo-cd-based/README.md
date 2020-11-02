@@ -70,13 +70,69 @@ You can use k3d as well. This example sticks with KinD.
 <details>
 <summary>Details</summary>
 
-You can find more in [KinD-based Setup document](https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/kind-based#1-start-local-kubernetes-clusters-with-kind).
+You can find more about this setup in [KinD-based Setup document](https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/kind-based#1-start-local-kubernetes-clusters-with-kind).
 
 </details>
 
 ---
 
-### 3. Install Argo CD
+### 3. Prepare CA Certs
+
+<!-- The steps are detailed at [Certificate Preparation steps](https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/cert-prep/README.md). -->
+
+You need to complete this step before installing Istio to the cluster. Essentially, you need to run the following:
+
+```bash
+{
+    pushd certs > /dev/null
+    make -f ../tools/certs/Makefile.selfsigned.mk root-ca
+
+    make -f ../tools/certs/Makefile.selfsigned.mk armadillo-cacerts
+    make -f ../tools/certs/Makefile.selfsigned.mk bison-cacerts
+    make -f ../tools/certs/Makefile.selfsigned.mk dolphin-cacerts
+
+    popd > /dev/null
+
+    kubectl create namespace --context kind-armadillo istio-system
+    kubectl create secret --context kind-armadillo \
+        generic cacerts -n istio-system \
+        --from-file=./certs/armadillo/ca-cert.pem \
+        --from-file=./certs/armadillo/ca-key.pem \
+        --from-file=./certs/armadillo/root-cert.pem \
+        --from-file=./certs/armadillo/cert-chain.pem
+
+    kubectl create namespace --context kind-bison istio-system
+    kubectl create secret --context kind-bison \
+        generic cacerts -n istio-system \
+        --from-file=./certs/bison/ca-cert.pem \
+        --from-file=./certs/bison/ca-key.pem \
+        --from-file=./certs/bison/root-cert.pem \
+        --from-file=./certs/bison/cert-chain.pem
+
+    kubectl create namespace --context kind-dolphin istio-system
+    kubectl create secret --context kind-dolphin \
+        generic cacerts -n istio-system \
+        --from-file=./certs/dolphin/ca-cert.pem \
+        --from-file=./certs/dolphin/ca-key.pem \
+        --from-file=./certs/dolphin/root-cert.pem \
+        --from-file=./certs/dolphin/cert-chain.pem
+}
+```
+
+<details>
+<summary>Details</summary>
+
+In truly GitOps setup, you will likely want to keep this secrcet as a part of git repo. That would pose another challenge on how you can securely store the secret data in git, while keeping its secrecy.
+
+You can combine with solution such as [sealed-secret](https://github.com/bitnami-labs/sealed-secrets) to store secret securely in git.
+
+You can find more about this setup in [KinD-based Setup document](https://github.com/rytswd/simple-istio-multicluster/blob/main/docs/kind-based/README.md#2-prepare-ca-certs).
+
+</details>
+
+---
+
+### 4. Install Argo CD
 
 Armadillo
 
