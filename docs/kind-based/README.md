@@ -30,6 +30,8 @@ $ pwd
 /some/path/at
 
 $ git clone https://github.com/rytswd/simple-istio-multicluster.git
+
+$ cd simple-istio-multicluster
 ```
 
 From here on, all the steps are assumed to be run from `/some/path/at/simple-istio-multicluster`.
@@ -88,7 +90,7 @@ As you can see `istioctl-input.yaml` in each cluster, the NodePort used are:
 
 ### 2. Prepare CA Certs
 
-The steps are detailed at [Certificate Preparation steps](https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/cert-prep/README.md).
+<!-- The steps are detailed at [Certificate Preparation steps](https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/cert-prep/README.md). -->
 
 You need to complete this step before installing Istio to the cluster. Essentially, you need to run the following:
 
