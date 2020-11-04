@@ -1,0 +1,37 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: external-svc-httpbin
+spec:
+  hosts:
+    - httpbin.org
+  location: MESH_EXTERNAL
+  ports:
+    - number: 80
+      name: example-http
+      protocol: HTTP
+  resolution: DNS
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: external-svc-httpbin-chaos-routing
+spec:
+  hosts:
+    - httpbin.org
+  http:
+    # Add chaos routing
+    - match:
+        - uri:
+            prefix: /chaos
+      rewrite:
+        uri: /status/418
+      route:
+        - destination:
+            host: httpbin.org
+      fault:
+        abort:
+          percentage:
+            value: 50
+          httpStatus: 400

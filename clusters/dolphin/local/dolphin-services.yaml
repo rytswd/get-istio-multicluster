@@ -1,0 +1,29 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: dolphin-httpbin-chaos-routing
+  # namespace: istio-system
+spec:
+  hosts:
+    - httpbin.default.dolphin.global
+    - httpbin.default.global
+    - httpbin.default.svc.cluster.local
+  gateways:
+    - dolphin-multicluster-ingressgateway.istio-system.svc.cluster.local
+    - mesh
+    - istio-system/dolphin-multicluster-ingressgateway
+  http:
+    - match:
+        - uri:
+            prefix: /chaos
+      rewrite:
+        uri: /status/418
+      route:
+        - destination:
+            host: httpbin.default.svc.cluster.local
+      fault:
+        abort:
+          percentage:
+            value: 50
+          httpStatus: 400

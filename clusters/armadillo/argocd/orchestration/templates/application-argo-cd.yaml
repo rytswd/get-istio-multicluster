@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-cd
+  namespace: argocd
+  {{- if .Values.metadata.finalizers.enabled }}
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  {{- end }}
+spec:
+  project: argo-cd-setup
+  source:
+    path: docs/argo-cd-based/gitops-armadillo/stack/argo-cd
+    repoURL: {{ .Values.spec.source.gitRepoUrl }}
+    targetRevision: {{ .Values.spec.source.targetRevision }}
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: argocd
+
+  # Do not specify syncPolicy if nothing is defined in values
+  {{- if or .Values.spec.syncPolicy.automated.prune.enabled .Values.spec.syncPolicy.automated.selfHeal.enabled }}
+  syncPolicy:
+    automated:
+      {{- if .Values.spec.syncPolicy.automated.prune.enabled }}
+      # Specifies if resources should be pruned during auto-syncing ( false by default ).
+      prune: true 
+      {{- end }}
+
+      {{- if .Values.spec.syncPolicy.automated.selfHeal.enabled }}
+      # Specifies if partial app sync should be executed when resources are changed only in target Kubernetes cluster and no git change detected ( false by default ).
+      selfHeal: true 
+      {{- end }}
+  {{- end }}

@@ -1,0 +1,158 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: armadillo-istio
+spec:
+  # The minimal profile is a good place to start for testing
+  profile: minimal
+  # Addon components include Grafana, Jaeger and other useful set. For this
+  # setup, we only get the essential setup, which is istiocoredns.
+  addonComponents:
+    istiocoredns:
+      enabled: true
+  components:
+    # The below creates multiple EgressGateways - one for multicluster
+    # communication, and the other is for other EgressGateway usages.
+    egressGateways:
+      - enabled: true
+        name: armadillo-external-egressgateway
+        label:
+          app: armadillo-external-egressgateway
+      - enabled: true
+        name: armadillo-multicluster-egressgateway
+        label:
+          app: armadillo-multicluster-egressgateway
+        # k8s:
+        #   env:
+        #     - name: ISTIO_META_REQUESTED_NETWORK_VIEW
+        #       value: external
+
+    # The below creates multiple IngressGateways - one for multicluster
+    # communication, and the other is for other IngressGateway usages.
+    ingressGateways:
+      - enabled: true
+        name: armadillo-external-ingressgateway
+        label:
+          app: armadillo-external-ingressgateway
+        k8s:
+          # In case of LB usage in real environment, you may want to create
+          # IP from the cloud provider service, and use it here.
+          # service:
+          #   loadBalancerIP: TBC
+
+          # Affinity for IngressGateways, so that pods are separated into
+          # different nodes.
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app: armadillo-external-ingressgateway
+                  topologyKey: kubernetes.io/hostname
+
+          # HPA setup, which is commented out for local testing.
+          # hpaSpec:
+          #   maxReplicas: 5
+          #   metrics:
+          #     - resource:
+          #         name: cpu
+          #         targetAverageUtilization: 80
+          #       type: Resource
+          #   minReplicas: 3
+          #   scaleTargetRef:
+          #     apiVersion: apps/v1
+          #     kind: Deployment
+          #     name: armadillo-external-ingressgateway
+
+      - enabled: true
+        name: armadillo-multicluster-ingressgateway
+        label:
+          app: armadillo-multicluster-ingressgateway
+        k8s:
+          service:
+            # In case of LB usage in real environment, you may want to create
+            # IP from the cloud provider service, and use it here.
+            # loadBalancerIP: TBC
+            ports:
+              - port: 80
+                targetPort: 8080
+                name: http2
+              - port: 443
+                targetPort: 8443
+                name: https
+              - port: 15443
+                targetPort: 15443
+                name: tls
+                nodePort: 32001 # This is for KinD based testing. Make sure this doesn't clash with other mesh definitions.
+
+          # Affinity for IngressGateways, so that pods are separated into
+          # different nodes.
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app: armadillo-multicluster-ingressgateway
+                  topologyKey: kubernetes.io/hostname
+
+          # HPA setup, which is commented out for local testing.
+          # hpaSpec:
+          #   maxReplicas: 4
+          #   metrics:
+          #     - resource:
+          #         name: cpu
+          #         targetAverageUtilization: 80
+          #       type: Resource
+          #   minReplicas: 2
+          #   scaleTargetRef:
+          #     apiVersion: apps/v1
+          #     kind: Deployment
+          #     name: armadillo-multicluster-ingressgateway
+
+    # For Istiod setup
+    pilot:
+      k8s:
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app: istiod
+                topologyKey: kubernetes.io/hostname
+
+        # Reduce resource requirements for local testing. This is NOT
+        # recommended for the real use cases.
+        resources:
+          limits:
+            cpu: 200m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+
+        # HPA setup, which is commented out for local testing.
+        # hpaSpec:
+        #   maxReplicas: 5
+        #   metrics:
+        #     - resource:
+        #         name: cpu
+        #         targetAverageUtilization: 80
+        #       type: Resource
+        #   minReplicas: 3
+        #   scaleTargetRef:
+        #     apiVersion: apps/v1
+        #     kind: Deployment
+        #     name: istiod
+
+  meshConfig:
+    accessLogFile: /dev/stdout
+
+  values:
+    global:
+      # pilotCertProvider: kubernetes
+      controlPlaneSecurityEnabled: true
+      multiCluster:
+        # clusterName: armadillo
+        enabled: true # Only used for istio-sidecar-injector ConfigMap
+      podDNSSearchNamespaces:
+        - global
