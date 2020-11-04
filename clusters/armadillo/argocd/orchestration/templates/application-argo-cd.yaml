@@ -10,7 +10,7 @@ metadata:
 spec:
   project: argo-cd-setup
   source:
-    path: docs/argo-cd-based/gitops-armadillo/stack/argo-cd
+    path: clusters/armadillo/argocd/stack/argo-cd
     repoURL: {{ .Values.spec.source.gitRepoUrl }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
   destination:
