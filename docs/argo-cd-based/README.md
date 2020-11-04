@@ -4,7 +4,7 @@
 
 This setup uses this remote repository as the target. If you want to adjust the installation setup as your liking, you can fork this repo, or simply copy the directory.
 
-For detailed GitOps setup, you can find more complex setup in my [get-gitops-k8s](https://github.com/rytswd/get-gitops-k8s) repo.
+For detailed GitOps setup, you can find more complex setup in [get-gitops-k8s](https://github.com/rytswd/get-gitops-k8s).
 
 ## ⚙️ Prerequisites
 
@@ -21,6 +21,8 @@ $ pwd
 /some/path/at
 
 $ git clone https://github.com/rytswd/simple-istio-multicluster.git
+
+$ cd simple-istio-multicluster
 ```
 
 From here on, all the steps are assumed to be run from `/some/path/at/simple-istio-multicluster`.
@@ -137,30 +139,29 @@ You can find more about this setup in [KinD-based Setup document](https://github
 Armadillo
 
 ```bash
+$ export userToken=GITHUB_USER_TOKEN_FROM_STEP_1
+```
+
+```bash
 {
-    kubectx kind-armadillo
-    pushd docs/argo-cd-based/gitops-armadillo
-    make
+    pushd clusters/armadillo/argocd > /dev/null
 
-    # ========================================
-    #
-    # Interactive mode
-    #   provide your credential when requested
-    #
-    # ========================================
+    kubectl apply \
+        -f ./init/namespace-argocd.yaml
+    kubectl -n argocd create secret generic access-secret \
+        --from-literal=username=placeholder \
+        --from-literal=token=$userToken
+    kubectl apply -n argocd \
+        -f ./stack/argo-cd/argo-cd-install.yaml \
+        -f ./init/argo-cd-project.yaml \
+        -f ./init/argo-cd-application.yaml
 
-    popd
+    popd > /dev/null
 }
 ```
 
 <details>
 <summary>Details</summary>
-
-Firstly, run `kubectx` to point to the correct cluster.
-
-`pushd` and `popd` are there to change directory while `make` is running, and then get back to the original directory.
-
-`make` runs several actions.
 
 _To be updated_
 
