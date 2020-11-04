@@ -197,9 +197,9 @@ Each command is associated with some comments to clarify what they do:
 
 ```bash
 {
-    istioctl install --context kind-armadillo -f clusters/armadillo/istioctl-input.yaml
-    istioctl install --context kind-bison -f clusters/bison/istioctl-input.yaml
-    istioctl install --context kind-dolphin -f clusters/dolphin/istioctl-input.yaml
+    istioctl install --context kind-armadillo -f clusters/armadillo/istio-setup/istioctl-input.yaml
+    istioctl install --context kind-bison -f clusters/bison/istio-setup/istioctl-input.yaml
+    istioctl install --context kind-dolphin -f clusters/dolphin/istio-setup/istioctl-input.yaml
 }
 ```
 
@@ -276,10 +276,10 @@ Each cluster has different resources. Check out the documentation one by one.
 ```bash
 {
     sed -i '' -e "s/REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP/$ARMADILLO_ISTIOCOREDNS_CLUSTER_IP/" \
-        clusters/armadillo/coredns-configmap.yaml
+        clusters/armadillo/istio-setup/coredns-configmap.yaml
     kubectl apply --context kind-armadillo \
-        -f clusters/armadillo/armadillo-services.yaml \
-        -f clusters/armadillo/coredns-configmap.yaml
+        -f clusters/armadillo/local/armadillo-services.yaml \
+        -f clusters/armadillo/istio-setup/coredns-configmap.yaml
 }
 ```
 
@@ -313,7 +313,7 @@ Before completing this, make sure the cluster Bison is also started, and has com
         -o jsonpath='{.items[0].spec.clusterIP}')
     echo $ARMADILLO_EGRESS_GATEWAY_ADDRESS
     sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
-        clusters/armadillo/bison-connections.yaml
+        clusters/armadillo/external/bison-connections.yaml
 }
 ```
 
@@ -332,10 +332,10 @@ Before completing this, make sure the cluster Bison is also started, and has com
     echo $BISON_INGRESS_GATEWAY_ADDRESS
     {
         sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
-            clusters/armadillo/bison-connections.yaml
+            clusters/armadillo/external/bison-connections.yaml
         if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
             sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
-                clusters/armadillo/bison-connections.yaml
+                clusters/armadillo/external/bison-connections.yaml
         fi
     }
 }
@@ -348,12 +348,12 @@ Before completing this, make sure the cluster Bison is also started, and has com
 
 ```bash
 kubectl apply --context kind-armadillo \
-    -f clusters/armadillo/bison-connections.yaml
+    -f clusters/armadillo/external/bison-connections.yaml
 ```
 
 ```sh
 # OUTPUT
-serviceentry.networking.istio.io/bison-services created
+serviceentry.networking.istio.io/local/bison-services created
 ```
 
 <details>
@@ -361,7 +361,7 @@ serviceentry.networking.istio.io/bison-services created
 
 **WARNING**: The current setup does NOT go through EgressGateway, and simply skips it. This needs further investigation.
 
-There are 2 places that are being updated in a single file `clusters/armadillo/bison-connections.yaml`. The first one is for Armadillo's EgressGateway, and the second is for Bison's IngressGateway. This means the traffic follows the below pattern.
+There are 2 places that are being updated in a single file `clusters/armadillo/external/bison-connections.yaml`. The first one is for Armadillo's EgressGateway, and the second is for Bison's IngressGateway. This means the traffic follows the below pattern.
 
 ```
 [ Armadillo Cluster]                                  Cluster Border                                         [ Bison Cluster]
@@ -393,7 +393,7 @@ Before completing this, make sure the cluster Dolphin is also started, and has c
         -o jsonpath='{.items[0].spec.clusterIP}')
     echo $ARMADILLO_EGRESS_GATEWAY_ADDRESS
     sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
-        clusters/armadillo/dolphin-connections.yaml
+        clusters/armadillo/external/dolphin-connections.yaml
 }
 ```
 
@@ -412,10 +412,10 @@ Before completing this, make sure the cluster Dolphin is also started, and has c
     echo $DOLPHIN_INGRESS_GATEWAY_ADDRESS
     {
         sed -i '' -e "s/REPLACE_WITH_DOLPHIN_INGRESS_GATEWAY_ADDRESS/$DOLPHIN_INGRESS_GATEWAY_ADDRESS/g" \
-            clusters/armadillo/dolphin-connections.yaml
+            clusters/armadillo/external/dolphin-connections.yaml
         if [[ $DOLPHIN_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
             sed -i '' -e "s/15443 # Istio Ingress Gateway port/32004/" \
-                clusters/armadillo/dolphin-connections.yaml
+                clusters/armadillo/external/dolphin-connections.yaml
         fi
     }
 }
@@ -428,12 +428,12 @@ Before completing this, make sure the cluster Dolphin is also started, and has c
 
 ```bash
 kubectl apply --context kind-armadillo \
-    -f clusters/armadillo/dolphin-connections.yaml
+    -f clusters/armadillo/external/dolphin-connections.yaml
 ```
 
 ```sh
 # OUTPUT
-serviceentry.networking.istio.io/dolphin-services created
+serviceentry.networking.istio.io/local/dolphin-services created
 ```
 
 <details>
@@ -452,15 +452,15 @@ To be updated
 
 ```bash
 kubectl apply --context kind-bison \
-    -f clusters/bison/bison-services.yaml \
-    -f clusters/bison/multicluster-setup.yaml
+    -f clusters/bison/local/bison-services.yaml \
+    -f clusters/bison/istio-setup/multicluster-setup.yaml
 ```
 
 If you are using Istio v1.6, you will get an error from the above. You need to run the following command:
 
 ```bash
 kubectl apply --context kind-bison \
-    -f clusters/bison/multicluster-setup-1.6.yaml
+    -f clusters/bison/istio-setup/multicluster-setup-1.6.yaml
 ```
 
 <details>
@@ -477,15 +477,15 @@ To be updated
 
 ```bash
 kubectl apply --context kind-dolphin \
-    -f clusters/dolphin/dolphin-services.yaml \
-    -f clusters/dolphin/multicluster-setup.yaml
+    -f clusters/dolphin/local/dolphin-services.yaml \
+    -f clusters/dolphin/istio-setup/multicluster-setup.yaml
 ```
 
 If you are using Istio v1.6, you will get an error from the above. You need to run the following command:
 
 ```bash
 kubectl apply --context kind-bison \
-    -f clusters/bison/multicluster-setup-1.6.yaml
+    -f clusters/bison/istio-setup/multicluster-setup-1.6.yaml
 ```
 
 <details>
@@ -592,7 +592,7 @@ The below will be quicker than above if you use multiple terminals to run them i
         --from-file=./certs/bison/root-cert.pem \
         --from-file=./certs/bison/cert-chain.pem
 
-    istioctl install --context kind-bison -f clusters/bison/istioctl-input.yaml
+    istioctl install --context kind-bison -f clusters/bison/istio-setup/istioctl-input.yaml
 
     kubectl label --context kind-bison namespace default istio-injection=enabled
     kubectl apply --context kind-bison \
@@ -600,8 +600,8 @@ The below will be quicker than above if you use multiple terminals to run them i
         -f tools/toolkit-alpine/toolkit-alpine.yaml
 
     kubectl apply --context kind-bison \
-        -f clusters/bison/bison-services.yaml \
-        -f clusters/bison/multicluster-setup.yaml
+        -f clusters/bison/local/bison-services.yaml \
+        -f clusters/bison/istio-setup/multicluster-setup.yaml
 }
 ```
 
@@ -619,7 +619,7 @@ The below will be quicker than above if you use multiple terminals to run them i
         --from-file=./certs/dolphin/root-cert.pem \
         --from-file=./certs/dolphin/cert-chain.pem
 
-    istioctl install --context kind-dolphin -f clusters/dolphin/istioctl-input.yaml
+    istioctl install --context kind-dolphin -f clusters/dolphin/istio-setup/istioctl-input.yaml
 
     kubectl label --context kind-dolphin namespace default istio-injection=enabled
     kubectl apply --context kind-dolphin \
@@ -627,8 +627,8 @@ The below will be quicker than above if you use multiple terminals to run them i
         -f tools/toolkit-alpine/toolkit-alpine.yaml
 
     kubectl apply --context kind-dolphin \
-        -f clusters/dolphin/dolphin-services.yaml \
-        -f clusters/dolphin/multicluster-setup.yaml
+        -f clusters/dolphin/local/dolphin-services.yaml \
+        -f clusters/dolphin/istio-setup/multicluster-setup.yaml
 }
 ```
 
@@ -648,7 +648,7 @@ The below will be quicker than above if you use multiple terminals to run them i
         --from-file=./certs/armadillo/root-cert.pem \
         --from-file=./certs/armadillo/cert-chain.pem
 
-    istioctl install --context kind-armadillo -f clusters/armadillo/istioctl-input.yaml
+    istioctl install --context kind-armadillo -f clusters/armadillo/istio-setup/istioctl-input.yaml
 
     kubectl label --context kind-armadillo namespace default istio-injection=enabled
     kubectl apply --context kind-armadillo \
@@ -661,10 +661,10 @@ The below will be quicker than above if you use multiple terminals to run them i
         istiocoredns \
         -o jsonpath={.spec.clusterIP})
     sed -i '' -e "s/REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP/$ARMADILLO_ISTIOCOREDNS_CLUSTER_IP/" \
-        clusters/armadillo/coredns-configmap.yaml
+        clusters/armadillo/istio-setup/coredns-configmap.yaml
     kubectl apply --context kind-armadillo \
-        -f clusters/armadillo/armadillo-services.yaml \
-        -f clusters/armadillo/coredns-configmap.yaml
+        -f clusters/armadillo/local/armadillo-services.yaml \
+        -f clusters/armadillo/istio-setup/coredns-configmap.yaml
 
     export ARMADILLO_EGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
         --context=kind-armadillo \
@@ -672,20 +672,20 @@ The below will be quicker than above if you use multiple terminals to run them i
         --selector=app=armadillo-multicluster-egressgateway \
         -o jsonpath='{.items[0].spec.clusterIP}')
     sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
-        clusters/armadillo/bison-connections.yaml
+        clusters/armadillo/external/bison-connections.yaml
     export BISON_INGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
         --context=kind-bison \
         -n istio-system \
         --selector=app=istio-ingressgateway \
         -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo '172.18.0.1')
     sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
-        clusters/armadillo/bison-connections.yaml
+        clusters/armadillo/external/bison-connections.yaml
     if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
         sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
-            clusters/armadillo/bison-connections.yaml
+            clusters/armadillo/external/bison-connections.yaml
     fi
     kubectl apply --context kind-armadillo \
-        -f clusters/armadillo/bison-connections.yaml
+        -f clusters/armadillo/external/bison-connections.yaml
 
     export ARMADILLO_EGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
         --context=kind-armadillo \
@@ -693,20 +693,20 @@ The below will be quicker than above if you use multiple terminals to run them i
         --selector=app=armadillo-multicluster-egressgateway \
         -o jsonpath='{.items[0].spec.clusterIP}')
     sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
-        clusters/armadillo/dolphin-connections.yaml
+        clusters/armadillo/external/dolphin-connections.yaml
     export DOLPHIN_INGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
         --context=kind-dolphin \
         -n istio-system \
         --selector=app=istio-ingressgateway \
         -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo '172.18.0.1')
     sed -i '' -e "s/REPLACE_WITH_DOLPHIN_INGRESS_GATEWAY_ADDRESS/$DOLPHIN_INGRESS_GATEWAY_ADDRESS/g" \
-        clusters/armadillo/dolphin-connections.yaml
+        clusters/armadillo/external/dolphin-connections.yaml
     if [[ $DOLPHIN_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
         sed -i '' -e "s/15443 # Istio Ingress Gateway port/32004/" \
-            clusters/armadillo/dolphin-connections.yaml
+            clusters/armadillo/external/dolphin-connections.yaml
     fi
     kubectl apply --context kind-armadillo \
-        -f clusters/armadillo/dolphin-connections.yaml
+        -f clusters/armadillo/external/dolphin-connections.yaml
 }
 ```
 
