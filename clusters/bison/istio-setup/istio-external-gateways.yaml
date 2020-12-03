@@ -1,0 +1,48 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: bison-istio-external-gateways
+spec:
+  # Profile empty is used to create Gateways only.
+  profile: empty
+
+  components:
+    egressGateways:
+      - enabled: true
+        name: bison-external-egressgateway
+        label:
+          app: bison-external-egressgateway
+
+    ingressGateways:
+      - enabled: true
+        name: bison-external-ingressgateway
+        label:
+          app: bison-external-ingressgateway
+        k8s:
+          # In case of LB usage in real environment, you may want to create
+          # IP from the cloud provider service, and use it here.
+          # service:
+          #   loadBalancerIP: TBC
+
+          # Affinity for IngressGateways, so that pods are separated into
+          # different nodes.
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app: bison-external-ingressgateway
+                  topologyKey: kubernetes.io/hostname
+          # HPA setup, which is commented out for local testing.
+          # hpaSpec:
+          #   maxReplicas: 5
+          #   metrics:
+          #     - resource:
+          #         name: cpu
+          #         targetAverageUtilization: 80
+          #       type: Resource
+          #   minReplicas: 3
+          #   scaleTargetRef:
+          #     apiVersion: apps/v1
+          #     kind: Deployment
+          #     name: bison-external-ingressgateway
