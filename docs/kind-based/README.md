@@ -193,13 +193,18 @@ Each command is associated with some comments to clarify what they do:
 
 ---
 
-### 3. Install Istio into clusters
+### 3. Install Istio Control Plane into Clusters
 
 ```bash
 {
-    istioctl install --context kind-armadillo -f clusters/armadillo/istio-setup/istioctl-input.yaml
-    istioctl install --context kind-bison -f clusters/bison/istio-setup/istioctl-input.yaml
-    istioctl install --context kind-dolphin -f clusters/dolphin/istio-setup/istioctl-input.yaml
+    istioctl install --context kind-armadillo \
+        -f clusters/armadillo/istio-setup/istio-control-plane.yaml
+
+    istioctl install --context kind-bison \
+        -f clusters/bison/istio-setup/istio-control-plane.yaml
+
+    istioctl install --context kind-dolphin \
+        -f clusters/dolphin/istio-setup/istio-control-plane.yaml
 }
 ```
 
@@ -208,13 +213,46 @@ Each command is associated with some comments to clarify what they do:
 
 Install Istio into each cluster. Istio can be installed in a few ways, but `istioctl install` is the most standard way recommended by the official documentation. It is also possible to create a lengthy YAML definition, so that we can even have GitOps as a part of Istio installation.
 
-As to the configurations, Armadillo and Bison have almost identical cluster setup. The main difference is the name used by various components (Ingress and Egress Gateways have `armadillo-` or `bison-` prefix, and so on). Also, as the previous step created the KinD cluster with different NodePort for Istio IngressGateway, you can see the corresponding port being used in `istioctl-input.yaml`.
+As to the configuration files, the above command uses basically identical cluster setup input. This part of installation is called "Control Plane" in Istio. It is the core copmonent of Istio, and mainly it's `istiod` (and a few more things around it). Some more differences would be seen for "Data Plane" components, and that would be dealt in the next step.
 
 </details>
 
 ---
 
-### 4. Install Debug Processes
+### 4. Install Istio Data Plane (i.e. Gateways) into Clusters
+
+```bash
+{
+    PATH="$HOME/Coding/bin/istio-1.7.5/bin:$PATH"
+    istioctl install --context kind-armadillo \
+        -f clusters/armadillo/istio-setup/istio-external-gateways.yaml
+    istioctl install --context kind-armadillo \
+        -f clusters/armadillo/istio-setup/istio-multicluster-gateways.yaml
+
+    istioctl install --context kind-armadillo \
+        -f clusters/armadillo/istio-setup/istio-external-gateways.yaml
+    istioctl install --context kind-armadillo \
+        -f clusters/armadillo/istio-setup/istio-multicluster-gateways.yaml
+
+    istioctl install --context kind-armadillo \
+        -f clusters/armadillo/istio-setup/istio-external-gateways.yaml
+    istioctl install --context kind-armadillo \
+        -f clusters/armadillo/istio-setup/istio-multicluster-gateways.yaml
+}
+```
+
+<details>
+<summary>Details</summary>
+
+This step installs "Data Plane" components into the clusters. For this, we are only introducing some Istio Ingress and Egress Gateways. You can think of Data Plane components as actually running service (in this case IngressGateway which is `docker.io/istio/proxyv2` image), and they will be controlled by Control Plane components (`istiod`).
+
+The main difference in the configuration files is the name used by various components (Ingress and Egress Gateways have `armadillo-` or `bison-` prefix, and so on). Also, as the previous step created the KinD cluster with different NodePort for Istio IngressGateway, you can see the corresponding port being used in `istioctl-input.yaml`.
+
+</details>
+
+---
+
+### 5. Install Debug Processes
 
 ```bash
 {
@@ -248,14 +286,14 @@ Second action is to install the testing tools. `httpbin` is a nice Web server wh
 
 ---
 
-### 5. Apply Istio Custom Resources
+### 6. Apply Istio Custom Resources
 
 Each cluster has different resources. Check out the documentation one by one.
 
 <details>
 <summary>For Armadillo</summary>
 
-#### 5.1. Add `istiocoredns` as a part of CoreDNS ConfigMap
+#### 6.1. Add `istiocoredns` as a part of CoreDNS ConfigMap
 
 ```bash
 {
@@ -300,7 +338,7 @@ This will then be applied to `kube-system/coredns` ConfigMap. As KinD comes with
 
 ---
 
-#### 5.2. Add ServiceEntry for Bison
+#### 6.2. Add ServiceEntry for Bison
 
 Before completing this, make sure the cluster Bison is also started, and has completed Istio installation.
 
@@ -380,7 +418,7 @@ The command may look confusing, but the update is simple. If you cloned this rep
 
 ---
 
-#### 5.3. Add ServiceEntry for Dolphin
+#### 6.3. Add ServiceEntry for Dolphin
 
 Before completing this, make sure the cluster Dolphin is also started, and has completed Istio installation.
 
