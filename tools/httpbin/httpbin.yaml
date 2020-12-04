@@ -26,14 +26,14 @@ kind: Service
 metadata:
   name: httpbin
   labels:
-    app: httpbin
+    app.kubernetes.io/name: httpbin
 spec:
   ports:
     - name: http
       port: 8000
       targetPort: 80
   selector:
-    app: httpbin
+    app.kubernetes.io/name: httpbin
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -43,12 +43,12 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: httpbin
+      app.kubernetes.io/name: httpbin
       version: v1
   template:
     metadata:
       labels:
-        app: httpbin
+        app.kubernetes.io/name: httpbin
         version: v1
     spec:
       serviceAccountName: httpbin
