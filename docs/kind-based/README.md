@@ -537,7 +537,7 @@ To be updated
 
 ---
 
-### 6. Verify
+### 7. Verify
 
 Simple curl to verify connection
 

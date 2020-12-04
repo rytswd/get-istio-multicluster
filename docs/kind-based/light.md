@@ -68,18 +68,40 @@ You need to complete this step before installing Istio to the cluster. Essential
 
 ---
 
-### 3. Install Istio into clusters
+### 3. Install Istio Control Plane into Clusters
 
 ```bash
 {
-    istioctl install --context kind-armadillo -f clusters/armadillo/istioctl-input.yaml
-    istioctl install --context kind-bison -f clusters/bison/istioctl-input.yaml
+    istioctl install --context kind-armadillo \
+        -f clusters/armadillo/istio-setup/istio-control-plane.yaml
+
+    istioctl install --context kind-bison \
+        -f clusters/bison/istio-setup/istio-control-plane.yaml
 }
 ```
 
 ---
 
-### 4. Install Debug Processes
+### 4. Install Istio Data Plane (i.e. Gateways) into Clusters
+
+```bash
+{
+    PATH="$HOME/Coding/bin/istio-1.7.5/bin:$PATH"
+    istioctl install --context kind-armadillo \
+        -f clusters/armadillo/istio-setup/istio-external-gateways.yaml
+    istioctl install --context kind-armadillo \
+        -f clusters/armadillo/istio-setup/istio-multicluster-gateways.yaml
+
+    istioctl install --context kind-armadillo \
+        -f clusters/armadillo/istio-setup/istio-external-gateways.yaml
+    istioctl install --context kind-armadillo \
+        -f clusters/armadillo/istio-setup/istio-multicluster-gateways.yaml
+}
+```
+
+---
+
+### 5. Install Debug Processes
 
 ```bash
 {
@@ -97,14 +119,14 @@ You need to complete this step before installing Istio to the cluster. Essential
 
 ---
 
-### 5. Apply Istio Custom Resources
+### 6. Apply Istio Custom Resources
 
 Each cluster has different resources. Check out the documentation one by one.
 
 <details>
 <summary>For Armadillo</summary>
 
-#### 5.1. Add `istiocoredns` as a part of CoreDNS ConfigMap
+#### 6.1. Add `istiocoredns` as a part of CoreDNS ConfigMap
 
 ```bash
 {
@@ -149,7 +171,7 @@ This will then be applied to `kube-system/coredns` ConfigMap. As KinD comes with
 
 ---
 
-#### 5.2. Add ServiceEntry for Bison
+#### 6.2. Add ServiceEntry for Bison
 
 Before completing this, make sure the cluster Bison is also started, and has completed Istio installation.
 
@@ -258,7 +280,7 @@ To be updated
 
 ---
 
-### 6. Verify
+### 7. Verify
 
 Simple curl to verify connection
 
