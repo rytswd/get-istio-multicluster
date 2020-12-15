@@ -39,9 +39,10 @@ spec:
           name: toolkit-alpine
           command: ["/bin/sleep", "3650d"]
       # Ensure pods are placed in different nodes
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          - topologyKey: kubernetes.io/hostname
-            labelSelector:
-              matchLabels:
-                app.kubernetes.io/name: toolkit-alpine
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: toolkit-alpine
