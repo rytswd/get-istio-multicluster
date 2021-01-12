@@ -38,11 +38,3 @@ spec:
         - image: docker.io/rytswd/toolkit-alpine:0.1.1
           name: toolkit-alpine
           command: ["/bin/sleep", "3650d"]
-      # Ensure pods are placed in different nodes
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: toolkit-alpine

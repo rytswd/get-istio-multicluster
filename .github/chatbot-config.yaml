@@ -1,0 +1,14 @@
+---
+version: 0.2.0
+
+trigger: specific
+
+users:
+  active:
+    - rytswd
+
+keywords:
+  - name: start-2-clusters
+    value: '^\/start-2-clusters$'
+  - name: start-3-clusters
+    value: '^\/start-3-clusters$'

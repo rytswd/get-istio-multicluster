@@ -1,0 +1,40 @@
+name: ChatBot
+on:
+  issue_comment:
+    # This shouldn't be called for comment deletion
+    types:
+      - created
+      - edited
+
+jobs:
+  chatbot:
+    name: ChatBot
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Handle with Comvent
+        uses: rytswd/comvent@v0.3
+        if: ${{ !github.event.issue.pull_request }} # Run only if it's issue comment, not PR
+        id: comvent
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-path: .github/chatbot-config.yaml
+
+      - if: steps.comvent.outputs.comvent-found-any-match != ''
+        uses: actions/checkout@v2
+
+      - if: steps.comvent.outputs.comvent-found-any-match != ''
+        name: Start Armadillo KinD cluster
+        uses: engineerd/setup-kind@v0.5.0
+        with:
+          version: v0.9.0
+          name: armadillo
+          config: ./tools/kind-config/config-2-nodes-port-32001.yaml
+
+      - if: steps.comvent.outputs.comvent-found-any-match != ''
+        name: Start Bison KinD cluster
+        uses: engineerd/setup-kind@v0.5.0
+        with:
+          version: v0.9.0
+          name: bison
+          config: ./tools/kind-config/config-2-nodes-port-32002.yaml
