@@ -1,0 +1,47 @@
+env: prod
+
+# === Application Onboarding with ArgoCD ==================================== #
+#
+#   ArgoCD template setup is going to loop through the items in slice here,
+#   and search for `name` inside `get-gitops-k8s/stack/`. If the `enabled`
+#   boolean flag is set to `false`, ArgoCD will ignore.
+#
+#   Additionally, you can specify `namespace`. This may be useful when the
+#   installation requires a specific namespace in place.
+#
+#   If `stack` does not comply with the directory format ArgoCD expects,
+#   ArgoCD sync will be halted until it is fixed.
+#
+apps:
+  - name: istio
+    enabled: true
+    namespace: istio-system
+#
+# =========================================================================== #
+
+# === ArgoCD Setup ========================================================== #
+#
+# Metadata
+metadata:
+  finalizers:
+    enabled: true
+# Overrides
+spec:
+  source:
+    gitRepoUrl: https://github.com/rytswd/simple-istio-multicluster
+    targetRevision: prod # This assumes production environment is backed by `prod` branch
+  destination:
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      prune:
+        # Specifies if resources should be pruned during auto-syncing
+        # ( false by default ).
+        enabled: true
+      selfHeal:
+        # Specifies if partial app sync should be executed when resources
+        # are changed only in target Kubernetes cluster and no git change
+        # detected ( false by default ).
+        enabled: true
+#
+# =========================================================================== #

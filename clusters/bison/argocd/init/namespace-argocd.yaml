@@ -1,0 +1,4 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd # This cannot change as Argo CD installer expects this namespace
