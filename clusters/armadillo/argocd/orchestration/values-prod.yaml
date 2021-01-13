@@ -15,8 +15,7 @@ env: prod
 apps:
   - name: istio
     enabled: true
-  - name: armadillo-apps
-    enabeld: true
+    namespace: istio-system
 #
 # =========================================================================== #
 
