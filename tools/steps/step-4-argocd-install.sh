@@ -9,7 +9,8 @@
         --from-literal=username=placeholder \
         --from-literal=token=$userToken
     kubectl apply -n argocd \
-        -f ./stack/argo-cd/argo-cd-install.yaml \
+        -f ./stack/argo-cd/argo-cd-install.yaml
+    kubectl apply -n argocd \
         -f ./init/argo-cd-project.yaml \
         -f ./init/argo-cd-application.yaml
 
