@@ -16,9 +16,9 @@ This setup assumes you are using Istio 1.7.5.
 | ------------------------ | ---------------------------------------------- |
 | 2 Clusters               | This page                                      |
 | 2 Clusters with Raw YAML | The same setup but does not require Git clone  |
-| [3 Clusters](3-clusters) | Creates 3 clusters for more complicated setup. |
+| [3 Clusters](3clusters)  | Creates 3 clusters for more complicated setup. |
 
-[3-clusters]: https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/kind-based/light.md
+[3clusters]: https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/kind-based/light.md
 
 ## 🐾 Steps
 
