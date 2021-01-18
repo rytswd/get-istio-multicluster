@@ -370,7 +370,7 @@ Before completing this, make sure the cluster Bison is also started, and has com
         -o jsonpath='{.items[0].spec.clusterIP}')
     echo $ARMADILLO_EGRESS_GATEWAY_ADDRESS
     sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
-        clusters/armadillo/external/bison-connections.yaml
+        clusters/bison/external/bison-connections.yaml
 }
 ```
 
