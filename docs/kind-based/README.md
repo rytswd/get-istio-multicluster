@@ -478,7 +478,7 @@ kubectl exec \
     -it \
     $(kubectl get pod \
         --context kind-armadillo \
-        -l app=toolkit-alpine \
+        -l app.kubernetes.io/name=toolkit-alpine \
         -o jsonpath='{.items[0].metadata.name}') \
     -c toolkit-alpine \
     -- curl -vvv httpbin.default.bison.global:8000/status/418
@@ -492,7 +492,7 @@ kubectl exec \
     -it \
     $(kubectl get pod \
         --context kind-armadillo \
-        -l app=toolkit-alpine \
+        -l app.kubernetes.io/name=toolkit-alpine \
         -o jsonpath='{.items[0].metadata.name}') \
     -c toolkit-alpine \
     -- bash
@@ -505,7 +505,7 @@ kubectl logs \
     --context kind-armadillo \
     $(kubectl get pod \
         --context kind-armadillo \
-        -l app=toolkit-alpine \
+        -l app.kubernetes.io/name=toolkit-alpine \
         -o jsonpath='{.items[0].metadata.name}') \
     -c istio-proxy \
     | less
