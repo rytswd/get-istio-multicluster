@@ -63,7 +63,7 @@ spec:
           #     name: dolphin-multicluster-ingressgateway
   # values:
   #   global:
-  #     meshID: simple-istio-multicluster
+  #     meshID: get-istio-multicluster
   #     multiCluster:
   #       clusterName: dolphin
   #       enabled: true # Only used for istio-sidecar-injector ConfigMap

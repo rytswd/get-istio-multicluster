@@ -63,7 +63,7 @@ spec:
           #     name: bison-multicluster-ingressgateway
   # values:
   #   global:
-  #     meshID: simple-istio-multicluster
+  #     meshID: get-istio-multicluster
   #     multiCluster:
   #       clusterName: bison
   #       enabled: true # Only used for istio-sidecar-injector ConfigMap

@@ -20,12 +20,12 @@ In addition to the base prerequisite, you would need the following tools as well
 $ pwd
 /some/path/at
 
-$ git clone https://github.com/rytswd/simple-istio-multicluster.git
+$ git clone https://github.com/rytswd/get-istio-multicluster.git
 
-$ cd simple-istio-multicluster
+$ cd get-istio-multicluster
 ```
 
-From here on, all the steps are assumed to be run from `/some/path/at/simple-istio-multicluster`.
+From here on, all the steps are assumed to be run from `/some/path/at/get-istio-multicluster`.
 
 <details>
 <summary>Details</summary>
@@ -49,7 +49,7 @@ The next step will use this token.
 <details>
 <summary>Details</summary>
 
-In the following steps, Argo CD will run on your local machine. Argo CD will then fetch the configurations from `https://github.com/rytswd/simple-istio-multicluster` - and thus, it would need to be able to use your GitHub account credential to retrieve all the relevant files, and also automatically apply changes to your cluster.
+In the following steps, Argo CD will run on your local machine. Argo CD will then fetch the configurations from `https://github.com/rytswd/get-istio-multicluster` - and thus, it would need to be able to use your GitHub account credential to retrieve all the relevant files, and also automatically apply changes to your cluster.
 
 As to how the token works, you can find more in [the official documentation of GitHub access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line).
 
@@ -72,7 +72,7 @@ You can use k3d as well. This example sticks with KinD.
 <details>
 <summary>Details</summary>
 
-You can find more about this setup in [KinD-based Setup document](https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/kind-based#1-start-local-kubernetes-clusters-with-kind).
+You can find more about this setup in [KinD-based Setup document](https://github.com/rytswd/get-istio-multicluster/tree/main/docs/kind-based#1-start-local-kubernetes-clusters-with-kind).
 
 </details>
 
@@ -80,7 +80,7 @@ You can find more about this setup in [KinD-based Setup document](https://github
 
 ### 3. Prepare CA Certs
 
-<!-- The steps are detailed at [Certificate Preparation steps](https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/cert-prep/README.md). -->
+<!-- The steps are detailed at [Certificate Preparation steps](https://github.com/rytswd/get-istio-multicluster/tree/main/docs/cert-prep/README.md). -->
 
 You need to complete this step before installing Istio to the cluster. Essentially, you need to run the following:
 
@@ -128,7 +128,7 @@ In truly GitOps setup, you will likely want to keep this secrcet as a part of gi
 
 You can combine with solution such as [sealed-secret](https://github.com/bitnami-labs/sealed-secrets) to store secret securely in git.
 
-You can find more about this setup in [KinD-based Setup document](https://github.com/rytswd/simple-istio-multicluster/blob/main/docs/kind-based/README.md#2-prepare-ca-certs).
+You can find more about this setup in [KinD-based Setup document](https://github.com/rytswd/get-istio-multicluster/blob/main/docs/kind-based/README.md#2-prepare-ca-certs).
 
 </details>
 

@@ -63,7 +63,7 @@ spec:
           #     name: armadillo-multicluster-ingressgateway
   # values:
   #   global:
-  #     meshID: simple-istio-multicluster
+  #     meshID: get-istio-multicluster
   #     multiCluster:
   #       clusterName: armadillo
   #       enabled: true # Only used for istio-sidecar-injector ConfigMap

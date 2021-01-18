@@ -16,10 +16,10 @@ Ref: https://github.com/istio/istio/tree/master/tools/certs
 
 ```bash
 $ pwd
-/some/path/at/simple-istio-multicluster
+/some/path/at/get-istio-multicluster
 
 $ cd certs
-/some/path/at/simple-istio-multicluster/certs
+/some/path/at/get-istio-multicluster/certs
 
 $ make -f ../tools/certs/Makefile.selfsigned.mk root-ca
 ```
@@ -67,7 +67,7 @@ _TODO: To be corrected, the below won't work correctly_
 
 ```bash
 $ pwd
-/some/path/at/simple-istio-multicluster
+/some/path/at/get-istio-multicluster
 
 $ mkdir /tmp/istio-input/
 ```

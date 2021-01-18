@@ -6,7 +6,7 @@ metadata:
 spec:
   description: Project for Argo CD setup
   sourceRepos:
-    - https://github.com/rytswd/simple-istio-multicluster.git
+    - https://github.com/rytswd/get-istio-multicluster.git
   destinations:
     - namespace: "*"
       server: https://kubernetes.default.svc

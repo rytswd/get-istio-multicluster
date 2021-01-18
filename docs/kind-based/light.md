@@ -4,7 +4,7 @@ This is a light setup documentation, which should require less machine spec and 
 
 For the default setup, the [default README.md] has more detailed information on how the setup is done.
 
-[default readme.md]: https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/kind-based/README.md
+[default readme.md]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/kind-based/README.md
 
 ## 🐾 Steps
 
@@ -14,10 +14,10 @@ For the default setup, the [default README.md] has more detailed information on 
 $ pwd
 /some/path/at
 
-$ git clone https://github.com/rytswd/simple-istio-multicluster.git
+$ git clone https://github.com/rytswd/get-istio-multicluster.git
 ```
 
-From here on, all the steps are assumed to be run from `/some/path/at/simple-istio-multicluster`.
+From here on, all the steps are assumed to be run from `/some/path/at/get-istio-multicluster`.
 
 ---
 
@@ -34,7 +34,7 @@ From here on, all the steps are assumed to be run from `/some/path/at/simple-ist
 
 ### 2. Prepare CA Certs
 
-The steps are detailed at [Certificate Preparation steps](https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/cert-prep/README.md).
+The steps are detailed at [Certificate Preparation steps](https://github.com/rytswd/get-istio-multicluster/tree/main/docs/cert-prep/README.md).
 
 You need to complete this step before installing Istio to the cluster. Essentially, you need to run the following:
 

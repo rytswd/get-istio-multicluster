@@ -6,7 +6,7 @@ metadata:
 spec:
   project: argo-cd-setup
   source:
-    repoURL: https://github.com/rytswd/simple-istio-multicluster.git
+    repoURL: https://github.com/rytswd/get-istio-multicluster.git
     targetRevision: main
     path: clusters/dolphin/argocd/orchestration
     helm:

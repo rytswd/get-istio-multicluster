@@ -2,7 +2,7 @@ The installation file `istio-install.yaml` is created with the following command
 
 ```bash
 $ pwd
-/some/path/at/simple-istio-multicluster
+/some/path/at/get-istio-multicluster
 
 $ {
     istioctl manifest generate --context kind-armadillo \

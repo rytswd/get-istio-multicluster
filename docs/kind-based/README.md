@@ -18,8 +18,8 @@ This setup assumes you are using Istio 1.7.3.
 | [Light] | Creates only 2 clusters - quick and light setup       |
 | [v1.6]  | The same setup as default, but uses Istio version 1.6 |
 
-[light]: https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/kind-based/light.md
-[v1.6]: https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/kind-based/v1.6.md
+[light]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/kind-based/light.md
+[v1.6]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/kind-based/v1.6.md
 
 ## 🐾 Steps
 
@@ -29,12 +29,12 @@ This setup assumes you are using Istio 1.7.3.
 $ pwd
 /some/path/at
 
-$ git clone https://github.com/rytswd/simple-istio-multicluster.git
+$ git clone https://github.com/rytswd/get-istio-multicluster.git
 
-$ cd simple-istio-multicluster
+$ cd get-istio-multicluster
 ```
 
-From here on, all the steps are assumed to be run from `/some/path/at/simple-istio-multicluster`.
+From here on, all the steps are assumed to be run from `/some/path/at/get-istio-multicluster`.
 
 <details>
 <summary>Details</summary>
@@ -45,15 +45,15 @@ Git repository is not necessarily a must-have. Although the clean-up step uses G
 
 ```bash
 # Shallow Git clone
-git clone --depth 1 -b main https://github.com/rytswd/simple-istio-multicluster.git
+git clone --depth 1 -b main https://github.com/rytswd/get-istio-multicluster.git
 ```
 
 ```bash
 # Simple curl without Git
 {
-    curl -sL -o simple-istio-multicluster.zip https://github.com/rytswd/simple-istio-multicluster/archive/main.zip
-    unzip simple-istio-multicluster.zip
-    cd simple-istio-multicluster-main.zip
+    curl -sL -o get-istio-multicluster.zip https://github.com/rytswd/get-istio-multicluster/archive/main.zip
+    unzip get-istio-multicluster.zip
+    cd get-istio-multicluster-main.zip
 }
 ```
 
@@ -90,7 +90,7 @@ As you can see `istioctl-input.yaml` in each cluster, the NodePort used are:
 
 ### 2. Prepare CA Certs
 
-<!-- The steps are detailed at [Certificate Preparation steps](https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/cert-prep/README.md). -->
+<!-- The steps are detailed at [Certificate Preparation steps](https://github.com/rytswd/get-istio-multicluster/tree/main/docs/cert-prep/README.md). -->
 
 You need to complete this step before installing Istio to the cluster. Essentially, you need to run the following:
 

@@ -28,9 +28,9 @@ This should allow you to have a quick deep-dive into the Istio offerings. Many o
 | Setup  | Public Cloud       |      WIP      | TBD         |
 | Verify | Fault Injection    |   1.6, 1.7    | TBD         |
 
-[1]: https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/kind-based/README.md
-[2]: https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/k3d-based/README.md
-[3]: https://github.com/rytswd/simple-istio-multicluster/blob/main/docs/argo-cd-based/README.md
+[1]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/kind-based/README.md
+[2]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/k3d-based/README.md
+[3]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/argo-cd-based/README.md
 
 <!--
 | [KinD-based]    | 1.6<br />1.7  | Set up multiple [KinD](https://kind.sigs.k8s.io/) clusters, each having its own Istio Control Plane.<br />This is suitable for getting started and understanding multicluster setup as well as testing some features with it.<br /><br /> This setup can be run completely locally, though depending on your machine spec, you may need to adjust the setup accordingly for stable environment. |
@@ -39,9 +39,9 @@ This should allow you to have a quick deep-dive into the Istio offerings. Many o
 | Public Cloud    |      WIP      | WIP                                                                    |
  -->
 
-[kind-based]: https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/kind-based/README.md
-[k3d-based]: https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/k3d-based/README.md
-[argo-cd-based]: https://github.com/rytswd/simple-istio-multicluster/blob/main/docs/argo-cd-based/README.md
+[kind-based]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/kind-based/README.md
+[k3d-based]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/k3d-based/README.md
+[argo-cd-based]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/argo-cd-based/README.md
 
 ### ⚙️ Prerequisites
 

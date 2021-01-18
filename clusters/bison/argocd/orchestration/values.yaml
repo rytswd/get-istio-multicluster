@@ -28,7 +28,7 @@ metadata:
 # Overrides
 spec:
   source:
-    gitRepoUrl: https://github.com/rytswd/simple-istio-multicluster
+    gitRepoUrl: https://github.com/rytswd/get-istio-multicluster
     targetRevision: main
   destination:
     server: https://kubernetes.default.svc

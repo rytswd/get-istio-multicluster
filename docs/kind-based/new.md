@@ -18,7 +18,7 @@ This setup assumes you are using Istio 1.7.5.
 | 2 Clusters with Raw YAML | The same setup but does not require Git clone  |
 | 3 Clusters               | Creates 3 clusters for more complicated setup. |
 
-[3-clusters]: https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/kind-based/light.md
+[3-clusters]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/kind-based/light.md
 
 ## 🐾 Steps
 
@@ -28,12 +28,12 @@ This setup assumes you are using Istio 1.7.5.
 $ pwd
 /some/path/at
 
-$ git clone https://github.com/rytswd/simple-istio-multicluster.git
+$ git clone https://github.com/rytswd/get-istio-multicluster.git
 
-$ cd simple-istio-multicluster
+$ cd get-istio-multicluster
 ```
 
-From here on, all the steps are assumed to be run from `/some/path/at/simple-istio-multicluster`.
+From here on, all the steps are assumed to be run from `/some/path/at/get-istio-multicluster`.
 
 <details>
 <summary>Details</summary>
@@ -44,15 +44,15 @@ Git repository is not necessarily a must-have. Although the clean-up step uses G
 
 ```bash
 # Shallow Git clone
-git clone --depth 1 -b main https://github.com/rytswd/simple-istio-multicluster.git
+git clone --depth 1 -b main https://github.com/rytswd/get-istio-multicluster.git
 ```
 
 ```bash
 # Simple curl without Git
 {
-    curl -sL -o simple-istio-multicluster.zip https://github.com/rytswd/simple-istio-multicluster/archive/main.zip
-    unzip simple-istio-multicluster.zip
-    cd simple-istio-multicluster-main
+    curl -sL -o get-istio-multicluster.zip https://github.com/rytswd/get-istio-multicluster/archive/main.zip
+    unzip get-istio-multicluster.zip
+    cd get-istio-multicluster-main
 }
 ```
 
@@ -87,7 +87,7 @@ As you can see `istioctl-input.yaml` in each cluster, the NodePort used are:
 
 ### 2. Prepare CA Certs
 
-<!-- The steps are detailed at [Certificate Preparation steps](https://github.com/rytswd/simple-istio-multicluster/tree/main/docs/cert-prep/README.md). -->
+<!-- The steps are detailed at [Certificate Preparation steps](https://github.com/rytswd/get-istio-multicluster/tree/main/docs/cert-prep/README.md). -->
 
 You need to complete this step before installing Istio to the cluster. Essentially, you need to run the following:
 
@@ -255,7 +255,7 @@ Second action is to install the testing tools.
 - [`color-svc`](color-svc) is a simple Web server which handles incoming HTTP request, and return some random color.
 - [`toolkit-alpine`](toolkit-alpine) is a lightweight container which has a few tools useful for testing, such as `curl`, `dig`, etc.
 
-For both `color-svc` and `toolkit-alpine`, [`tools`](https://github.com/rytswd/simple-istio-multicluster/tree/main/tools) directory has the copy of the predefined YAML files. You can find more about them in their repos.
+For both `color-svc` and `toolkit-alpine`, [`tools`](https://github.com/rytswd/get-istio-multicluster/tree/main/tools) directory has the copy of the predefined YAML files. You can find more about them in their repos.
 
 - [github.com/rytswd/color-svc](color-svc)
 - [github.com/rytswd/docker-toolkit-images](toolkit-alpine)
