@@ -194,6 +194,23 @@ As to the configuration files, the above command uses basically identical cluste
 
 ---
 
+### 4. Install Istio Operator into Clusters
+
+TODO: Correct this
+
+```bash
+{
+    kubectl apply --context kind-armadillo \
+        -n istio-system \
+        -f clusters/armadillo/istio-setup/istio-control-plane.yaml
+
+    kubectl apply --context kind-armadillo \
+        -n istio-system \
+        -f clusters/armadillo/istio-setup/istio-external-gateways.yaml \
+        -f clusters/armadillo/istio-setup/istio-multicluster-gateways.yaml
+}
+```
+
 ### 4. Install Istio Data Plane (i.e. Gateways) into Clusters
 
 ```bash
