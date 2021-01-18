@@ -370,7 +370,7 @@ Before completing this, make sure the cluster Bison is also started, and has com
         -o jsonpath='{.items[0].spec.clusterIP}')
     echo $ARMADILLO_EGRESS_GATEWAY_ADDRESS
     sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
-        clusters/bison/external/bison-connections.yaml
+        clusters/armadillo/multicluster/bison-connections.yaml
 }
 ```
 
@@ -389,10 +389,10 @@ Before completing this, make sure the cluster Bison is also started, and has com
     echo $BISON_INGRESS_GATEWAY_ADDRESS
     {
         sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
-            clusters/armadillo/external/bison-connections.yaml
+            clusters/armadillo/multicluster/bison-connections.yaml
         if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
             sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
-                clusters/armadillo/external/bison-connections.yaml
+                clusters/armadillo/multicluster/bison-connections.yaml
         fi
     }
 }
