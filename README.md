@@ -1,3 +1,5 @@
+## ⚠️ NOTE: This repo is work-in-progress. ⚠️
+
 # Get Istio Multicluster
 
 Istio Multicluster is by no means simple. There are many features Istio provides, and many moving pieces for the setup. This repository tries to showcase some of Istio's capability with the following in mind:
