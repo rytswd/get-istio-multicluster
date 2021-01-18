@@ -405,12 +405,14 @@ Before completing this, make sure the cluster Bison is also started, and has com
 
 ```bash
 kubectl apply --context kind-armadillo \
-    -f clusters/armadillo/external/bison-connections.yaml
+    -f clusters/armadillo/multicluster/bison-connections.yaml
 ```
 
 ```sh
 # OUTPUT
-serviceentry.networking.istio.io/local/bison-services created
+serviceentry.networking.istio.io/bison-httpbin-global created
+serviceentry.networking.istio.io/bison-httpbin-service created
+virtualservice.networking.istio.io/bison-httpbin-chaos-routing created
 ```
 
 <details>
