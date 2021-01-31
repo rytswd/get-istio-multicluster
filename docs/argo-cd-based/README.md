@@ -194,3 +194,27 @@ _To be updated_
 </details>
 
 ---
+
+## 🧹 Cleanup
+
+```bash
+{
+    rm -rf certs
+    git reset --hard
+    kind delete cluster --name armadillo
+    kind delete cluster --name bison
+}
+```
+
+<details>
+<summary>Details</summary>
+
+Remove the entire `certs` directory, and `git reset --hard` to remove all the changes.
+
+KinD clusters can be deleted with `kind delete cluster` - and you can provide `--name` to specify one.
+
+As the above steps creates multiple clusters, this step makes sure to delete all.
+
+Because all the Istio components are inside KinD cluster, deleting the cluster will remove everything that was generated / configured / deployed.
+
+</details>
