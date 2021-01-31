@@ -3,8 +3,8 @@ kind: IstioOperator
 metadata:
   name: armadillo-istio-external-gateways
   annotations:
-    # ArgoCD Wave setup for controlling the timing of sync.
-    argocd.argoproj.io/sync-wave: "-1"
+    # ArgoCD hook setup for controlling the timing of sync.
+    argocd.argoproj.io/hook: PreSync
 spec:
   # Profile empty is used to create Gateways only.
   profile: empty
