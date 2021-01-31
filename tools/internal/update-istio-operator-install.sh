@@ -5,5 +5,5 @@ __root_dir="$__tools_dir"/..
 
 for e in "armadillo" "bison" "dolphin"; do
     istioctl operator dump >"$__root_dir"/clusters/$e/argocd/stack/istio/istio-operator-install.yaml
-    istioctl operator dump >"$__root_dir"/clusters/$e/istio-setup/istio-operator-install.yaml
+    istioctl operator dump >"$__root_dir"/clusters/$e/istio-operator/istio-operator-install.yaml
 done
