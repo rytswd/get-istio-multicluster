@@ -3,7 +3,7 @@ kind: IstioOperator
 metadata:
   name: armadillo-istio-control-plane
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "-1"
 spec:
   # The minimal profile is a good base with control plane setup.
   profile: minimal
