@@ -13,7 +13,7 @@ metadata:
 spec:
   project: default
   source:
-    path: clusters/bison/argocd/stack/{{ .name }}
+    path: {{ .path | default (print "stack/" .name) | printf "clusters/bison/argocd/%s" }} 
     repoURL: {{ $.Values.spec.source.gitRepoUrl }}
     targetRevision: {{ $.Values.spec.source.targetRevision }}
   destination:

@@ -16,6 +16,9 @@ apps:
   - name: istio
     enabled: true
     namespace: istio-system
+  - name: istio-setup
+    enabled: true
+    path: ../istio-setup/ # Relative from `clusters/armadillo/argocd/`
 #
 # =========================================================================== #
 
