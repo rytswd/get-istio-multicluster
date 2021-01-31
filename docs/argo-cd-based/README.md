@@ -147,11 +147,14 @@ $ export userToken=GITHUB_USER_TOKEN_FROM_STEP_1
     pushd clusters/armadillo/argocd > /dev/null
 
     kubectl apply \
+        --context kind-armadillo \
         -f ./init/namespace-argocd.yaml
     kubectl -n argocd create secret generic access-secret \
+        --context kind-armadillo \
         --from-literal=username=placeholder \
         --from-literal=token=$userToken
     kubectl apply -n argocd \
+        --context kind-armadillo \
         -f ./stack/argo-cd/argo-cd-install.yaml \
         -f ./init/argo-cd-project.yaml \
         -f ./init/argo-cd-application.yaml
@@ -167,11 +170,14 @@ Bison
     pushd clusters/bison/argocd > /dev/null
 
     kubectl apply \
+        --context kind-bison \
         -f ./init/namespace-argocd.yaml
     kubectl -n argocd create secret generic access-secret \
+        --context kind-bison \
         --from-literal=username=placeholder \
         --from-literal=token=$userToken
     kubectl apply -n argocd \
+        --context kind-bison \
         -f ./stack/argo-cd/argo-cd-install.yaml \
         -f ./init/argo-cd-project.yaml \
         -f ./init/argo-cd-application.yaml
