@@ -19,11 +19,9 @@ apps:
   - name: istio-operator
     namespace: istio-system
     enabled: true
-    wave: -2
     path: ../istio-operator/ # Relative from `clusters/armadillo/argocd/`
   - name: istio-install
     enabled: true
-    wave: -1
     path: ../istio-install/ # Relative from `clusters/armadillo/argocd/`
   - name: istio-setup
     enabled: true
