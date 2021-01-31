@@ -17,6 +17,7 @@ apps:
   #   enabled: true
   #   namespace: istio-system
   - name: istio-operator
+    namespace: istio-system
     enabled: true
     wave: -1
     path: ../istio-operator/ # Relative from `clusters/armadillo/argocd/`
