@@ -2,6 +2,8 @@ apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 metadata:
   name: armadillo-istio-multicluster-gateways
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   # Profile empty is used to create Gateways only.
   profile: empty
