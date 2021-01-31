@@ -182,10 +182,10 @@ Each command is associated with some comments to clarify what they do:
 ```bash
 {
     kubectl apply --context kind-armadillo \
-        -f clusters/armadillo/istio-setup/istio-operator-install.yaml
+        -f clusters/armadillo/istio-operator/istio-operator-install.yaml
 
     kubectl apply --context kind-bison \
-        -f clusters/bison/istio-setup/istio-operator-install.yaml
+        -f clusters/bison/istio-operator/istio-operator-install.yaml
 }
 ```
 
