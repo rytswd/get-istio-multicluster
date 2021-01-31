@@ -10,6 +10,8 @@ metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
   {{- end }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .wave | default "0" | quote }}
 spec:
   project: default
   source:

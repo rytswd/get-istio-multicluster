@@ -13,9 +13,16 @@ env: staging
 #   ArgoCD sync will be halted until it is fixed.
 #
 apps:
-  - name: istio
+  # - name: istio
+  #   enabled: true
+  #   namespace: istio-system
+  - name: istio-operator
     enabled: true
-    namespace: istio-system
+    wave: -1
+    path: ../istio-operator/ # Relative from `clusters/armadillo/argocd/`
+  - name: istio-install
+    enabled: true
+    path: ../istio-install/ # Relative from `clusters/armadillo/argocd/`
   - name: istio-setup
     enabled: true
     path: ../istio-setup/ # Relative from `clusters/armadillo/argocd/`
