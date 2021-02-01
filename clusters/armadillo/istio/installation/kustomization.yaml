@@ -2,9 +2,18 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+  # Install Istio Operator first.
+  # The order of installation is managed by ArgoCD wave control.
+  # Ref: https://argoproj.github.io/argo-cd/user-guide/sync-waves/
   - ./operator-install/istio-operator-install.yaml
 
+  # Install Istio Control Plane and Data Planes.
+  # The Control Plane needs to be installed first, and then the rest of the
+  # components. This is also managed by ArgoCD wave control.
   - ./operator-input/istio-control-plane.yaml
   - ./operator-input/istio-external-gateways.yaml
   - ./operator-input/istio-multicluster-gateways.yaml
+
+  # Any additional resources for Istio can be installed at the same time. This
+  # example includes CoreDNS configuration.
   # - ./additional-setup/coredns-configmap.yaml
