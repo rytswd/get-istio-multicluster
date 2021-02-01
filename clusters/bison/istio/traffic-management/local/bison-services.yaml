@@ -58,20 +58,6 @@ spec:
             value: 50
           httpStatus: 400
 ---
-apiVersion: networking.istio.io/v1beta1
-kind: ServiceEntry
-metadata:
-  name: external-svc-httpbin
-spec:
-  hosts:
-    - httpbin.org
-  location: MESH_EXTERNAL
-  ports:
-    - number: 80
-      name: example-http
-      protocol: HTTP
-  resolution: DNS
----
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
