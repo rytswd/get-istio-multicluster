@@ -178,7 +178,7 @@ Bison
         --from-literal=token=$userToken
     kubectl apply -n argocd \
         --context kind-bison \
-        -f ./installation/argo-cd/argo-cd-install.yaml \
+        -f ./installation/argo-cd-install.yaml \
         -f ./init/argo-cd-project.yaml \
         -f ./init/argo-cd-application.yaml
 
