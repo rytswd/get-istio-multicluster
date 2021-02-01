@@ -1,0 +1,41 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: toolkit-alpine
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: toolkit-alpine
+  labels:
+    app.kubernetes.io/name: toolkit-alpine
+spec:
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 80
+  selector:
+    app.kubernetes.io/name: toolkit-alpine
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: toolkit-alpine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: toolkit-alpine
+      version: v1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: toolkit-alpine
+        version: v1
+    spec:
+      serviceAccountName: toolkit-alpine
+      containers:
+        - image: docker.io/rytswd/toolkit-alpine:0.1.1
+          name: toolkit-alpine
+          command: ["/bin/sleep", "3650d"]
