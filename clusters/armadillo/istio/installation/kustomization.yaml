@@ -5,6 +5,6 @@ resources:
   - ./operator-install/istio-operator-install.yaml
 
   - ./operator-input/istio-control-plane.yaml
-  - ./operator-input/istio-external-gateway.yaml
-  - ./operator-input/istio-multicluster-gateway.yaml
+  - ./operator-input/istio-external-gateways.yaml
+  - ./operator-input/istio-multicluster-gateways.yaml
   # - ./additional-setup/coredns-configmap.yaml
