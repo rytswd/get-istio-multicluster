@@ -1,3 +1,9 @@
+# This file sets up ArgoCD to manage ArgoCD itself, meaning the ArgoCD version
+# can be managed with GitOps as well.
+#
+# As the path looks up the `argocd/installation/` path, YAMLs in that directory
+# will be applied to the cluster.
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
