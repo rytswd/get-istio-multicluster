@@ -182,10 +182,10 @@ Each command is associated with some comments to clarify what they do:
 ```bash
 {
     kubectl apply --context kind-armadillo \
-        -f clusters/armadillo/istio-operator/istio-operator-install.yaml
+        -f clusters/armadillo/istio/installation/operator-install/istio-operator-install.yaml
 
     kubectl apply --context kind-bison \
-        -f clusters/bison/istio-operator/istio-operator-install.yaml
+        -f clusters/bison/istio/installation/operator-install/istio-operator-install.yaml
 }
 ```
 
@@ -210,11 +210,11 @@ Using IstioOperator Coontroller is one of the few ways to install Istio. The mai
 {
     kubectl apply --context kind-armadillo \
         -n istio-system \
-        -f clusters/armadillo/istio-setup/istio-control-plane.yaml
+        -f clusters/armadillo/istio/installation/operator-input/istio-control-plane.yaml
 
     kubectl apply --context kind-bison \
         -n istio-system \
-        -f clusters/bison/istio-setup/istio-control-plane.yaml
+        -f clusters/bison/istio/installation/operator-input/istio-control-plane.yaml
 }
 ```
 
@@ -237,13 +237,13 @@ This installation uses the IstioOperator manifest with `minimal` profile, meanin
 {
     kubectl apply --context kind-armadillo \
         -n istio-system \
-        -f clusters/armadillo/istio-setup/istio-external-gateways.yaml \
-        -f clusters/armadillo/istio-setup/istio-multicluster-gateways.yaml
+        -f clusters/armadillo/istio/installation/operator-input/istio-external-gateways.yaml \
+        -f clusters/armadillo/istio/installation/operator-input/istio-multicluster-gateways.yaml
 
     kubectl apply --context kind-bison \
         -n istio-system \
-        -f clusters/bison/istio-setup/istio-external-gateways.yaml \
-        -f clusters/bison/istio-setup/istio-multicluster-gateways.yaml
+        -f clusters/bison/istio/installation/operator-input/istio-external-gateways.yaml \
+        -f clusters/bison/istio/installation/operator-input/istio-multicluster-gateways.yaml
 }
 ```
 
@@ -264,17 +264,17 @@ The main difference in the configuration files used above is the name used by va
 {
     kubectl label --context kind-armadillo namespace default istio-injection=enabled
     kubectl apply --context kind-armadillo \
-        -f tools/httpbin/httpbin.yaml \
-        -f https://raw.githubusercontent.com/rytswd/color-svc/main/k8s/account.yaml \
-        -f https://raw.githubusercontent.com/rytswd/color-svc/main/k8s/color-svc-only-blue.yaml \
-        -f https://raw.githubusercontent.com/rytswd/docker-toolkit-images/main/k8s/toolkit-alpine.yaml
+        -f clusters/armadillo/other/httpbin.yaml \
+        -f clusters/armadillo/other/color-svc-account.yaml \
+        -f clusters/armadillo/other/color-svc-only-blue.yaml \
+        -f clusters/armadillo/other/toolkit-alpine.yaml
 
     kubectl label --context kind-bison namespace default istio-injection=enabled
     kubectl apply --context kind-bison \
-        -f tools/httpbin/httpbin.yaml \
-        -f https://raw.githubusercontent.com/rytswd/color-svc/main/k8s/account.yaml \
-        -f https://raw.githubusercontent.com/rytswd/color-svc/main/k8s/color-svc-only-red.yaml \
-        -f https://raw.githubusercontent.com/rytswd/docker-toolkit-images/main/k8s/toolkit-alpine.yaml
+        -f clusters/bison/other/httpbin.yaml \
+        -f clusters/bison/other/color-svc-account.yaml \
+        -f clusters/bison/other/color-svc-only-red.yaml \
+        -f clusters/bison/other/toolkit-alpine.yaml
 }
 ```
 
@@ -331,12 +331,12 @@ Each cluster has different resources. Check out the documentation one by one.
 ```bash
 {
     sed -i '' -e "s/REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP/$ARMADILLO_ISTIOCOREDNS_CLUSTER_IP/" \
-        clusters/armadillo/istio-setup/coredns-configmap.yaml
+        clusters/armadillo/istio/installation/additional-setup/coredns-configmap.yaml
     kubectl apply --context kind-armadillo \
-        -f clusters/armadillo/istio-setup/coredns-configmap.yaml
+        -f clusters/armadillo/istio/installation/additional-setup/coredns-configmap.yaml
 
     kubectl apply --context kind-armadillo \
-        -f clusters/armadillo/local/armadillo-services.yaml
+        -f clusters/armadillo/istio/traffic-management/local/armadillo-services.yaml
 }
 ```
 
@@ -357,7 +357,7 @@ This will then be applied to `kube-system/coredns` ConfigMap. As KinD comes with
 
 ---
 
-#### 7.2. Add ServiceEntry for Bison
+#### 7.2. Add ServiceEntry for Bison connection
 
 Before completing this, make sure the cluster Bison is also started, and has completed Istio installation.
 
@@ -370,7 +370,7 @@ Before completing this, make sure the cluster Bison is also started, and has com
         -o jsonpath='{.items[0].spec.clusterIP}')
     echo $ARMADILLO_EGRESS_GATEWAY_ADDRESS
     sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
-        clusters/armadillo/multicluster/bison-connections.yaml
+        clusters/armadillo/istio/traffic-management/multicluster/bison-connections.yaml
 }
 ```
 
@@ -389,10 +389,10 @@ Before completing this, make sure the cluster Bison is also started, and has com
     echo $BISON_INGRESS_GATEWAY_ADDRESS
     {
         sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
-            clusters/armadillo/multicluster/bison-connections.yaml
+            clusters/armadillo/istio/traffic-management/multicluster/bison-connections.yaml
         if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
             sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
-                clusters/armadillo/multicluster/bison-connections.yaml
+                clusters/armadillo/istio/traffic-management/multicluster/bison-connections.yaml
         fi
     }
 }
@@ -405,7 +405,7 @@ Before completing this, make sure the cluster Bison is also started, and has com
 
 ```bash
 kubectl apply --context kind-armadillo \
-    -f clusters/armadillo/multicluster/bison-connections.yaml
+    -f clusters/armadillo/istio/traffic-management/multicluster/bison-connections.yaml
 ```
 
 ```sh
@@ -420,7 +420,7 @@ virtualservice.networking.istio.io/bison-httpbin-chaos-routing created
 
 **WARNING**: The current setup does NOT go through EgressGateway, and simply skips it. This needs further investigation.
 
-There are 2 places that are being updated in a single file `clusters/armadillo/external/bison-connections.yaml`. The first one is for Armadillo's EgressGateway, and the second is for Bison's IngressGateway. This means the traffic follows the below pattern.
+There are 2 places that are being updated in a single file `clusters/armadillo/istio/traffic-management/multicluster/bison-connections.yaml`. The first one is for Armadillo's EgressGateway, and the second is for Bison's IngressGateway. This means the traffic follows the below pattern.
 
 ```
 [ Armadillo Cluster]                                  Cluster Border                                         [ Bison Cluster]
@@ -446,15 +446,15 @@ The command may look confusing, but the update is simple. If you cloned this rep
 
 ```bash
 kubectl apply --context kind-bison \
-    -f clusters/bison/local/bison-services.yaml \
-    -f clusters/bison/istio-setup/multicluster-setup.yaml
+    -f clusters/bison/istio/traffic-management/local/bison-services.yaml \
+    -f clusters/bison/istio/traffic-management/multicluster/multicluster-setup.yaml
 ```
 
 If you are using Istio v1.6, you will get an error from the above. You need to run the following command:
 
 ```bash
 kubectl apply --context kind-bison \
-    -f clusters/bison/istio-setup/multicluster-setup-1.6.yaml
+    -f clusters/bison/istio/traffic-management/archive-for-istio-1.6/multicluster-setup-1.6.yaml
 ```
 
 <details>
@@ -523,7 +523,7 @@ _TODO: More to be added_
 </details>
 
 ---
-
+o
 ## ⚡️ Quicker Paralllel Steps
 
 The below will be quicker than above if you use multiple terminals to run them in parallel.
