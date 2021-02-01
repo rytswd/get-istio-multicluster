@@ -1,0 +1,77 @@
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: bison-httpbin-global
+spec:
+  hosts:
+    - httpbin.default.global
+  location: MESH_INTERNAL
+  exportTo:
+    - "."
+  ports:
+    - name: http1
+      number: 8000
+      protocol: http
+  resolution: STATIC
+  addresses:
+    - 240.0.0.1
+  endpoints:
+    - address: REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS
+      network: external
+      ports:
+        http1: 15443 # Istio Ingress Gateway port
+    - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
+      ports:
+        http1: 15443
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: bison-httpbin-service
+spec:
+  hosts:
+    - httpbin.default.bison.global # Can be anything, as long as appropriate EnvoyFilter is in place on target cluster
+  location: MESH_INTERNAL
+  exportTo:
+    - "."
+  ports:
+    - name: http-bison
+      number: 8000
+      protocol: http
+  resolution: STATIC
+  addresses:
+    - 240.0.0.2
+  endpoints:
+    - address: REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS
+      network: external
+      ports:
+        http-bison: 15443 # Istio Ingress Gateway port
+    - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
+      ports:
+        http-bison: 15443
+---
+# VirtualService definition on Bison side won't be able to handle the chaos setup.
+# TODO: Check if this can be handled at IngressGateway instead
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: bison-httpbin-chaos-routing
+spec:
+  hosts:
+    - httpbin.default.bison.global
+    - httpbin.default.global
+    - httpbin.default.svc.cluster.local
+  http:
+    - match:
+        - uri:
+            prefix: /chaos
+      rewrite:
+        uri: /status/418
+      route:
+        - destination:
+            host: httpbin.default.bison.global
+      fault:
+        abort:
+          percentage:
+            value: 50
+          httpStatus: 400
