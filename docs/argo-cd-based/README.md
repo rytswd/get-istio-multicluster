@@ -155,7 +155,7 @@ $ export userToken=GITHUB_USER_TOKEN_FROM_STEP_1
         --from-literal=token=$userToken
     kubectl apply -n argocd \
         --context kind-armadillo \
-        -f ./stack/argo-cd/argo-cd-install.yaml \
+        -f ./installation/argo-cd-install.yaml \
         -f ./init/argo-cd-project.yaml \
         -f ./init/argo-cd-application.yaml
 
@@ -178,7 +178,7 @@ Bison
         --from-literal=token=$userToken
     kubectl apply -n argocd \
         --context kind-bison \
-        -f ./stack/argo-cd/argo-cd-install.yaml \
+        -f ./installation/argo-cd/argo-cd-install.yaml \
         -f ./init/argo-cd-project.yaml \
         -f ./init/argo-cd-application.yaml
 
