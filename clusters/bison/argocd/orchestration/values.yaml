@@ -25,7 +25,7 @@ apps:
     path: ../istio/traffic-management/multicluster # Relative from `clusters/armadillo/argocd/`.
 
   - name: other
-    enabled: false
+    enabled: true
     path: ../other/ # Relative from `clusters/armadillo/argocd/`.
 #
 # =========================================================================== #
