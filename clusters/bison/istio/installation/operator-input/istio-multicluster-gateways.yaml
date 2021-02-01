@@ -4,7 +4,7 @@ metadata:
   name: bison-istio-multicluster-gateways
   annotations:
     # ArgoCD Wave setup for controlling the timing of sync.
-    argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   # Profile empty is used to create Gateways only.
   profile: empty

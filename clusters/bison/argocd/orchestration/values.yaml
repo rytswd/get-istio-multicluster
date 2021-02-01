@@ -2,30 +2,31 @@ env: staging
 
 # === Application Onboarding with ArgoCD ==================================== #
 #
-#   ArgoCD template setup is going to loop through the items in slice here,
-#   and search for `name` inside `get-gitops-k8s/stack/`. If the `enabled`
-#   boolean flag is set to `false`, ArgoCD will ignore.
+#   ArgoCD template setup is going to loop through the items in slice here.
+#   If the `enabled` boolean flag is set to `false`, ArgoCD will ignore.
 #
 #   Additionally, you can specify `namespace`. This may be useful when the
 #   installation requires a specific namespace in place.
 #
-#   If `stack` does not comply with the directory format ArgoCD expects,
-#   ArgoCD sync will be halted until it is fixed.
-#
 apps:
-  # - name: istio
-  #   enabled: true
-  #   namespace: istio-system
-  - name: istio-operator
-    namespace: istio-system
+  # Istio related setup
+  - name: istio-installation
+    namespace: istio-system # Namespace gets created by a template setup.
     enabled: true
-    path: ../istio-operator/ # Relative from `clusters/armadillo/argocd/`
-  - name: istio-install
+    path: ../istio/installation/ # Relative from `clusters/armadillo/argocd/`.
+  - name: istio-traffic-management-local
     enabled: true
-    path: ../istio-install/ # Relative from `clusters/armadillo/argocd/`
-  - name: istio-setup
+    path: ../istio/traffic-management/local # Relative from `clusters/armadillo/argocd/`.
+  - name: istio-traffic-management-external
     enabled: true
-    path: ../istio-setup/ # Relative from `clusters/armadillo/argocd/`
+    path: ../istio/traffic-management/external # Relative from `clusters/armadillo/argocd/`.
+  - name: istio-traffic-management-multicluster
+    enabled: true
+    path: ../istio/traffic-management/multicluster # Relative from `clusters/armadillo/argocd/`.
+
+  - name: other
+    enabled: false
+    path: ../other/ # Relative from `clusters/armadillo/argocd/`.
 #
 # =========================================================================== #
 
