@@ -523,7 +523,7 @@ _TODO: More to be added_
 </details>
 
 ---
-o
+
 ## ⚡️ Quicker Paralllel Steps
 
 The below will be quicker than above if you use multiple terminals to run them in parallel.
