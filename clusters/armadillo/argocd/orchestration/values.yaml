@@ -22,7 +22,7 @@ apps:
     path: ../istio/traffic-management/external # Relative from `clusters/armadillo/argocd/`.
   - name: istio-traffic-management-multicluster
     enabled: true
-    path: ../istio/traffic-management-multicluster # Relative from `clusters/armadillo/argocd/`.
+    path: ../istio/traffic-management/multicluster # Relative from `clusters/armadillo/argocd/`.
 
   - name: other
     enabled: false
