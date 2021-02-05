@@ -32,7 +32,7 @@ apps:
     namespace: prometheus-operator
     enabled: true
     path: ../observability/prometheus/operator-install
-  - name: Prometheus
+  - name: prometheus
     enabled: true
     path: ../observability/prometheus/operator-usage
   - name: kiali-operator
