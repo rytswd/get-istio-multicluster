@@ -25,6 +25,9 @@ apps:
     path: ../istio/traffic-management/multicluster # Relative from `clusters/armadillo/argocd/`.
 
   # Observability related setup
+  - name: grafana
+    enabled: true
+    path: ../observability/grafana
   - name: prometheus-operator
     namespace: prometheus-operator
     enabled: true
