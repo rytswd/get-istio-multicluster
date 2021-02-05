@@ -24,6 +24,19 @@ apps:
     enabled: true
     path: ../istio/traffic-management/multicluster # Relative from `clusters/armadillo/argocd/`.
 
+  # Observability related setup
+  - name: prometheus-operator
+    namespace: prometheus-operator
+    enabled: true
+    path: ../observability/prometheus/operator-install
+  - name: Prometheus
+    enabled: true
+    path: ../observability/prometheus/operator-usage
+  - name: kiali-operator
+    namespace: kiali-operator
+    enabled: true
+    path: ../observability/kiali/operator-install
+
   - name: other
     enabled: true
     path: ../other/ # Relative from `clusters/armadillo/argocd/`.
