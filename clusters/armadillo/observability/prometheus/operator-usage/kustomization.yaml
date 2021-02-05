@@ -1,0 +1,7 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - prometheus-istio.yaml
+  - prometheus-istio-rbac.yaml
+  - istio-scrape-configs-secret.yaml
