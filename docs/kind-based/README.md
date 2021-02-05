@@ -210,11 +210,11 @@ Using IstioOperator Coontroller is one of the few ways to install Istio. The mai
 {
     kubectl apply --context kind-armadillo \
         -n istio-system \
-        -f clusters/armadillo/istio/installation/operator-input/istio-control-plane.yaml
+        -f clusters/armadillo/istio/installation/operator-usage/istio-control-plane.yaml
 
     kubectl apply --context kind-bison \
         -n istio-system \
-        -f clusters/bison/istio/installation/operator-input/istio-control-plane.yaml
+        -f clusters/bison/istio/installation/operator-usage/istio-control-plane.yaml
 }
 ```
 
@@ -237,13 +237,13 @@ This installation uses the IstioOperator manifest with `minimal` profile, meanin
 {
     kubectl apply --context kind-armadillo \
         -n istio-system \
-        -f clusters/armadillo/istio/installation/operator-input/istio-external-gateways.yaml \
-        -f clusters/armadillo/istio/installation/operator-input/istio-multicluster-gateways.yaml
+        -f clusters/armadillo/istio/installation/operator-usage/istio-external-gateways.yaml \
+        -f clusters/armadillo/istio/installation/operator-usage/istio-multicluster-gateways.yaml
 
     kubectl apply --context kind-bison \
         -n istio-system \
-        -f clusters/bison/istio/installation/operator-input/istio-external-gateways.yaml \
-        -f clusters/bison/istio/installation/operator-input/istio-multicluster-gateways.yaml
+        -f clusters/bison/istio/installation/operator-usage/istio-external-gateways.yaml \
+        -f clusters/bison/istio/installation/operator-usage/istio-multicluster-gateways.yaml
 }
 ```
 

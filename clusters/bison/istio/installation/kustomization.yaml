@@ -10,10 +10,9 @@ resources:
   # Install Istio Control Plane and Data Planes.
   # The Control Plane needs to be installed first, and then the rest of the
   # components. This is also managed by ArgoCD wave control.
-  - ./operator-input/istio-control-plane.yaml
-  - ./operator-input/istio-external-gateways.yaml
-  - ./operator-input/istio-multicluster-gateways.yaml
-
+  - ./operator-usage/istio-control-plane.yaml
+  - ./operator-usage/istio-external-gateways.yaml
+  - ./operator-usage/istio-multicluster-gateways.yaml
   # Any additional resources for Istio can be installed at the same time. This
   # example includes CoreDNS configuration.
   # - ./additional-setup/coredns-configmap.yaml
