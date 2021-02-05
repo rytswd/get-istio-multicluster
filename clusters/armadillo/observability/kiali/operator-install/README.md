@@ -14,3 +14,5 @@ $ helm template \
     kiali-operator \
     kiali-operator > ./kiali-operator-install.yaml
 ```
+
+NOTE: This is done as Helm dependency setup was seeing some errors.
