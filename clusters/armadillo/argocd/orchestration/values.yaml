@@ -39,6 +39,9 @@ apps:
     namespace: kiali-operator
     enabled: true
     path: ../observability/kiali/operator-install
+  - name: kiali
+    enabled: true
+    path: ../observability/kiali/operator-usage
 
   - name: other
     enabled: true
