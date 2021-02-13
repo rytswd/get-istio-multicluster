@@ -20,7 +20,5 @@ bf9080d328a5db48755f4a6d89c1b117230cb8d1b36432ddbb2687559ba665f2  ./prometheus-o
 bf9080d328a5db48755f4a6d89c1b117230cb8d1b36432ddbb2687559ba665f2  -
 ```
 
-## NOTE
-
-Also, there is a shell script to update all other clusters at the same time.
-Check out `/tools/internal/` to find more.
+- **Last Update**: 2nd February, 2021
+- **Version**: v0.45.0

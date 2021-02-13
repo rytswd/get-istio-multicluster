@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: jaeger-operator
+
+resources:
+  - jaeger-operator-cluster-role.yaml
+  - jaeger-operator-cluster-role-binding.yaml
+  - jaeger-operator-crds.yaml
+  - jaeger-operator-deployment.yaml
+  - jaeger-operator-role.yaml
+  - jaeger-operator-role-binding.yaml
+  - jaeger-operator-service-account.yaml

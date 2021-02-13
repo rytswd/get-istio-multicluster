@@ -1,5 +1,5 @@
-# Ref: https://github.com/kiali/kiali-operator/blob/master/deploy/kiali/kiali_cr.yaml
 ---
+# Ref: https://github.com/kiali/kiali-operator/blob/master/deploy/kiali/kiali_cr.yaml
 apiVersion: kiali.io/v1alpha1
 kind: Kiali
 metadata:
@@ -11,6 +11,7 @@ spec:
   deployment:
     accessible_namespaces:
       - "**"
+    ingress_enabled: false
 
   auth:
     strategy: "anonymous"
@@ -21,12 +22,18 @@ spec:
   external_services:
     custom_dashboards:
       prometheus:
-        url: "http://prometheus-istio.istio-system.svc.cluster.local:9090"
+        cache_duration: 10
+        cache_enabled: true
+        cache_expiration: 300
+        url: "http://prometheus-istio.prometheus.svc.cluster.local:9090/prometheus/"
     grafana:
-      in_cluster_url: "http://grafana.istio-system:3000"
-      url: ""
+      in_cluster_url: "http://grafana.istio-system/grafana"
+      url: "/grafana/"
     prometheus:
-      url: "http://prometheus-istio.istio-system.svc.cluster.local:9090"
+      url: "http://prometheus-istio.prometheus.svc.cluster.local:9090/prometheus/"
+    tracing:
+      in_cluster_url: "http://jaeger-query.istio-system.svc.cluster.local:16686/jaeger/"
+      url: "/jaeger/"
 ###################################################################
 
 ###################################################################

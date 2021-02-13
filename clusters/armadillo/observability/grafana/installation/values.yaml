@@ -1,0 +1,30 @@
+# Ref: https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
+grafana:
+  namespaceOverride: istio-system # Deploys against this namespace
+
+  persistence:
+    enabled: true
+    size: 10Mi
+
+  grafana.ini:
+    # auth.anonymous:
+    #   enabled: true
+    #   org_name: test-org
+    #   org_role: Viewer
+    server:
+      domain: monitoring.example.com
+      root_url: "%(protocol)s://%(domain)s/grafana"
+      serve_from_sub_path: true
+
+  env:
+    GF_SECURITY_ADMIN_USER: "-"
+    GF_SECURITY_ADMIN_PASSWORD: "-"
+    GF_AUTH_ANONYMOUS_ENABLED: "true"
+    GF_AUTH_ANONYMOUS_ORG_ROLE: "Viewer"
+    GF_AUTH_BASIC_ENABLED: "false"
+
+  sidecar:
+    dashboards:
+      enabled: true
+    datasources:
+      enabled: true

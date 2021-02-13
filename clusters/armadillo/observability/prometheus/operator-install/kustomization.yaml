@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# TODO: Consider moving installation target namespace to be something else.
+#       With the below namespace setup, ClusterRoleBinding will be incorrect.
+#       Patch may be a way to handle it for now.
+# namespace: prometheus-operator
+
+resources:
+  - prometheus-operator-install.yaml
