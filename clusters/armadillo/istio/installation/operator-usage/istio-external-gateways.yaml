@@ -22,10 +22,19 @@ spec:
         label:
           app: armadillo-external-ingressgateway
         k8s:
-          # In case of LB usage in real environment, you may want to create
-          # IP from the cloud provider service, and use it here.
-          # service:
-          #   loadBalancerIP: TBC
+          service:
+            # In case of LB usage in real environment, you may want to create
+            # IP from the cloud provider service, and use it here.
+            # loadBalancerIP: TBC
+
+            ports:
+              - port: 80
+                targetPort: 8080
+                name: http2
+                nodePort: 31001 # This is for KinD based testing. Make sure this doesn't clash with other mesh definitions.
+              - port: 443
+                targetPort: 8443
+                name: https
 
           # Affinity for IngressGateways, so that pods are separated into
           # different nodes.

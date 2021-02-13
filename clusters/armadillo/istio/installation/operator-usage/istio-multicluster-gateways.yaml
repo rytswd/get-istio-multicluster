@@ -30,6 +30,7 @@ spec:
             # In case of LB usage in real environment, you may want to create
             # IP from the cloud provider service, and use it here.
             # loadBalancerIP: TBC
+
             ports:
               - port: 80
                 targetPort: 8080
