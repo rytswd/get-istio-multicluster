@@ -8,6 +8,7 @@ spec:
     - httpbin.default.svc.cluster.local
   gateways:
     - mesh
+    - istio-system/armadillo-external-ingressgateway
     # - istio-system/armadillo-multicluster-ingressgateway
   http:
     - match:
@@ -18,6 +19,31 @@ spec:
       route:
         - destination:
             host: httpbin.default.svc.cluster.local
+      fault:
+        abort:
+          percentage:
+            value: 50
+          httpStatus: 400
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: armadillo-color-svc-routing
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - mesh
+    - istio-system/armadillo-external-ingressgateway
+  http:
+    - match:
+        - uri:
+            prefix: /chaos
+      rewrite:
+        uri: /random
+      route:
+        - destination:
+            host: color-svc-only-blue.default.svc.cluster.local
       fault:
         abort:
           percentage:
