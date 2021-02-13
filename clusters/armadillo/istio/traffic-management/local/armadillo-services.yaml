@@ -33,7 +33,6 @@ spec:
   hosts:
     - "*"
   gateways:
-    - mesh
     - istio-system/armadillo-external-ingressgateway
   http:
     - match:
