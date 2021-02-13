@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasource-jaeger
+  namespace: istio-system # Should be the same as Grafana
+  labels:
+    grafana_datasource: "1"
+data:
+  datasource_jaeger.yaml: |-
+    apiVersion: 1
+    datasources:
+      - name: Jaeger
+        type: jaeger
+        url: http://jaeger-query.istio-system.svc.cluster.local:16686/jaeger/
+        access: proxy
+        isDefault: false
+        orgId: 1

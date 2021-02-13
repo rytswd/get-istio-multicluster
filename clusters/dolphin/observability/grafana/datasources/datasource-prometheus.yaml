@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasource-prometheus
+  namespace: istio-system # Should be the same as Grafana
+  labels:
+    grafana_datasource: "1"
+data:
+  datasource_prometheus.yaml: |-
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-istio.prometheus.svc.cluster.local:9090/prometheus/
+        access: proxy
+        isDefault: true
+        orgId: 1

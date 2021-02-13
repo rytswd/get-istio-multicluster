@@ -1,0 +1,17 @@
+---
+# Ref: https://www.jaegertracing.io/docs/1.21/operator/#understanding-custom-resource-definitions
+# Ref: https://github.com/jaegertracing/jaeger-operator/tree/master/examples
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: jaeger
+  namespace: istio-system
+spec:
+  startegy: allInOne
+  allInOne:
+    options:
+      log-level: debug
+      query:
+        base-path: /jaeger
+  ingress:
+    enabled: false
