@@ -70,8 +70,8 @@ git clone --depth 1 -b main https://github.com/rytswd/get-istio-multicluster.git
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32021.yaml --name armadillo
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32022.yaml --name bison
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-320x1.yaml --name armadillo
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-320x2.yaml --name bison
 }
 ```
 
@@ -553,7 +553,7 @@ TODO: THE BELOW NEEDS TO BE UPDATED
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32022.yaml --name bison
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-320x2.yaml --name bison
 
     kubectl create namespace --context kind-bison istio-system
     kubectl create secret --context kind-bison \
@@ -580,7 +580,7 @@ TODO: THE BELOW NEEDS TO BE UPDATED
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32024.yaml --name dolphin
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-320x4.yaml --name dolphin
 
     kubectl create namespace --context kind-dolphin istio-system
     kubectl create secret --context kind-dolphin \
@@ -609,7 +609,7 @@ TODO: THE BELOW NEEDS TO BE UPDATED
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32021.yaml --name armadillo
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-320x1.yaml --name armadillo
 
     kubectl create namespace --context kind-armadillo istio-system
     kubectl create secret --context kind-armadillo \

@@ -25,8 +25,8 @@ From here on, all the steps are assumed to be run from `/some/path/at/get-istio-
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32021.yaml --name armadillo
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32022.yaml --name bison
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-320x1.yaml --name armadillo
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-320x2.yaml --name bison
 }
 ```
 
@@ -351,7 +351,7 @@ The below will be quicker than above if you use multiple terminals to run them i
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32022.yaml --name bison
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-320x2.yaml --name bison
 
     kubectl create namespace --context kind-bison istio-system
     kubectl create secret --context kind-bison \
@@ -380,7 +380,7 @@ The below will be quicker than above if you use multiple terminals to run them i
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32021.yaml --name armadillo
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-320x1.yaml --name armadillo
 
     kubectl create namespace --context kind-armadillo istio-system
     kubectl create secret --context kind-armadillo \
