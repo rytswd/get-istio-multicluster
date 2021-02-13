@@ -25,8 +25,8 @@ From here on, all the steps are assumed to be run from `/some/path/at/get-istio-
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32001.yaml --name armadillo
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32002.yaml --name bison
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32021.yaml --name armadillo
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32022.yaml --name bison
 }
 ```
 
@@ -205,7 +205,7 @@ Before completing this, make sure the cluster Bison is also started, and has com
         sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
             clusters/armadillo/bison-connections.yaml
         if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
-            sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
+            sed -i '' -e "s/15443 # Istio Ingress Gateway port/32022/" \
                 clusters/armadillo/bison-connections.yaml
         fi
     }
@@ -243,7 +243,7 @@ App Container A ==> Istio Sidecar Proxy ==> Egress Gateway ==|==> Ingress Gatewa
 
 This means that, when you need App Container A to talk to App Container B on the other cluster, you need to provide 2 endpoints.
 
-In order for 2 KinD clusters to talk to each other, the extra `sed` takes place to fallback to use `172.18.0.1` as endpoint address (which is a mapping outside of cluster), and because Bison's Ingress Gateway is set up with NodePort of `32002`, we replace the default port of `15443` with `32002`.
+In order for 2 KinD clusters to talk to each other, the extra `sed` takes place to fallback to use `172.18.0.1` as endpoint address (which is a mapping outside of cluster), and because Bison's Ingress Gateway is set up with NodePort of `32022`, we replace the default port of `15443` with `32022`.
 
 The command may look confusing, but the update is simple. If you cloned this repo at the step 0, you can easily see from git diff.
 
@@ -351,7 +351,7 @@ The below will be quicker than above if you use multiple terminals to run them i
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32002.yaml --name bison
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32022.yaml --name bison
 
     kubectl create namespace --context kind-bison istio-system
     kubectl create secret --context kind-bison \
@@ -380,7 +380,7 @@ The below will be quicker than above if you use multiple terminals to run them i
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32001.yaml --name armadillo
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32021.yaml --name armadillo
 
     kubectl create namespace --context kind-armadillo istio-system
     kubectl create secret --context kind-armadillo \
@@ -423,7 +423,7 @@ The below will be quicker than above if you use multiple terminals to run them i
     sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
         clusters/armadillo/bison-connections.yaml
     if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
-        sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
+        sed -i '' -e "s/15443 # Istio Ingress Gateway port/32022/" \
             clusters/armadillo/bison-connections.yaml
     fi
     kubectl apply --context kind-armadillo \

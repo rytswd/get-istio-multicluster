@@ -11,14 +11,14 @@ nodes:
           kubeletExtraArgs:
             node-labels: "ingress-ready=true"
     extraPortMappings:
-      - containerPort: 31001
-        hostPort: 31001
+      - containerPort: 32011
+        hostPort: 32011
         protocol: TCP
-      - containerPort: 32001
-        hostPort: 32001
+      - containerPort: 32021
+        hostPort: 32021
         protocol: TCP
-      - containerPort: 33001
-        hostPort: 33001
+      - containerPort: 32031
+        hostPort: 32031
         protocol: TCP
 kubeadmConfigPatches:
   - |

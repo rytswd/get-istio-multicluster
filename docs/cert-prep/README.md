@@ -240,8 +240,8 @@ _To be updated_
 <details>
 <summary>Details</summary>
 
-- Armadillo will set up Istio IngressGateway with 32001 NodePort
-- Bison will set up Istio IngressGateway with 32002 NodePort
+- Armadillo will set up Istio IngressGateway with 32021 NodePort
+- Bison will set up Istio IngressGateway with 32022 NodePort
 
 </details>
 

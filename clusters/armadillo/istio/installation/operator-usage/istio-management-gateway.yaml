@@ -25,7 +25,7 @@ spec:
               - port: 80
                 targetPort: 8080
                 name: http2
-                nodePort: 33001 # This is for KinD based testing. Make sure this doesn't clash with other mesh definitions.
+                nodePort: 32031 # This is for KinD based testing. Make sure this doesn't clash with other mesh definitions.
               - port: 443
                 targetPort: 8443
                 name: https

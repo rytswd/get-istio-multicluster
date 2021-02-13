@@ -27,7 +27,7 @@ The below will be quicker than above if you use multiple terminals to run them i
 
 ```bash
 {
-    k3d cluster create bison --agents 1 -p "32002:32002@agent[0]"
+    k3d cluster create bison --agents 1 -p "32022:32022@agent[0]"
 
     kubectl create namespace --context k3d-bison istio-system
     kubectl create secret --context k3d-bison \
@@ -63,7 +63,7 @@ If you are using Istio v1.6 or below, you would need to run the following comman
 
 ```bash
 {
-    k3d cluster create dolphin --agents 1 -p "32004:32004@agent[0]"
+    k3d cluster create dolphin --agents 1 -p "32024:32024@agent[0]"
 
     kubectl create namespace --context k3d-dolphin istio-system
     kubectl create secret --context k3d-dolphin \
@@ -101,7 +101,7 @@ If you are using Istio v1.6 or below, you would need to run the following comman
 
 ```bash
 {
-    k3d cluster create armadillo --agents 1 -p "32001:32001@agent[0]"
+    k3d cluster create armadillo --agents 1 -p "32021:32021@agent[0]"
 
     kubectl create namespace --context k3d-armadillo istio-system
     kubectl create secret --context k3d-armadillo \
@@ -144,7 +144,7 @@ If you are using Istio v1.6 or below, you would need to run the following comman
     sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
         clusters/armadillo/bison-connections.yaml
     if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.21.0.1' ]]; then
-        sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
+        sed -i '' -e "s/15443 # Istio Ingress Gateway port/32022/" \
             clusters/armadillo/bison-connections.yaml
     fi
     kubectl apply --context k3d-armadillo \
@@ -165,7 +165,7 @@ If you are using Istio v1.6 or below, you would need to run the following comman
     sed -i '' -e "s/REPLACE_WITH_DOLPHIN_INGRESS_GATEWAY_ADDRESS/$DOLPHIN_INGRESS_GATEWAY_ADDRESS/g" \
         clusters/armadillo/dolphin-connections.yaml
     if [[ $DOLPHIN_INGRESS_GATEWAY_ADDRESS == '172.21.0.1' ]]; then
-        sed -i '' -e "s/15443 # Istio Ingress Gateway port/32004/" \
+        sed -i '' -e "s/15443 # Istio Ingress Gateway port/32024/" \
             clusters/armadillo/dolphin-connections.yaml
     fi
     kubectl apply --context k3d-armadillo \

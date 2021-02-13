@@ -34,7 +34,7 @@ jobs:
         with:
           version: v0.9.0
           name: armadillo
-          config: ./tools/kind-config/config-2-nodes-port-32001.yaml
+          config: ./tools/kind-config/config-2-nodes-port-32021.yaml
 
       - if: steps.comvent.outputs.comvent-found-any-match != ''
         name: Start Bison KinD cluster
@@ -42,7 +42,7 @@ jobs:
         with:
           version: v0.9.0
           name: bison
-          config: ./tools/kind-config/config-2-nodes-port-32002.yaml
+          config: ./tools/kind-config/config-2-nodes-port-32022.yaml
 
       - if: steps.comvent.outputs.comvent-found-any-match != ''
         name: Start Dolphin KinD cluster
@@ -50,7 +50,7 @@ jobs:
         with:
           version: v0.9.0
           name: dolphin
-          config: ./tools/kind-config/config-2-nodes-port-32004.yaml
+          config: ./tools/kind-config/config-2-nodes-port-32024.yaml
 
       - if: steps.comvent.outputs.comvent-found-any-match != ''
         name: Prep CA certs

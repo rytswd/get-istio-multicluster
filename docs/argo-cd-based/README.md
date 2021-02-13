@@ -61,9 +61,9 @@ As to how the token works, you can find more in [the official documentation of G
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32001.yaml --name armadillo
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32002.yaml --name bison
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32004.yaml --name dolphin
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32021.yaml --name armadillo
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32022.yaml --name bison
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32024.yaml --name dolphin
 }
 ```
 

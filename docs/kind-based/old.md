@@ -65,9 +65,9 @@ git clone --depth 1 -b main https://github.com/rytswd/get-istio-multicluster.git
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32001.yaml --name armadillo
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32002.yaml --name bison
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32004.yaml --name dolphin
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32021.yaml --name armadillo
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32022.yaml --name bison
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32024.yaml --name dolphin
 }
 ```
 
@@ -80,9 +80,9 @@ The difference between the configuration is the open port setup. Because cluster
 
 As you can see `istioctl-input.yaml` in each cluster, the NodePort used are:
 
-- Armadillo will set up Istio IngressGateway with 32001 NodePort
-- Bison will set up Istio IngressGateway with 32002 NodePort
-- Dolphin will set up Istio IngressGateway with 32004 NodePort
+- Armadillo will set up Istio IngressGateway with 32021 NodePort
+- Bison will set up Istio IngressGateway with 32022 NodePort
+- Dolphin will set up Istio IngressGateway with 32024 NodePort
 
 </details>
 
@@ -372,7 +372,7 @@ Before completing this, make sure the cluster Bison is also started, and has com
         sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
             clusters/armadillo/external/bison-connections.yaml
         if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
-            sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
+            sed -i '' -e "s/15443 # Istio Ingress Gateway port/32022/" \
                 clusters/armadillo/external/bison-connections.yaml
         fi
     }
@@ -410,7 +410,7 @@ App Container A ==> Istio Sidecar Proxy ==> Egress Gateway ==|==> Ingress Gatewa
 
 This means that, when you need App Container A to talk to App Container B on the other cluster, you need to provide 2 endpoints.
 
-In order for 2 KinD clusters to talk to each other, the extra `sed` takes place to fallback to use `172.18.0.1` as endpoint address (which is a mapping outside of cluster), and because Bison's Ingress Gateway is set up with NodePort of `32002`, we replace the default port of `15443` with `32002`.
+In order for 2 KinD clusters to talk to each other, the extra `sed` takes place to fallback to use `172.18.0.1` as endpoint address (which is a mapping outside of cluster), and because Bison's Ingress Gateway is set up with NodePort of `32022`, we replace the default port of `15443` with `32022`.
 
 The command may look confusing, but the update is simple. If you cloned this repo at the step 0, you can easily see from git diff.
 
@@ -452,7 +452,7 @@ Before completing this, make sure the cluster Dolphin is also started, and has c
         sed -i '' -e "s/REPLACE_WITH_DOLPHIN_INGRESS_GATEWAY_ADDRESS/$DOLPHIN_INGRESS_GATEWAY_ADDRESS/g" \
             clusters/armadillo/external/dolphin-connections.yaml
         if [[ $DOLPHIN_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
-            sed -i '' -e "s/15443 # Istio Ingress Gateway port/32004/" \
+            sed -i '' -e "s/15443 # Istio Ingress Gateway port/32024/" \
                 clusters/armadillo/external/dolphin-connections.yaml
         fi
     }
@@ -620,7 +620,7 @@ The below will be quicker than above if you use multiple terminals to run them i
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32002.yaml --name bison
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32022.yaml --name bison
 
     kubectl create namespace --context kind-bison istio-system
     kubectl create secret --context kind-bison \
@@ -647,7 +647,7 @@ The below will be quicker than above if you use multiple terminals to run them i
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32004.yaml --name dolphin
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32024.yaml --name dolphin
 
     kubectl create namespace --context kind-dolphin istio-system
     kubectl create secret --context kind-dolphin \
@@ -676,7 +676,7 @@ The below will be quicker than above if you use multiple terminals to run them i
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32001.yaml --name armadillo
+    kind create cluster --config ./tools/kind-config/config-2-nodes-port-32021.yaml --name armadillo
 
     kubectl create namespace --context kind-armadillo istio-system
     kubectl create secret --context kind-armadillo \
@@ -719,7 +719,7 @@ The below will be quicker than above if you use multiple terminals to run them i
     sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
         clusters/armadillo/external/bison-connections.yaml
     if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
-        sed -i '' -e "s/15443 # Istio Ingress Gateway port/32002/" \
+        sed -i '' -e "s/15443 # Istio Ingress Gateway port/32022/" \
             clusters/armadillo/external/bison-connections.yaml
     fi
     kubectl apply --context kind-armadillo \
@@ -740,7 +740,7 @@ The below will be quicker than above if you use multiple terminals to run them i
     sed -i '' -e "s/REPLACE_WITH_DOLPHIN_INGRESS_GATEWAY_ADDRESS/$DOLPHIN_INGRESS_GATEWAY_ADDRESS/g" \
         clusters/armadillo/external/dolphin-connections.yaml
     if [[ $DOLPHIN_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
-        sed -i '' -e "s/15443 # Istio Ingress Gateway port/32004/" \
+        sed -i '' -e "s/15443 # Istio Ingress Gateway port/32024/" \
             clusters/armadillo/external/dolphin-connections.yaml
     fi
     kubectl apply --context kind-armadillo \
