@@ -9,43 +9,59 @@ env: staging
 #   installation requires a specific namespace in place.
 #
 apps:
+  # All the `loadPath` inputs are relative from `clusters/armadillo/argocd/`.
+
   # Istio related setup
   - name: istio-installation
     namespace: istio-system # Namespace gets created by a template setup.
     enabled: true
-    path: ../istio/installation/ # Relative from `clusters/armadillo/argocd/`.
+    loadPath: ../istio/installation
   - name: istio-traffic-management-local
     enabled: true
-    path: ../istio/traffic-management/local # Relative from `clusters/armadillo/argocd/`.
+    loadPath: ../istio/traffic-management/local
   - name: istio-traffic-management-external
     enabled: true
-    path: ../istio/traffic-management/external # Relative from `clusters/armadillo/argocd/`.
+    loadPath: ../istio/traffic-management/external
   - name: istio-traffic-management-multicluster
     enabled: true
-    path: ../istio/traffic-management/multicluster # Relative from `clusters/armadillo/argocd/`.
+    loadPath: ../istio/traffic-management/multicluster
 
   # Observability related setup
-  - name: grafana
-    enabled: true
-    path: ../observability/grafana
-  - name: prometheus-operator
-    namespace: prometheus-operator
-    enabled: true
-    path: ../observability/prometheus/operator-install
   - name: prometheus
     enabled: true
-    path: ../observability/prometheus/operator-usage
-  - name: kiali-operator
-    namespace: kiali-operator
+    namespace: prometheus
+    istioSidecar: true
+    loadPath: ../observability/prometheus/operator-usage
+  - name: prometheus-operator
     enabled: true
-    path: ../observability/kiali/operator-install
+    loadPath: ../observability/prometheus/operator-install
+  - name: grafana
+    enabled: true
+    loadPath: ../observability/grafana/installation
+  - name: grafana-datasources
+    enabled: true
+    loadPath: ../observability/grafana/datasources
+  - name: grafana-dashboards
+    enabled: true
+    loadPath: ../observability/grafana/dashboards
+  - name: jaeger
+    enabled: true
+    loadPath: ../observability/jaeger/operator-usage
+  - name: jaeger-operator
+    enabled: true
+    namespace: jaeger-operator
+    loadPath: ../observability/jaeger/operator-install
   - name: kiali
     enabled: true
-    path: ../observability/kiali/operator-usage
+    loadPath: ../observability/kiali/operator-usage
+  - name: kiali-operator
+    enabled: true
+    namespace: kiali-operator
+    loadPath: ../observability/kiali/operator-install
 
   - name: other
     enabled: true
-    path: ../other/ # Relative from `clusters/armadillo/argocd/`.
+    loadPath: ../other
 #
 # =========================================================================== #
 
