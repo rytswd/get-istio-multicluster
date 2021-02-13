@@ -149,7 +149,7 @@ $ export userToken=GITHUB_USER_TOKEN_FROM_STEP_1
     kubectl apply \
         --context kind-armadillo \
         -f ./init/namespace-argocd.yaml
-    kubectl -n argocd create secret generic access-secret \
+    kubectl create secret generic access-secret -n argocd \
         --context kind-armadillo \
         --from-literal=username=placeholder \
         --from-literal=token=$userToken
@@ -158,6 +158,15 @@ $ export userToken=GITHUB_USER_TOKEN_FROM_STEP_1
         -f ./installation/argo-cd-install.yaml \
         -f ./init/argo-cd-project.yaml \
         -f ./init/argo-cd-application.yaml
+
+    kubectl patch secret argocd-secret -n argocd \
+        --context kind-armadillo \
+        -p \
+            "{\"data\": \
+                    {\
+                    \"admin.password\": \"$(echo -n '$2a$10$p9R9u6JBwOVTPa3tpcS68OifxvqIPjCFceiLul2aPwOaIlEJ6fGMi' | base64)\", \
+                    \"admin.passwordMtime\": \"$(date +%FT%T%Z | base64)\" \
+            }}"
 
     popd > /dev/null
 }
@@ -190,6 +199,8 @@ Bison
 <summary>Details</summary>
 
 _To be updated_
+
+`kubectl patch` against argocd secret updates the login password as `admin`.
 
 </details>
 
