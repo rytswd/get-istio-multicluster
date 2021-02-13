@@ -3,6 +3,9 @@ kind: Gateway
 metadata:
   name: armadillo-external-ingressgateway
   namespace: istio-system
+  annotations:
+    # ArgoCD Wave setup for controlling the timing of sync.
+    argocd.argoproj.io/sync-wave: "3"
 spec:
   selector:
     app: armadillo-external-ingressgateway
