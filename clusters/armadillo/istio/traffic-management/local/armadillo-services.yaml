@@ -42,7 +42,7 @@ spec:
         uri: /random
       route:
         - destination:
-            host: color-svc-only-blue.default.svc.cluster.local
+            host: color-svc-only-blue.armadillo-offerings.svc.cluster.local
       fault:
         abort:
           percentage:
