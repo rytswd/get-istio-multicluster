@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: armadillo-external-ingressgateway
+  namespace: istio-system
+spec:
+  selector:
+    app: armadillo-external-ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http-ingress
+        protocol: HTTP2
+      hosts:
+        - "*"
