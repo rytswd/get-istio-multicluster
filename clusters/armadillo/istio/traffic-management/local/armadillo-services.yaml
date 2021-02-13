@@ -43,6 +43,8 @@ spec:
       route:
         - destination:
             host: color-svc-only-blue.armadillo-offerings.svc.cluster.local
+            port:
+              number: 8800
       fault:
         abort:
           percentage:
