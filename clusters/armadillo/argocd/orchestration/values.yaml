@@ -61,6 +61,7 @@ apps:
 
   - name: other
     enabled: true
+    namespace: armadillo-offerings
     loadPath: ../other
 #
 # =========================================================================== #
