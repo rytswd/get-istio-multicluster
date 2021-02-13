@@ -8,3 +8,5 @@ resources:
   - istio-control-plane.yaml
   - istio-external-gateways.yaml
   - istio-multicluster-gateways.yaml
+
+  - external-gateway.yaml
