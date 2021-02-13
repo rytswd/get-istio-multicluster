@@ -13,7 +13,7 @@ metadata:
 spec:
   project: default
   source:
-    path: {{ .loadPath }}
+    path: {{ .loadPath | printf "clusters/armadillo/argocd/%s" }} 
     repoURL: {{ $.Values.spec.source.gitRepoUrl }}
     targetRevision: {{ $.Values.spec.source.targetRevision }}
   destination:
