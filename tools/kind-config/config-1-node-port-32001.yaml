@@ -17,6 +17,9 @@ nodes:
       - containerPort: 32001
         hostPort: 32001
         protocol: TCP
+      - containerPort: 33001
+        hostPort: 33001
+        protocol: TCP
 kubeadmConfigPatches:
   - |
     kind: InitConfiguration
