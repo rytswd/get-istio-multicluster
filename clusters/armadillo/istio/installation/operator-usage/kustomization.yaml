@@ -9,4 +9,4 @@ resources:
   - istio-external-gateways.yaml
   - istio-multicluster-gateways.yaml
 
-  - external-gateway.yaml
+  - istio-management-gateway.yaml

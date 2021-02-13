@@ -16,6 +16,9 @@ apps:
     namespace: istio-system # Namespace gets created by a template setup.
     enabled: true
     loadPath: ../istio/installation
+  - name: istio-traffic-management-custom-resources
+    enabled: true
+    loadPath: ../istio/traffic-management/istio-resources
   - name: istio-traffic-management-local
     enabled: true
     loadPath: ../istio/traffic-management/local
