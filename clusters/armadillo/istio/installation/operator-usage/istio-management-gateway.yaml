@@ -1,0 +1,54 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: armadillo-istio-management-gateway
+  annotations:
+    # ArgoCD Wave setup for controlling the timing of sync.
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  # Profile empty is used to create Gateways only.
+  profile: empty
+
+  components:
+    ingressGateways:
+      - enabled: true
+        name: armadillo-management-ingressgateway
+        label:
+          app: armadillo-management-ingressgateway
+        k8s:
+          service:
+            # In case of LB usage in real environment, you may want to create
+            # IP from the cloud provider service, and use it here.
+            # loadBalancerIP: TBC
+
+            ports:
+              - port: 80
+                targetPort: 8080
+                name: http2
+                nodePort: 33001 # This is for KinD based testing. Make sure this doesn't clash with other mesh definitions.
+              - port: 443
+                targetPort: 8443
+                name: https
+
+          # Affinity for IngressGateways, so that pods are separated into
+          # different nodes.
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app: armadillo-management-ingressgateway
+                  topologyKey: kubernetes.io/hostname
+          # HPA setup, which is commented out for local testing.
+          # hpaSpec:
+          #   maxReplicas: 5
+          #   metrics:
+          #     - resource:
+          #         name: cpu
+          #         targetAverageUtilization: 80
+          #       type: Resource
+          #   minReplicas: 3
+          #   scaleTargetRef:
+          #     apiVersion: apps/v1
+          #     kind: Deployment
+          #     name: armadillo-management-ingressgateway
