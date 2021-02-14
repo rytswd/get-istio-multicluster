@@ -53,6 +53,7 @@ apps:
   - name: other
     enabled: true
     namespace: armadillo-offerings
+    istioSidecar: true
     loadPath: ../other
 #
 # =========================================================================== #
