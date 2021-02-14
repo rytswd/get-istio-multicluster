@@ -10,7 +10,7 @@ spec:
     - istio-system/armadillo-management-ingressgateway
   http:
     - match:
-        - port: 8088
+        - port: 80
           uri:
             prefix: /grafana/
       rewrite:
@@ -32,7 +32,7 @@ spec:
     - istio-system/armadillo-management-ingressgateway
   http:
     - match:
-        - port: 8088
+        - port: 80
           uri:
             prefix: /kiali/
       route:
@@ -52,7 +52,7 @@ spec:
     - istio-system/armadillo-management-ingressgateway
   http:
     - match:
-        - port: 8088
+        - port: 80
           uri:
             prefix: /jaeger/
       route:
