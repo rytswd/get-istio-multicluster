@@ -11,7 +11,7 @@ spec:
   deployment:
     accessible_namespaces:
       - "**"
-    ingress_enabled: false
+    ingress_enabled: false # Instead of using a dedicated Ingress, rely on other routing logic
 
   auth:
     strategy: "anonymous"
