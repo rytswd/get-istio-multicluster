@@ -39,6 +39,9 @@ for e in "armadillo" "bison" "dolphin"; do
     istioctl manifest generate \
         -f ../operator-usage/istio-multicluster-gateways.yaml \
         >./istio-multicluster-gateways-install.yaml
+    istioctl manifest generate \
+        -f ../operator-usage/istio-management-gateway.yaml \
+        >./istio-management-gateway-install.yaml
     echo "  Complete."
 
     popd >/dev/null || {

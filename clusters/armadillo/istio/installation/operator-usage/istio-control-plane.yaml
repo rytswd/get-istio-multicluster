@@ -69,3 +69,6 @@ spec:
         enabled: true # Only used for istio-sidecar-injector ConfigMap
       podDNSSearchNamespaces:
         - global
+
+      # This is for KinD environment to work with first
+      jwtPolicy: first-party-jwt

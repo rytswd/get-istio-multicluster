@@ -394,10 +394,8 @@ spec:
         image: docker.io/istio/proxyv2:1.7.5
         name: istio-proxy
         ports:
-        - containerPort: 15021
         - containerPort: 8080
         - containerPort: 8443
-        - containerPort: 15443
         - containerPort: 15090
           name: http-envoy-prom
           protocol: TCP
@@ -654,33 +652,24 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: armadillo-external-ingressgateway
-  namespace: istio-system
-  annotations:
+  annotations: null
   labels:
     app: armadillo-external-ingressgateway
     istio: ingressgateway
     release: istio
+  name: armadillo-external-ingressgateway
+  namespace: istio-system
 spec:
-  type: LoadBalancer
+  ports:
+  - name: http2
+    nodePort: 32011
+    port: 80
+    targetPort: 8080
+  - name: https
+    port: 443
+    targetPort: 8443
   selector:
     app: armadillo-external-ingressgateway
     istio: ingressgateway
-  ports:
-    -
-      name: status-port
-      port: 15021
-      targetPort: 15021
-    -
-      name: http2
-      port: 80
-      targetPort: 8080
-    -
-      name: https
-      port: 443
-      targetPort: 8443
-    -
-      name: tls
-      port: 15443
-      targetPort: 15443
+  type: LoadBalancer
 ---
