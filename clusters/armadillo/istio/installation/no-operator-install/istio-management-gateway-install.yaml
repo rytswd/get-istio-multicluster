@@ -95,7 +95,7 @@ spec:
         - --trust-domain=cluster.local
         env:
         - name: JWT_POLICY
-          value: third-party-jwt
+          value: first-party-jwt
         - name: PILOT_CERT_PROVIDER
           value: istiod
         - name: CA_ADDR
@@ -186,9 +186,6 @@ spec:
           name: config-volume
         - mountPath: /var/run/secrets/istio
           name: istiod-ca-cert
-        - mountPath: /var/run/secrets/tokens
-          name: istio-token
-          readOnly: true
         - mountPath: /var/run/ingress_gateway
           name: gatewaysdsudspath
         - mountPath: /var/lib/istio/data
@@ -226,13 +223,6 @@ spec:
         name: gatewaysdsudspath
       - emptyDir: {}
         name: istio-data
-      - name: istio-token
-        projected:
-          sources:
-          - serviceAccountToken:
-              audience: istio-ca
-              expirationSeconds: 43200
-              path: istio-token
       - configMap:
           name: istio
           optional: true
