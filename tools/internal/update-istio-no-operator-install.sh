@@ -32,19 +32,19 @@ for e in "armadillo" "bison" "dolphin"; do
 
     istioctl manifest generate \
         -f ../operator-usage/istio-control-plane.yaml \
-        --set values.global.jwtPolicy=first-party-jwt \
+        -s values.global.jwtPolicy=first-party-jwt \
         >./istio-control-plane-install.yaml
     istioctl manifest generate \
         -f ../operator-usage/istio-external-gateways.yaml \
-        --set values.global.jwtPolicy=first-party-jwt \
+        -s values.global.jwtPolicy=first-party-jwt \
         >./istio-external-gateways-install.yaml
     istioctl manifest generate \
         -f ../operator-usage/istio-multicluster-gateways.yaml \
-        --set values.global.jwtPolicy=first-party-jwt \
+        -s values.global.jwtPolicy=first-party-jwt \
         >./istio-multicluster-gateways-install.yaml
     istioctl manifest generate \
         -f ../operator-usage/istio-management-gateway.yaml \
-        --set values.global.jwtPolicy=first-party-jwt \
+        -s values.global.jwtPolicy=first-party-jwt \
         >./istio-management-gateway-install.yaml
     echo "  Complete."
 
