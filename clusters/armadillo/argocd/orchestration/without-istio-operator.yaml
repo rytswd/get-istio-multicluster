@@ -16,6 +16,18 @@ apps:
     namespace: istio-system # Namespace gets created by a template setup.
     enabled: true
     loadPath: ../istio/installation/no-operator-install
+    ignoreDifferences:
+      # Ignore caBundle diff due to runtime updates to the config
+      - group: admissionregistration.k8s.io
+        kind: MutatingWebhookConfiguration
+        jsonPointers:
+          - /webhooks/0/clientConfig/caBundle
+          - /webhooks/0/failurePolicy
+      - group: admissionregistration.k8s.io
+        kind: ValidatingWebhookConfiguration
+        jsonPointers:
+          - /webhooks/0/clientConfig/caBundle
+          - /webhooks/0/failurePolicy
   - name: istio-traffic-management-custom-resources
     enabled: true
     loadPath: ../istio/traffic-management/istio-resources
