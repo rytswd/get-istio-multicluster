@@ -1,5 +1,25 @@
 ---
 apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: armadillo-color-svc
+spec:
+  hsot: color-svc-only-blue.armadillo-offerings.svc.cluster.local
+  trafficPolicy:
+  loadBalancer:
+    simple: LEAST_CONN
+    connectionPool:
+      http:
+        maxRequestsPerConnection: 8
+
+      tcp:
+        maxConnections: 10
+        connectTimeout: 30ms
+        tcpKeepalive:
+          time: 7200s
+          interval: 75s
+---
+apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: armadillo-color-svc-routing
@@ -24,3 +44,13 @@ spec:
           percentage:
             value: 50
           httpStatus: 400
+    - match:
+        - uri:
+            prefix: /armadillo
+      rewrite:
+        uri: /random
+      route:
+        - destination:
+            host: color-svc-only-blue.armadillo-offerings.svc.cluster.local
+            port:
+              number: 8800
