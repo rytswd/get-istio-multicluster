@@ -6,8 +6,8 @@ metadata:
 spec:
   hsot: color-svc-only-blue.armadillo-offerings.svc.cluster.local
   trafficPolicy:
-  loadBalancer:
-    simple: LEAST_CONN
+    loadBalancer:
+      simple: LEAST_CONN
     connectionPool:
       http:
         maxRequestsPerConnection: 8
