@@ -4,7 +4,7 @@ kind: DestinationRule
 metadata:
   name: armadillo-color-svc
 spec:
-  hsot: color-svc-only-blue.armadillo-offerings.svc.cluster.local
+  host: color-svc-only-blue.armadillo-offerings.svc.cluster.local
   trafficPolicy:
     loadBalancer:
       simple: LEAST_CONN
