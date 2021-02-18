@@ -197,6 +197,14 @@ Each command is associated with some comments to clarify what they do:
 }
 ```
 
+When you see error messages such as:
+
+```console
+Error from server (NotFound): error when creating "clusters/armadillo/istio/installation/operator-install/istio-operator-install.yaml": namespaces "istio-operator" not found
+```
+
+You can simply run the above command one more time. <!--TODO: Add more details-->
+
 <details>
 <summary>Details</summary>
 
