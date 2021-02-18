@@ -502,9 +502,11 @@ Simple curl to verify connection
 ```bash
 kubectl exec \
     --context kind-armadillo \
+    -n armadillo-offerings \
     -it \
     $(kubectl get pod \
         --context kind-armadillo \
+        -n armadillo-offerings \
         -l app.kubernetes.io/name=toolkit-alpine \
         -o jsonpath='{.items[0].metadata.name}') \
     -c toolkit-alpine \
@@ -516,9 +518,11 @@ Interactive shell from Armadillo cluster
 ```bash
 kubectl exec \
     --context kind-armadillo \
+    -n armadillo-offerings \
     -it \
     $(kubectl get pod \
         --context kind-armadillo \
+        -n armadillo-offerings \
         -l app.kubernetes.io/name=toolkit-alpine \
         -o jsonpath='{.items[0].metadata.name}') \
     -c toolkit-alpine \
@@ -530,8 +534,10 @@ For logs
 ```bash
 kubectl logs \
     --context kind-armadillo \
+    -n armadillo-offerings \
     $(kubectl get pod \
         --context kind-armadillo \
+        -n armadillo-offerings \
         -l app.kubernetes.io/name=toolkit-alpine \
         -o jsonpath='{.items[0].metadata.name}') \
     -c istio-proxy \
