@@ -40,6 +40,8 @@ spec:
           env:
             - name: ENABLE_DELAY
               value: "true"
+            - name: DELAY_DURATION_MILLISECOND
+              value: "500"
             - name: ENABLE_CORS
               value: "true"
             - name: DISABLE_RED
