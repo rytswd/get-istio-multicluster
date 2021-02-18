@@ -367,6 +367,9 @@ Each cluster has different resources. Check out the documentation one by one.
 # OUTPUT
 Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
 configmap/coredns configured
+destinationrule.networking.istio.io/armadillo-color-svc created
+virtualservice.networking.istio.io/armadillo-color-svc-routing created
+virtualservice.networking.istio.io/armadillo-httpbin-chaos-routing created
 ```
 
 <details>
