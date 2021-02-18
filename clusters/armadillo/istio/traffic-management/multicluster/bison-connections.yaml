@@ -4,7 +4,7 @@ metadata:
   name: bison-httpbin-global
 spec:
   hosts:
-    - httpbin.default.global
+    - httpbin.bison-offerings.global
   location: MESH_INTERNAL
   exportTo:
     - "."
@@ -30,7 +30,7 @@ metadata:
   name: bison-httpbin-service
 spec:
   hosts:
-    - httpbin.default.bison.global # Can be anything, as long as appropriate EnvoyFilter is in place on target cluster
+    - httpbin.bison-offerings.bison.global # Can be anything, as long as appropriate EnvoyFilter is in place on target cluster
   location: MESH_INTERNAL
   exportTo:
     - "."
@@ -58,9 +58,9 @@ metadata:
   name: bison-httpbin-chaos-routing
 spec:
   hosts:
-    - httpbin.default.bison.global
-    - httpbin.default.global
-    - httpbin.default.svc.cluster.local
+    - httpbin.bison-offerings.bison.global
+    - httpbin.bison-offerings.global
+    - httpbin.bison-offerings.svc.cluster.local
   http:
     - match:
         - uri:
@@ -69,7 +69,7 @@ spec:
         uri: /status/418
       route:
         - destination:
-            host: httpbin.default.bison.global
+            host: httpbin.bison-offerings.bison.global
       fault:
         abort:
           percentage:
