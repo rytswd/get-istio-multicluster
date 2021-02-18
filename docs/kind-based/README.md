@@ -95,7 +95,9 @@ As you can see `istioctl-input.yaml` in each cluster, the NodePort used are:
 
 <!-- The steps are detailed at [Certificate Preparation steps](https://github.com/rytswd/get-istio-multicluster/tree/main/docs/cert-prep/README.md). -->
 
-You need to complete this step before installing Istio to the cluster. Essentially, you need to run the following:
+You need to complete this step before installing Istio to the cluster.
+
+The first step is to generate the certificates.
 
 ```bash
 {
@@ -106,7 +108,13 @@ You need to complete this step before installing Istio to the cluster. Essential
     make -f ../tools/certs/Makefile.selfsigned.mk bison-cacerts
 
     popd > /dev/null
+}
+```
 
+The second step is to create Kubernetes Secrets holding the generated certificates in the correpsonding clusters.
+
+```bash
+{
     kubectl create namespace --context kind-armadillo istio-system
     kubectl create secret --context kind-armadillo \
         generic cacerts -n istio-system \
