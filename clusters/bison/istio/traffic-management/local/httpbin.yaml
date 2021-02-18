@@ -6,10 +6,10 @@ metadata:
   # namespace: istio-system
 spec:
   hosts:
-    - httpbin.default.svc.cluster.local
+    - httpbin.bison-offerings.svc.cluster.local
     # TODO: Check if EnvoyFilter takes place before or after - if before, this is not useful
-    - httpbin.default.bison.global
-    - httpbin.default.global
+    - httpbin.bison-offerings.bison.global
+    - httpbin.bison-offerings.global
   gateways:
     - mesh
     # TODO: Below setup does not seem to work. When multicluster traffic comes in, this VS doesn't get applied.
@@ -23,7 +23,7 @@ spec:
         uri: /status/418
       route:
         - destination:
-            host: httpbin.default.svc.cluster.local
+            host: httpbin.bison-offerings.svc.cluster.local
       fault:
         abort:
           percentage:
@@ -38,9 +38,9 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-    - httpbin.default.bison.global
-    - httpbin.default.global
-    - httpbin.default.svc.cluster.local
+    - httpbin.bison-offerings.bison.global
+    - httpbin.bison-offerings.global
+    - httpbin.bison-offerings.svc.cluster.local
   gateways:
     - bison-multicluster-ingressgateway
   http:
@@ -51,7 +51,7 @@ spec:
         uri: /status/418
       route:
         - destination:
-            host: httpbin.default.svc.cluster.local
+            host: httpbin.bison-offerings.svc.cluster.local
       fault:
         abort:
           percentage:
