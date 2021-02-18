@@ -468,9 +468,13 @@ The command may look confusing, but the update is simple. If you cloned this rep
 <summary>For Bison</summary>
 
 ```bash
-kubectl apply --context kind-bison \
-    -f clusters/bison/istio/traffic-management/local/bison-services.yaml \
-    -f clusters/bison/istio/traffic-management/multicluster/multicluster-setup.yaml
+{
+    kubectl apply --context kind-bison \
+        -f clusters/bison/istio/traffic-management/local/color-svc.yaml \
+        -f clusters/bison/istio/traffic-management/local/httpbin.yaml
+    kubectl apply --context kind-bison \
+        -f clusters/bison/istio/traffic-management/multicluster/multicluster-setup.yaml
+}
 ```
 
 If you are using Istio v1.6, you will get an error from the above. You need to run the following command:
