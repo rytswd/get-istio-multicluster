@@ -12,6 +12,7 @@ spec:
       http:
         maxRequestsPerConnection: 8
         http2MaxRequests: 8
+        idleTimeout: 30s
 
       tcp:
         maxConnections: 10
