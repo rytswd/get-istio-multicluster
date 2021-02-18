@@ -510,7 +510,7 @@ kubectl exec \
         -l app.kubernetes.io/name=toolkit-alpine \
         -o jsonpath='{.items[0].metadata.name}') \
     -c toolkit-alpine \
-    -- curl -vvv httpbin.default.bison.global:8000/status/418
+    -- curl -vvv httpbin.bison-offerings.bison.global:8000/status/418
 ```
 
 Interactive shell from Armadillo cluster
