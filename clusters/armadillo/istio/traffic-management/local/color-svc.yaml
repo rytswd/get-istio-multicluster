@@ -10,8 +10,9 @@ spec:
       simple: LEAST_CONN
     connectionPool:
       http:
-        maxRequestsPerConnection: 8
-        http2MaxRequests: 8
+        maxRequestsPerConnection: 2
+        http1MaxPendingRequests: 2
+        http2MaxRequests: 2
         idleTimeout: 30s
 
       tcp:
