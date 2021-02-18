@@ -3,6 +3,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: armadillo-color-svc
+  namespace: armadillo-offerings
 spec:
   host: color-svc-only-blue.armadillo-offerings.svc.cluster.local
   trafficPolicy:
@@ -26,6 +27,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: armadillo-color-svc-routing
+  namespace: armadillo-offerings
 spec:
   hosts:
     - "*"
