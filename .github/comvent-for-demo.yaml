@@ -1,0 +1,16 @@
+---
+version: 0.2.0
+
+trigger: specific
+
+users:
+  active:
+    - rytswd
+
+keywords:
+  - name: demo-enable-istio
+    value: '^\/demo-enable-istio$'
+  - name: demo-enable-observability-tooling
+    value: '^\/demo-enable-observability-tooling$'
+  - name: demo-enable-observability-tooling
+    value: '^\/demo-enable-observability-tooling$'

@@ -1,4 +1,4 @@
-name: ChatBot
+name: ChatOps
 on:
   issue_comment:
     # This shouldn't be called for comment deletion
@@ -7,8 +7,8 @@ on:
       - edited
 
 jobs:
-  chatbot:
-    name: ChatBot
+  chatops:
+    name: ChatOps
     runs-on: ubuntu-latest
 
     steps:
@@ -18,7 +18,9 @@ jobs:
         id: comvent
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          config-path: .github/chatbot-config.yaml
+          config-path: .github/chatops-config.yaml
+
+      #* ---------------------------------------------------------------------- *#
 
       - if: steps.comvent.outputs.comvent-found-any-match != ''
         uses: actions/checkout@v2

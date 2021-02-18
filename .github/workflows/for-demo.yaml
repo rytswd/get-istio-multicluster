@@ -1,0 +1,40 @@
+name: Demo Setup
+on:
+  issue_comment:
+    # This shouldn't be called for comment deletion
+    types:
+      - created
+      - edited
+
+jobs:
+  demo:
+    name: ChatOps
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Handle with Comvent
+        uses: rytswd/comvent@v0.3
+        if: ${{ !github.event.issue.pull_request }} # Run only if it's issue comment, not PR
+        id: comvent
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-path: .github/comvent-for-demo.yaml
+
+      #* ---------------------------------------------------------------------- *#
+
+      - if: steps.comvent.outputs.comvent-found-any-match != ''
+        uses: actions/checkout@v2
+
+      - if: steps.comvent.outputs.demo-enable-istio != ''
+        name: Enable Istio Installation
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          branch: demo-enable-istio
+          delete-branch: true
+          title: "Enable Istio"
+          committer: Ryota <rytswd@gmail.com>
+          author: Ryota <rytswd@gmail.com>
+          labels: automation
+          body: |
+            Test PR
