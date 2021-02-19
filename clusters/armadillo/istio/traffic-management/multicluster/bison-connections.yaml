@@ -8,7 +8,7 @@ spec:
     - httpbin.bison-offerings.global
   location: MESH_INTERNAL
   exportTo:
-    - "."
+    - "*" # Temporarily set this to all namespaces
   ports:
     - name: http1
       number: 8000
@@ -34,7 +34,7 @@ spec:
     - httpbin.bison-offerings.bison.global # Can be anything, as long as appropriate EnvoyFilter is in place on target cluster
   location: MESH_INTERNAL
   exportTo:
-    - "."
+    - "*" # Temporarily set this to all namespaces
   ports:
     - name: http-bison
       number: 8000
