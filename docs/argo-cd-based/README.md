@@ -163,9 +163,7 @@ $ export userToken=GITHUB_USER_TOKEN_FROM_STEP_1
         --from-literal=token=$userToken
     kubectl apply -n argocd \
         --context kind-armadillo \
-        -f ./installation/argo-cd-install.yaml \
-        -f ./init/argo-cd-project.yaml \
-        -f ./init/argo-cd-application.yaml
+        -f ./installation/argo-cd-install.yaml
 
     kubectl patch secret argocd-secret -n argocd \
         --context kind-armadillo \
@@ -175,6 +173,21 @@ $ export userToken=GITHUB_USER_TOKEN_FROM_STEP_1
                     \"admin.password\": \"$(echo -n '$2a$10$p9R9u6JBwOVTPa3tpcS68OifxvqIPjCFceiLul2aPwOaIlEJ6fGMi' | base64)\", \
                     \"admin.passwordMtime\": \"$(date +%FT%T%Z | base64)\" \
             }}"
+
+    popd > /dev/null
+}
+```
+
+Install GitOps setup
+
+```bash
+{
+    pushd clusters/armadillo/argocd > /dev/null
+
+    kubectl apply -n argocd \
+        --context kind-armadillo \
+        -f ./init/argo-cd-project.yaml \
+        -f ./init/argo-cd-app-demo-2.yaml
 
     popd > /dev/null
 }
@@ -195,9 +208,7 @@ Bison
         --from-literal=token=$userToken
     kubectl apply -n argocd \
         --context kind-bison \
-        -f ./installation/argo-cd-install.yaml \
-        -f ./init/argo-cd-project.yaml \
-        -f ./init/argo-cd-application.yaml
+        -f ./installation/argo-cd-install.yaml
 
     kubectl patch secret argocd-secret -n argocd \
         --context kind-bison \
@@ -207,6 +218,21 @@ Bison
                     \"admin.password\": \"$(echo -n '$2a$10$p9R9u6JBwOVTPa3tpcS68OifxvqIPjCFceiLul2aPwOaIlEJ6fGMi' | base64)\", \
                     \"admin.passwordMtime\": \"$(date +%FT%T%Z | base64)\" \
             }}"
+
+    popd > /dev/null
+}
+```
+
+Install GitOps setup
+
+```bash
+{
+    pushd clusters/bison/argocd > /dev/null
+
+    kubectl apply -n argocd \
+        --context kind-bison \
+        -f ./init/argo-cd-project.yaml \
+        -f ./init/argo-cd-application.yaml
 
     popd > /dev/null
 }
