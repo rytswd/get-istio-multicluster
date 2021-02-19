@@ -1,3 +1,4 @@
+---
 apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
@@ -75,3 +76,7 @@ spec:
           percentage:
             value: 50
           httpStatus: 400
+    # Default routing
+    - route:
+        - destination:
+            host: httpbin.bison-offerings.bison.global
