@@ -20,6 +20,9 @@ metadata:
 spec:
   hosts:
     - httpbin.org
+  gateways:
+    - mesh
+    - istio-system/armadillo-external-ingressgateway
   http:
     # Add chaos routing
     - match:
