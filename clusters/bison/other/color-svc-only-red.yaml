@@ -1,8 +1,9 @@
+# Bison is configured with only redish colors
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: color-svc-only-red
+  name: color-svc
   labels:
     app.kubernetes.io/name: color-svc-only-red
 spec:
@@ -16,7 +17,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: color-svc-only-red
+  name: color-svc
 spec:
   replicas: 1
   selector:
