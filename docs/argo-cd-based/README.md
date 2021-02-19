@@ -232,7 +232,7 @@ Install GitOps setup
     kubectl apply -n argocd \
         --context kind-bison \
         -f ./init/argo-cd-project.yaml \
-        -f ./init/argo-cd-application.yaml
+        -f ./init/argo-cd-app-demo-2.yaml
 
     popd > /dev/null
 }
