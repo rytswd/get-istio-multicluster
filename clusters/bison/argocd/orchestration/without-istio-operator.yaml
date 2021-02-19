@@ -9,13 +9,25 @@ env: staging
 #   installation requires a specific namespace in place.
 #
 apps:
-  # All the `loadPath` inputs are relative from `clusters/bison/argocd/`.
+  # All the `loadPath` inputs are relative from `clusters/armadillo/argocd/`.
 
   # Istio related setup
-  - name: istio-installation
+  - name: istio-without-operator
     namespace: istio-system # Namespace gets created by a template setup.
     enabled: true
-    loadPath: ../istio/installation
+    loadPath: ../istio/installation/no-operator-install
+    ignoreDifferences:
+      # Ignore caBundle diff due to runtime updates to the config
+      - group: admissionregistration.k8s.io
+        kind: MutatingWebhookConfiguration
+        jsonPointers:
+          - /webhooks/0/clientConfig/caBundle
+          - /webhooks/0/failurePolicy
+      - group: admissionregistration.k8s.io
+        kind: ValidatingWebhookConfiguration
+        jsonPointers:
+          - /webhooks/0/clientConfig/caBundle
+          - /webhooks/0/failurePolicy
   - name: istio-traffic-management-custom-resources
     enabled: true
     loadPath: ../istio/traffic-management/istio-resources
