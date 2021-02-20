@@ -38,7 +38,7 @@ $ PATH="$HOME/Coding/bin/istio-1.7.5/bin:$PATH"
 ```
 
 <details>
-<summary>Details</summary>
+<summary>ℹ️ Details</summary>
 
 This repository is mostly configuration files. Having the set of files all in directory structure makes it easier to see how multiple configurations work together.
 
@@ -72,7 +72,7 @@ git clone --depth 1 -b main https://github.com/rytswd/get-istio-multicluster.git
 ```
 
 <details>
-<summary>Details</summary>
+<summary>ℹ️ Details</summary>
 
 KinD clusters are created with 2 almost identical configurations. The configuration ensures the Kubernetes version is v1.17 with 2 nodes in place (1 for control plane, 1 for worker).
 
@@ -130,7 +130,7 @@ The second step is to create Kubernetes Secrets holding the generated certificat
 ```
 
 <details>
-<summary>Details</summary>
+<summary>ℹ️ Details</summary>
 
 If you do not create the certificate before Istio is installed to the cluster, Istio will fall back to use its own certificate. This will cause an issue when you try to use your custom cert later on. It's best to get the cert ready first - otherwise you will likely need to run through a bunch of restarts of Istio components and others to ensure the correct cert is picked up.
 
@@ -202,7 +202,7 @@ Error from server (NotFound): error when creating "clusters/armadillo/istio/inst
 You can simply run the above command one more time. <!--TODO: Add more details-->
 
 <details>
-<summary>Details</summary>
+<summary>ℹ️ Details</summary>
 
 Prepare for Istio installation by installing IstioOperator Controller. This allows defining IsitoOperator Custom Resource in declarative manner, and IstioOperator Controller to handle the installation.
 
@@ -231,7 +231,7 @@ Using IstioOperator Coontroller is one of the few ways to install Istio. The mai
 ```
 
 <details>
-<summary>Details</summary>
+<summary>ℹ️ Details</summary>
 
 As detailed in the previous step, this step simply deploys IstioOperator CustomResource to the cluster, and rely on IstioOperator Controller to deploy Istio into the cluster.
 
@@ -260,7 +260,7 @@ This installation uses the IstioOperator manifest with `minimal` profile, meanin
 ```
 
 <details>
-<summary>Details</summary>
+<summary>ℹ️ Details</summary>
 
 This step installs "Data Plane" components into the clusters, which are mainly Istio Ingress and Egress Gateways. You can think of Data Plane components as actually running service (in this case IngressGateway which is `docker.io/istio/proxyv2` image), and they will be controlled by Control Plane components (`istiod`).
 
@@ -295,7 +295,7 @@ The main difference in the configuration files used above is the name used by va
 ```
 
 <details>
-<summary>Details</summary>
+<summary>ℹ️ Details</summary>
 
 There are 3 actions happening, and for 2 clusters (Armadillo and Bison).
 
@@ -369,7 +369,7 @@ virtualservice.networking.istio.io/armadillo-httpbin-chaos-routing created
 ```
 
 <details>
-<summary>Details</summary>
+<summary>ℹ️ Details</summary>
 
 Istio's `istiocoredns` handles DNS lookup, and thus, you need to let Kubernetes know that `istiocoredns` gets the DNS request. Get the K8s Service cluster IP in `ARMADILLO_ISTIOCOREDNS_CLUSTER_IP` env variable, so that you can use that in `coredns-configmap.yaml` as the endpoint.
 
@@ -448,7 +448,7 @@ virtualservice.networking.istio.io/bison-httpbin-routing created
 ```
 
 <details>
-<summary>Details</summary>
+<summary>ℹ️ Details</summary>
 
 **WARNING**: The current setup does NOT go through EgressGateway, and simply skips it. This needs further investigation.
 
@@ -494,7 +494,7 @@ kubectl apply --context kind-bison \
 ```
 
 <details>
-<summary>Details</summary>
+<summary>ℹ️ Details</summary>
 
 To be updated
 
@@ -554,7 +554,7 @@ kubectl logs \
 ```
 
 <details>
-<summary>Details</summary>
+<summary>ℹ️ Details</summary>
 
 `kubectl exec -it` is used to execute some command from the main container deployed from 4. Install Debug Processes.
 
@@ -573,7 +573,7 @@ The below will be quicker than above if you use multiple terminals to run them i
 TODO: THE BELOW NEEDS TO BE UPDATED
 
 <details>
-<summary>Details</summary>
+<summary>ℹ️ Details</summary>
 
 ### Prep - run before all
 
@@ -739,7 +739,7 @@ TODO: THE BELOW NEEDS TO BE UPDATED
 ```
 
 <details>
-<summary>Details</summary>
+<summary>ℹ️ Details</summary>
 
 Remove the entire `certs` directory, and `git reset --hard` to remove all the changes.
 
