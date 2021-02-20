@@ -341,7 +341,7 @@ Each cluster has different resources. Check out the documentation one by one.
         -n istio-system \
         istiocoredns \
         -o jsonpath={.spec.clusterIP})
-    echo $ARMADILLO_ISTIOCOREDNS_CLUSTER_IP
+    echo "$ARMADILLO_ISTIOCOREDNS_CLUSTER_IP"
 }
 ```
 
@@ -394,9 +394,11 @@ Before completing this, make sure the cluster Bison is also started, and has com
         -n istio-system \
         --selector=app=armadillo-multicluster-egressgateway \
         -o jsonpath='{.items[0].spec.clusterIP}')
-    echo $ARMADILLO_EGRESS_GATEWAY_ADDRESS
+    echo "$ARMADILLO_EGRESS_GATEWAY_ADDRESS"
     sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
-        clusters/armadillo/istio/traffic-management/multicluster/bison-connections.yaml
+        clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml
+    sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
+        clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml
 }
 ```
 
@@ -412,13 +414,19 @@ Before completing this, make sure the cluster Bison is also started, and has com
         -n istio-system \
         --selector=app=istio-ingressgateway \
         -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo '172.18.0.1')
-    echo $BISON_INGRESS_GATEWAY_ADDRESS
+    echo "$BISON_INGRESS_GATEWAY_ADDRESS"
     {
         sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
-            clusters/armadillo/istio/traffic-management/multicluster/bison-connections.yaml
+            clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml
         if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
             sed -i '' -e "s/15443 # Istio Ingress Gateway port/32022/" \
-                clusters/armadillo/istio/traffic-management/multicluster/bison-connections.yaml
+                clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml
+        fi
+        sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
+            clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml
+        if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
+            sed -i '' -e "s/15443 # Istio Ingress Gateway port/32022/" \
+                clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml
         fi
     }
 }
@@ -431,14 +439,16 @@ Before completing this, make sure the cluster Bison is also started, and has com
 
 ```bash
 kubectl apply --context kind-armadillo \
-    -f clusters/armadillo/istio/traffic-management/multicluster/bison-connections.yaml
+    -f clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml \
+    -f clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml
 ```
 
 ```sh
 # OUTPUT
-serviceentry.networking.istio.io/bison-httpbin-global created
-serviceentry.networking.istio.io/bison-httpbin-service created
-virtualservice.networking.istio.io/bison-httpbin-chaos-routing created
+serviceentry.networking.istio.io/bison-color-svc created
+virtualservice.networking.istio.io/bison-color-svc-routing created
+serviceentry.networking.istio.io/bison-httpbin created
+virtualservice.networking.istio.io/bison-httpbin-routing created
 ```
 
 <details>
