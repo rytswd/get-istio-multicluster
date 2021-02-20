@@ -5,3 +5,5 @@ resources:
   - armadillo-color-svc.yaml
   - armadillo-httpbin.yaml
   - coredns-configmap.yaml
+
+  - multicluster-setup.yaml
