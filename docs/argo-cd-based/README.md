@@ -63,7 +63,6 @@ As to how the token works, you can find more in [the official documentation of G
 {
     kind create cluster --config ./tools/kind-config/config-2-nodes-port-320x1.yaml --name armadillo
     kind create cluster --config ./tools/kind-config/config-2-nodes-port-320x2.yaml --name bison
-    kind create cluster --config ./tools/kind-config/config-2-nodes-port-320x4.yaml --name dolphin
 }
 ```
 
@@ -93,7 +92,6 @@ The first step is to generate the certificates.
 
     make -f ../tools/certs/Makefile.selfsigned.mk armadillo-cacerts
     make -f ../tools/certs/Makefile.selfsigned.mk bison-cacerts
-    make -f ../tools/certs/Makefile.selfsigned.mk dolphin-cacerts
 
     popd > /dev/null
 }
@@ -118,14 +116,6 @@ The second step is to create Kubernetes Secrets holding the generated certificat
         --from-file=./certs/bison/ca-key.pem \
         --from-file=./certs/bison/root-cert.pem \
         --from-file=./certs/bison/cert-chain.pem
-
-    kubectl create namespace --context kind-dolphin istio-system
-    kubectl create secret --context kind-dolphin \
-        generic cacerts -n istio-system \
-        --from-file=./certs/dolphin/ca-cert.pem \
-        --from-file=./certs/dolphin/ca-key.pem \
-        --from-file=./certs/dolphin/root-cert.pem \
-        --from-file=./certs/dolphin/cert-chain.pem
 }
 ```
 
