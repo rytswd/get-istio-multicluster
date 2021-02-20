@@ -51,7 +51,13 @@ spec:
           percentage:
             value: 50
           httpStatus: 400
-    # Default routing
-    - route:
+    - match:
+        - uri:
+            prefix: /armadillo
+      rewrite:
+        uri: /random
+      route:
         - destination:
-            host: color-svc.armadillo-offerings.armadillo.global
+            host: color-svc.armadillo-offerings.global
+            port:
+              number: 8800
