@@ -21,8 +21,8 @@ spec:
     - address: REPLACE_WITH_ARMADILLO_INGRESS_GATEWAY_ADDRESS
       network: external
       ports:
-        http-armadillo: 32022
-    - address: 10.96.77.167
+        http-armadillo: 15443 # Istio Ingress Gateway port
+    - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
       ports:
         http-armadillo: 15443
 ---
