@@ -5,7 +5,7 @@ metadata:
   name: bison-color-svc
   namespace: bison-offerings
 spec:
-  host: color-svc-only-red.bison-offerings.svc.cluster.local
+  host: color-svc.bison-offerings.svc.cluster.local
   trafficPolicy:
     loadBalancer:
       simple: LEAST_CONN
@@ -41,7 +41,7 @@ spec:
         uri: /random
       route:
         - destination:
-            host: color-svc-only-red.bison-offerings.svc.cluster.local
+            host: color-svc.bison-offerings.svc.cluster.local
             port:
               number: 8800
       fault:
@@ -56,6 +56,6 @@ spec:
         uri: /random
       route:
         - destination:
-            host: color-svc-only-red.bison-offerings.svc.cluster.local
+            host: color-svc.bison-offerings.svc.cluster.local
             port:
               number: 8800
