@@ -2,15 +2,15 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: bison-httpbin-chaos-routing
+  name: bison-httpbin-routing
   namespace: istio-system
 spec:
   hosts:
     - httpbin.bison-offerings
     - httpbin.bison-offerings.svc.cluster.local
     # TODO: Check if EnvoyFilter takes place before or after - if before, this is not useful
-    - httpbin.bison-offerings.bison.global
     - httpbin.bison-offerings.global
+    # - httpbin.bison-offerings.bison.global
 
   # 🍷 TODO 🍷: Ingress Gateway is definitely receiving the traffic, but it's not routed to the endpoint target.
   # This seems to be caused by either gateway matching is not working, or host informaiton not matching.
@@ -21,7 +21,7 @@ spec:
     - mesh
     # TODO: Below setup does not seem to work. When multicluster traffic comes in, this VS doesn't get applied.
     - istio-system/bison-multicluster-ingressgateway
-    - bison-multicluster-ingressgateway
+    # - bison-multicluster-ingressgateway
   exportTo:
     - "*"
   http:
@@ -41,32 +41,3 @@ spec:
             host: httpbin.bison-offerings.svc.cluster.local
             port:
               number: 8000
-# ---
-# apiVersion: networking.istio.io/v1alpha3
-# kind: VirtualService
-# metadata:
-#   name: bison-httpbin-chaos
-#   namespace: istio-system
-# spec:
-#   hosts:
-#     - httpbin.bison-offerings.bison.global
-#     - httpbin.bison-offerings.global
-#     - httpbin.bison-offerings.svc.cluster.local
-#   gateways:
-#     - bison-multicluster-ingressgateway
-#   http:
-#     - match:
-#         - uri:
-#             prefix: /chaos
-#       rewrite:
-#         uri: /status/418
-#       route:
-#         - destination:
-#             host: httpbin.bison-offerings.svc.cluster.local
-#             port:
-#               number: 8000
-#       fault:
-#         abort:
-#           percentage:
-#             value: 50
-#           httpStatus: 400
