@@ -6,7 +6,7 @@ metadata:
 spec:
   hosts:
     - color-svc.armadillo-offerings.global
-    - color-svc.armadillo-offerings.armadillo.global # Can be anything, as long as appropriate EnvoyFilter is in place on target cluster
+    # - color-svc.armadillo-offerings.armadillo.global # Can be anything, as long as appropriate EnvoyFilter is in place on target cluster
   location: MESH_INTERNAL
   exportTo:
     - "*" # Temporarily set this to all namespaces
@@ -34,8 +34,8 @@ metadata:
   name: armadillo-color-svc-chaos-routing
 spec:
   hosts:
-    - color-svc.armadillo-offerings.armadillo.global
     - color-svc.armadillo-offerings.global
+    # - color-svc.armadillo-offerings.armadillo.global
     - color-svc.armadillo-offerings.svc.cluster.local
   http:
     - match:
@@ -45,7 +45,7 @@ spec:
         uri: /random
       route:
         - destination:
-            host: color-svc.armadillo-offerings.armadillo.global
+            host: color-svc.armadillo-offerings.global
       fault:
         abort:
           percentage:

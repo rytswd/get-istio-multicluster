@@ -6,7 +6,7 @@ metadata:
 spec:
   hosts:
     - httpbin.armadillo-offerings.global
-    - httpbin.armadillo-offerings.armadillo.global # Can be anything, as long as appropriate EnvoyFilter is in place on target cluster
+    # - httpbin.armadillo-offerings.armadillo.global # Can be anything, as long as appropriate EnvoyFilter is in place on target cluster
   location: MESH_INTERNAL
   exportTo:
     - "*" # Temporarily set this to all namespaces
@@ -34,8 +34,8 @@ metadata:
   name: armadillo-httpbin-chaos-routing
 spec:
   hosts:
-    - httpbin.armadillo-offerings.armadillo.global
     - httpbin.armadillo-offerings.global
+    # - httpbin.armadillo-offerings.armadillo.global
     - httpbin.armadillo-offerings.svc.cluster.local
   http:
     - match:
@@ -45,7 +45,7 @@ spec:
         uri: /status/418
       route:
         - destination:
-            host: httpbin.armadillo-offerings.armadillo.global
+            host: httpbin.armadillo-offerings.global
       fault:
         abort:
           percentage:
@@ -54,4 +54,4 @@ spec:
     # Default routing
     - route:
         - destination:
-            host: httpbin.armadillo-offerings.armadillo.global
+            host: httpbin.armadillo-offerings.global

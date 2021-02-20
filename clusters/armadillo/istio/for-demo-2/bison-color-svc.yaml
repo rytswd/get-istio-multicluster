@@ -34,8 +34,8 @@ metadata:
   name: bison-color-svc-routing
 spec:
   hosts:
-    - color-svc.bison-offerings.bison.global
     - color-svc.bison-offerings.global
+    # - color-svc.bison-offerings.bison.global
     - color-svc.bison-offerings.svc.cluster.local
   http:
     - match:
