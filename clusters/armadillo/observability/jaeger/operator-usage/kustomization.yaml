@@ -3,3 +3,5 @@ kind: Kustomization
 
 resources:
   - jaeger.yaml
+
+  - istio-zipkin-endpoint-service.yaml

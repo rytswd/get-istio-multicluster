@@ -1,0 +1,18 @@
+---
+# For Istio to send tracing spans
+# This is not really about operator usage, but including here for now.
+apiVersion: v1
+kind: Service
+metadata:
+  name: zipkin # Needs to be zipkin for now, as Istio by default expects this
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: jaeger
+spec:
+  ports:
+    - port: 9411
+      targetPort: 9411
+      protocol: TCP
+      name: http-query
+  selector:
+    app.kubernetes.io/name: jaeger
