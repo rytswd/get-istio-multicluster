@@ -84,13 +84,13 @@
         sed -i '' -e "s/REPLACE_WITH_ARMADILLO_INGRESS_GATEWAY_ADDRESS/$ARMADILLO_INGRESS_GATEWAY_ADDRESS/g" \
             clusters/bison/istio/for-demo-2/armadillo-color-svc.yaml
         if [[ $ARMADILLO_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
-            sed -i '' -e "s/15443 # Istio Ingress Gateway port/32022/" \
+            sed -i '' -e "s/15443 # Istio Ingress Gateway port/32021/" \
                 clusters/bison/istio/for-demo-2/armadillo-color-svc.yaml
         fi
         sed -i '' -e "s/REPLACE_WITH_ARMADILLO_INGRESS_GATEWAY_ADDRESS/$ARMADILLO_INGRESS_GATEWAY_ADDRESS/g" \
             clusters/bison/istio/for-demo-2/armadillo-httpbin.yaml
         if [[ $ARMADILLO_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
-            sed -i '' -e "s/15443 # Istio Ingress Gateway port/32022/" \
+            sed -i '' -e "s/15443 # Istio Ingress Gateway port/32021/" \
                 clusters/bison/istio/for-demo-2/armadillo-httpbin.yaml
         fi
     }
