@@ -58,7 +58,7 @@ spec:
             host: httpbin.armadillo-offerings.global
             port:
               number: 8000
-    # Default routing
-    - route:
-        - destination:
-            host: httpbin.armadillo-offerings.global
+    # # Default routing
+    # - route:
+    #     - destination:
+    #         host: httpbin.armadillo-offerings.global
