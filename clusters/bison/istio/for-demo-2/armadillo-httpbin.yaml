@@ -51,6 +51,13 @@ spec:
           percentage:
             value: 50
           httpStatus: 400
+    - match:
+        - port: 8000
+      route:
+        - destination:
+            host: httpbin.armadillo-offerings.global
+            port:
+              number: 8000
     # Default routing
     - route:
         - destination:

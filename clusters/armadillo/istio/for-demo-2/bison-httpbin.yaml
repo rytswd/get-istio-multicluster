@@ -51,7 +51,14 @@ spec:
           percentage:
             value: 50
           httpStatus: 400
-    # Default routing
-    - route:
+    - match:
+        - port: 8000
+      route:
         - destination:
             host: httpbin.bison-offerings.global
+            port:
+              number: 8000
+    # # Default routing
+    # - route:
+    #     - destination:
+    #         host: httpbin.bison-offerings.global
