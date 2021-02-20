@@ -6,7 +6,6 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-    - httpbin.bison-offerings
     - httpbin.bison-offerings.svc.cluster.local
     # TODO: Check if EnvoyFilter takes place before or after - if before, this is not useful
     - httpbin.bison-offerings.global
