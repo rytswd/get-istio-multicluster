@@ -12,7 +12,7 @@ spec:
     - "*" # Temporarily set this to all namespaces
   ports:
     - name: http-armadillo
-      number: 8000
+      number: 8800
       protocol: http
   resolution: STATIC
   addresses:
@@ -31,7 +31,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: armadillo-color-svc-chaos-routing
+  name: armadillo-color-svc-routing
 spec:
   hosts:
     - color-svc.armadillo-offerings.global
