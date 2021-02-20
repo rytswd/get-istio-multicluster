@@ -61,6 +61,7 @@ spec:
             host: color-svc.armadillo-offerings.global
             port:
               number: 8800
+    # Default routing
     - route:
         - destination:
             host: color-svc.armadillo-offerings.global
