@@ -12,7 +12,7 @@ spec:
     - "*" # Temporarily set this to all namespaces
   ports:
     - name: http-bison
-      number: 8000
+      number: 8800
       protocol: http
   resolution: STATIC
   addresses:
