@@ -1,14 +1,14 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: armadillo-external-ingressgateway
+  name: bison-external-ingressgateway
   namespace: istio-system
   annotations:
     # ArgoCD Wave setup for controlling the timing of sync.
     argocd.argoproj.io/sync-wave: "3"
 spec:
   selector:
-    app: armadillo-external-ingressgateway
+    app: bison-external-ingressgateway
   servers:
     - port:
         number: 80
