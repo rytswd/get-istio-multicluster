@@ -152,6 +152,10 @@ spec:
         ports:
         - containerPort: 8080
         - containerPort: 8443
+        - containerPort: 15021
+        - containerPort: 15443
+        - containerPort: 15012
+        - containerPort: 15017
         - containerPort: 15090
           name: http-envoy-prom
           protocol: TCP
@@ -320,6 +324,18 @@ spec:
   - name: https
     port: 443
     targetPort: 8443
+  - name: status-port
+    port: 15021
+    targetPort: 15021
+  - name: tls
+    port: 15443
+    targetPort: 15443
+  - name: tls-istiod
+    port: 15012
+    targetPort: 15012
+  - name: tls-webhook
+    port: 15017
+    targetPort: 15017
   selector:
     app: bison-management-ingressgateway
     istio: ingressgateway
