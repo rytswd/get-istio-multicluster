@@ -12,7 +12,7 @@ spec:
   servers:
     - hosts:
         - "*.global"
-        - "*.bison.global"
+        # - "*.bison.global"
       port:
         name: tls
         number: 15443
