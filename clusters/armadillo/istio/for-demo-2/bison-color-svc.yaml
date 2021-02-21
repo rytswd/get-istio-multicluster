@@ -65,9 +65,9 @@ spec:
   hosts:
     - "*"
   gateways:
+    # Traffic handling for external IngressGateway mapping
     - istio-system/armadillo-external-ingressgateway
   http:
-    # Traffic handling for external IngressGateway mapping
     - match:
         - uri:
             prefix: /bison
@@ -76,3 +76,5 @@ spec:
       route:
         - destination:
             host: color-svc.bison-offerings.global
+            port:
+              number: 8800

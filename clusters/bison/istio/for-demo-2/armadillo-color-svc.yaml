@@ -77,3 +77,5 @@ spec:
       route:
         - destination:
             host: color-svc.bison-offerings.global
+            port:
+              number: 8800
