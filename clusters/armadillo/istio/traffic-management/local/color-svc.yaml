@@ -49,6 +49,7 @@ spec:
           percentage:
             value: 50
           httpStatus: 400
+
     - match:
         - uri:
             prefix: /armadillo

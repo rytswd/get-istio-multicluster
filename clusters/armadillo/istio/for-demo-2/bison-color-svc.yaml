@@ -51,18 +51,6 @@ spec:
             value: 50
           httpStatus: 400
 
-    # Traffic handling for external IngressGateway mapping
-    - match:
-        - uri:
-            prefix: /bison
-          gateways:
-            - istio-system/armadillo-external-ingressgateway
-      rewrite:
-        uri: /random
-      route:
-        - destination:
-            host: color-svc.bison-offerings.global
-
     # Default routing
     - route:
         - destination:
