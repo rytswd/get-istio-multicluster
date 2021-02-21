@@ -59,13 +59,3 @@ spec:
             host: color-svc.armadillo-offerings.svc.cluster.local
             port:
               number: 8800
-    - match:
-        - uri:
-            prefix: /bison
-      rewrite:
-        uri: /random
-      route:
-        - destination:
-            host: color-svc.bison-offerings.global
-            port:
-              number: 8800
