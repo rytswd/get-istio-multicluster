@@ -71,7 +71,7 @@ spec:
     # Traffic handling for external IngressGateway mapping
     - match:
         - uri:
-            prefix: /bison
+            prefix: /armadillo
       rewrite:
         uri: /random
       route:
