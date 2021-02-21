@@ -1,0 +1,28 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  # https://github.com/kubernetes-sigs/kind/releases
+  - role: control-plane
+    image: kindest/node:v1.17.17@sha256:7b6369d27eee99c7a85c48ffd60e11412dc3f373658bc59b7f4d530b7056823e
+    kubeadmConfigPatches:
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "ingress-ready=true"
+    extraPortMappings:
+      - containerPort: 32014
+        hostPort: 32014
+        protocol: TCP
+      - containerPort: 32024
+        hostPort: 32024
+        protocol: TCP
+      - containerPort: 32034
+        hostPort: 32034
+        protocol: TCP
+kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        authorization-mode: "AlwaysAllow"
