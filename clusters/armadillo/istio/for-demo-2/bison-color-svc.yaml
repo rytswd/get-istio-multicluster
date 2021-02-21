@@ -27,7 +27,6 @@ spec:
         http-bison: 15443
 ---
 # VirtualService definition on Bison side won't be able to handle the chaos setup.
-# TODO: Check if this can be handled at IngressGateway instead
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -66,5 +65,26 @@ spec:
 
     # Default routing
     - route:
+        - destination:
+            host: color-svc.bison-offerings.global
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: bison-color-svc-routing-external
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - istio-system/armadillo-external-ingressgateway
+  http:
+    # Traffic handling for external IngressGateway mapping
+    - match:
+        - uri:
+            prefix: /bison
+      rewrite:
+        uri: /random
+      route:
         - destination:
             host: color-svc.bison-offerings.global
