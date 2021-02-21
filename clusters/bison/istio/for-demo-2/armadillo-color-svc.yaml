@@ -76,6 +76,6 @@ spec:
         uri: /random
       route:
         - destination:
-            host: color-svc.bison-offerings.global
+            host: color-svc.armadillo-offerings.global
             port:
               number: 8800
