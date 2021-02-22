@@ -352,10 +352,6 @@ Each cluster has different resources. Check out the documentation one by one.
         clusters/armadillo/istio/installation/additional-setup/coredns-configmap.yaml
     kubectl apply --context kind-armadillo \
         -f clusters/armadillo/istio/installation/additional-setup/coredns-configmap.yaml
-
-    kubectl apply --context kind-armadillo \
-        -f clusters/armadillo/istio/traffic-management/local/color-svc.yaml \
-        -f clusters/armadillo/istio/traffic-management/local/httpbin.yaml
 }
 ```
 
@@ -363,9 +359,6 @@ Each cluster has different resources. Check out the documentation one by one.
 # OUTPUT
 Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
 configmap/coredns configured
-destinationrule.networking.istio.io/armadillo-color-svc created
-virtualservice.networking.istio.io/armadillo-color-svc-routing created
-virtualservice.networking.istio.io/armadillo-httpbin-chaos-routing created
 ```
 
 <details>
@@ -379,7 +372,49 @@ This will then be applied to `kube-system/coredns` ConfigMap. As KinD comes with
 
 ---
 
-#### 7.2. Add ServiceEntry for Bison connection
+#### 7.2. Add traffic routing for Armadillo local, and prepare for multicluster outbound
+
+For local routing
+
+```bash
+{
+    kubectl apply --context kind-armadillo \
+        -f clusters/armadillo/istio/traffic-management/local/color-svc.yaml \
+        -f clusters/armadillo/istio/traffic-management/local/httpbin.yaml
+}
+```
+
+```sh
+destinationrule.networking.istio.io/armadillo-color-svc created
+virtualservice.networking.istio.io/armadillo-color-svc-routing created
+virtualservice.networking.istio.io/armadillo-httpbin-chaos-routing created
+```
+
+For multicluster outbound routing
+
+```bash
+{
+    kubectl apply --context kind-armadillo \
+        -f clusters/armadillo/istio/traffic-management/multicluster/multicluster-setup.yaml
+}
+```
+
+```sh
+To be updated
+```
+
+<details>
+<summary>ℹ️ Details</summary>
+
+The first command will create local routing within Armadillo to test out the traffic management in a single cluster.
+
+The second command will create multicluster setup for Armadillo. This includes `Gateway` and `EnvoyFilter` Custom Resources which are responsible for inbound traffic, and `DestinationRule` Custom Resource for outbound traffic. Strictly speaking, you would only need the outbound traffic setup for this particular test, but setting up with the above file allows Bison to talk to Armadillo as well.
+
+</details>
+
+---
+
+#### 7.3. Add ServiceEntry for Bison connection
 
 Before completing this, make sure the cluster Bison is also started, and has completed Istio installation.
 
