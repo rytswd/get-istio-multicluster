@@ -168,21 +168,6 @@ $ export userToken=GITHUB_USER_TOKEN_FROM_STEP_1
 }
 ```
 
-Install GitOps setup
-
-```bash
-{
-    pushd clusters/armadillo/argocd > /dev/null
-
-    kubectl apply -n argocd \
-        --context kind-armadillo \
-        -f ./init/argo-cd-project.yaml \
-        -f ./init/argo-cd-app-demo-2.yaml
-
-    popd > /dev/null
-}
-```
-
 Bison
 
 ```bash
@@ -212,6 +197,73 @@ Bison
     popd > /dev/null
 }
 ```
+
+<details>
+<summary>Details</summary>
+
+_To be updated_
+
+`kubectl patch` against argocd secret updates the login password as `admin`.
+
+</details>
+
+---
+
+### 4.x. Install Istio Before GitOps Setup
+
+In order to speed up the deployment, it is recommended to install Istio before going ahead with GitOps configuartion.
+
+The next step will install Argo CD drive Git repository sync, and that would override Istio installation. The same step is taken for Argo CD itself.
+
+```bash
+{
+    kubectl apply \
+        --context kind-armadillo \
+        -f clusters/armadillo/istio/installation/no-operator-install/istio-control-plane-install.yaml \
+        -f clusters/armadillo/istio/installation/no-operator-install/istio-external-gateways-install.yaml \
+        -f clusters/armadillo/istio/installation/no-operator-install/istio-management-gateway-install.yaml \
+        -f clusters/armadillo/istio/installation/no-operator-install/istio-multicluster-gateways-install.yaml
+
+    kubectl apply \
+        --context kind-bison \
+        -f clusters/bison/istio/installation/no-operator-install/istio-control-plane-install.yaml \
+        -f clusters/bison/istio/installation/no-operator-install/istio-external-gateways-install.yaml \
+        -f clusters/bison/istio/installation/no-operator-install/istio-management-gateway-install.yaml \
+        -f clusters/bison/istio/installation/no-operator-install/istio-multicluster-gateways-install.yaml
+}
+```
+
+<details>
+<summary>Details</summary>
+
+_To be updated_
+
+`kubectl patch` against argocd secret updates the login password as `admin`.
+
+</details>
+
+---
+
+### 5. Add GitOps Cluster Configurations
+
+Armadillo
+
+Install GitOps setup
+
+```bash
+{
+    pushd clusters/armadillo/argocd > /dev/null
+
+    kubectl apply -n argocd \
+        --context kind-armadillo \
+        -f ./init/argo-cd-project.yaml \
+        -f ./init/argo-cd-app-demo-2.yaml
+
+    popd > /dev/null
+}
+```
+
+Bison
 
 Install GitOps setup
 
