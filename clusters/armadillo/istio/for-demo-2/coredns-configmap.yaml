@@ -26,5 +26,5 @@ data:
     global:53 {
         errors
         cache 30
-        forward . 10.96.170.177:53
+        forward . REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP:53
     }
