@@ -18,11 +18,11 @@ spec:
   addresses:
     - 240.0.0.2
   endpoints:
-    - address: 172.18.0.1
+    - address: REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS
       network: external
       ports:
-        http-bison: 32022
-    - address: 10.96.37.190
+        http-bison: 15443 # Istio Ingress Gateway port
+    - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
       ports:
         http-bison: 15443
 ---
