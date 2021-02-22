@@ -113,10 +113,8 @@ spec:
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
-  name: bison-multicluster-ingressgateway
+  name: multicluster-traffic-from-bison
   namespace: istio-system
-  labels:
-    app: bison-multicluster-ingressgateway
 spec:
   host: "*.global"
   trafficPolicy:
