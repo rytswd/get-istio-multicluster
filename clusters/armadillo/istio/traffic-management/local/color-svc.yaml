@@ -60,3 +60,9 @@ spec:
             host: color-svc.armadillo-offerings.svc.cluster.local
             port:
               number: 8800
+      # For demo
+      fault:
+        abort:
+          percentage:
+            value: 50
+          httpStatus: 400
