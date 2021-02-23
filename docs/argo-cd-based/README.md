@@ -246,12 +246,9 @@ _To be updated_
 
 ### 5. Add GitOps Cluster Configurations
 
-Armadillo
-
-Install GitOps setup
-
 ```bash
 {
+    # Armadillo setup
     pushd clusters/armadillo/argocd > /dev/null
 
     kubectl apply -n argocd \
@@ -260,15 +257,8 @@ Install GitOps setup
         -f ./init/argo-cd-app-demo-2.yaml
 
     popd > /dev/null
-}
-```
 
-Bison
-
-Install GitOps setup
-
-```bash
-{
+    # Bison setup
     pushd clusters/bison/argocd > /dev/null
 
     kubectl apply -n argocd \
