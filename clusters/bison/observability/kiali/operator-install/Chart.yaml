@@ -1,0 +1,11 @@
+apiVersion: v2
+name: kiali-operator
+description: A Helm chart for Kiali Operator
+type: application
+version: 0.1.0
+appVersion: 1.0.0
+
+dependencies:
+  - name: kiali-operator
+    version: "1.29.0"
+    repository: "https://kiali.org/helm-charts"
