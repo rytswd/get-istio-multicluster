@@ -20,6 +20,8 @@ for e in "armadillo" "bison"; do
         mikefarah/yq eval ".dependencies[0].version = \"${KIALI_OPERATOR_VERSION}\"" \
         -i Chart.yaml
 
+    # TODO: Consider updating the values.yaml as well
+
     # Get back to the original directory
     popd >/dev/null || {
         echo "failed to change directory"
