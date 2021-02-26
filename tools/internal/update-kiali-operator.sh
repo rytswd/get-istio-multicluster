@@ -6,6 +6,8 @@ __root_dir="$__tools_dir"/..
 KIALI_OPERATOR_VERSION=1.30.0
 
 for e in "armadillo" "bison"; do
+    echo "Starting Kiali Operator update, for cluster '$e'..."
+
     # Get into the directory for given cluster stack
     pushd "$__root_dir"/clusters/$e/observability/kiali/operator-install >/dev/null || {
         echo "failed to change directory"
@@ -22,9 +24,15 @@ for e in "armadillo" "bison"; do
 
     # TODO: Consider updating the values.yaml as well
 
+    # Update the dependency
+    helm dep up
+
     # Get back to the original directory
     popd >/dev/null || {
         echo "failed to change directory"
         exit 1
     }
+
+    echo "  Complete."
+    echo
 done
