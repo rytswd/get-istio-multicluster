@@ -20,10 +20,18 @@ On top of Istio, each cluster can be configured with the following
 | Kiali      |   TBC   | Observability | Operator, version v1.29.0  |
 | Jaeger     | v1.21.3 | Observability | Operator, version v1.21.3  |
 
+### How to update all
+
+Each tool can be updated separately in each cluster directory.
+
+Otherwise the version upgrade can take place for all the clusters via scripts under [`/tools/internal/`](https://github.com/rytswd/get-istio-multicluster/tree/main/tools/internal).
+
 ## Armadillo
 
-### Stack
+- Dedicated Control Plane
+- Connects to Bison
 
-- ArgoCD
-- Istio
--
+## Bison
+
+- Dedicated Control Plane
+- Connects to Armadillo
