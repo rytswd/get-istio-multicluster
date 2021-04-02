@@ -1,9 +1,11 @@
 #!/bin/bash
 
+ISTIO_VERSION=1.9.2
+
 __tools_dir=$(dirname "$0")/..
 __root_dir="$__tools_dir"/..
 
-ISTIO_VERSION=1.7.5
+__revision=$(echo $ISTIO_VERSION | tr '.' '-')
 
 __temp_dir=$(mktemp -d)
 pushd "$__temp_dir" >/dev/null || {
@@ -24,7 +26,10 @@ popd >/dev/null || {
 }
 
 for e in "armadillo" "bison" "dolphin"; do
-    istioctl operator dump >"$__root_dir"/clusters/$e/istio/installation/operator-install/istio-operator-install.yaml
+    echo "Updating operator spec for '$e'"
+    istioctl operator dump --revision "$__revision" \
+        >"$__root_dir"/clusters/$e/istio/installation/operator-install/istio-operator-install-"$ISTIO_VERSION".yaml
+    echo "  Complete."
 done
 
 # Clean up Istio installation

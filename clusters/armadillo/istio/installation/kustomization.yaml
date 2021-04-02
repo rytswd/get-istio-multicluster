@@ -3,13 +3,12 @@ kind: Kustomization
 
 # This setup does NOT use no-operator-install. It is used directly for demos.
 
-resources:
+bases:
   # Install Istio Operator first.
   # The order of installation is managed by ArgoCD wave control.
   # Ref: https://argoproj.github.io/argo-cd/user-guide/sync-waves/
-  - ./operator-install/istio-operator-install.yaml
+  - ./operator-install
 
-bases:
   # Install Istio Control Plane and Data Planes.
   # The Control Plane needs to be installed first, and then the rest of the
   # components. This is also managed by ArgoCD wave control.

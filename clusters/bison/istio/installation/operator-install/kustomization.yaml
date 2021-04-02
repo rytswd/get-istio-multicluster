@@ -1,0 +1,7 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ./istio-operator-install.yaml # Default: based on v1.7.8
+  - ./istio-operator-install-1.8.4.yaml
+  - ./istio-operator-install-1.9.2.yaml
