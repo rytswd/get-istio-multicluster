@@ -92,6 +92,14 @@ rules:
   verbs:
   - '*'
 - apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - get
+  - create
+  - update
+- apiGroups:
   - ""
   resources:
   - configmaps
@@ -141,7 +149,7 @@ spec:
       serviceAccountName: istio-operator
       containers:
         - name: istio-operator
-          image: docker.io/istio/operator:1.7.5
+          image: docker.io/istio/operator:1.7.8
           command:
           - operator
           - server
