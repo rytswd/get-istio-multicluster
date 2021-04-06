@@ -767,7 +767,7 @@ TODO: THE BELOW NEEDS TO BE UPDATED
 ```bash
 {
     rm -rf certs
-    git reset --hard
+    git checkout certs --force
     kind delete cluster --name armadillo
     kind delete cluster --name bison
 }
