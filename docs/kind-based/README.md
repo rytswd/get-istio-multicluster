@@ -12,9 +12,18 @@ This setup assumes you are using Istio 1.7.5.
 
 ## 📚 Other Setup Steps
 
-| Name          | Description   |
-| ------------- | ------------- |
-| To be updated | To be updated |
+<!-- == imptr: other-setup-steps / begin from: ../snippets/links-to-other-steps.md#2~12 == -->
+
+| Step               | Description |
+| ------------------ | ----------- |
+| [KinD based][1]    | TBD         |
+| [k3d based][2]     | TBD         |
+| [Argo CD based][3] | TBD         |
+
+[1]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/kind-based/README.md
+[2]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/k3d-based/README.md
+[3]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/argo-cd-based/README.md
+<!-- == imptr: other-setup-steps / end == -->
 
 ## 🐾 Steps
 
@@ -64,17 +73,18 @@ git clone --depth 1 -b main https://github.com/rytswd/get-istio-multicluster.git
 
 ### 1. Start local Kubernetes clusters with KinD
 
+<!-- == imptr: kind-start / begin from: ../snippets/steps/kind-setup.md#5~25 == -->
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/v1.17/config-2-nodes-port-320x1.yaml --name armadillo
-    kind create cluster --config ./tools/kind-config/v1.17/config-2-nodes-port-320x2.yaml --name bison
+    kind create cluster --config ./tools/kind-config/v1.18/config-2-nodes-port-320x1.yaml --name armadillo
+    kind create cluster --config ./tools/kind-config/v1.18/config-2-nodes-port-320x2.yaml --name bison
 }
 ```
 
 <details>
 <summary>ℹ️ Details</summary>
 
-KinD clusters are created with 2 almost identical configurations. The configuration ensures the Kubernetes version is v1.17 with 2 nodes in place (1 for control plane, 1 for worker).
+KinD clusters are created with 2 almost identical configurations. The configuration ensures the Kubernetes version is v1.18 with 2 nodes in place (1 for control plane, 1 for worker).
 
 The difference between the configuration is the open port setup. Because clusters needs to talk to each other, we need them to be externally available. With KinD, external IP does not get assigned by default, and for this demo, we are using NodePort for the entry points, effectively mocking the multi-network setup.
 
@@ -85,13 +95,17 @@ As you can see `istioctl-input.yaml` in each cluster, the NodePort used are:
 
 </details>
 
+<!-- == imptr: kind-start / end == -->
+
 ---
 
 ### 2. Prepare CA Certs
 
 <!-- The steps are detailed at [Certificate Preparation steps](https://github.com/rytswd/get-istio-multicluster/tree/main/docs/cert-prep/README.md). -->
 
-You need to complete this step before installing Istio to the cluster.
+**NOTE**: You should complete this step before installing Istio to the cluster.
+
+<!-- == imptr: cert-prep-1 / begin from: ../snippets/steps/cert-prep.md#4~45 == -->
 
 The first step is to generate the certificates.
 
@@ -106,6 +120,37 @@ The first step is to generate the certificates.
     popd > /dev/null
 }
 ```
+
+<details>
+<summary>ℹ️ Details</summary>
+
+Creating certificates uses Istio's certificate creation setup.
+
+You can find the original documentation [here](https://github.com/istio/istio/tree/master/tools/certs) (or [here for v1.9.2](https://github.com/istio/istio/tree/1.9.2/tools/certs)).
+
+```bash
+{
+    # Get into certs directory
+    pushd certs > /dev/null
+
+    # Create Root CA, which would then be used to sign Intermediate CAs.
+    make -f ../tools/certs/Makefile.selfsigned.mk root-ca
+
+    # Create Intermediate CA for each cluster. All clusters have their own
+    # certs for security reason. These certs are signed by the above Root CA.
+    make -f ../tools/certs/Makefile.selfsigned.mk armadillo-cacerts
+    make -f ../tools/certs/Makefile.selfsigned.mk bison-cacerts
+
+    # Get back to previous directory
+    popd > /dev/null
+}
+```
+
+</details>
+
+<!-- == imptr: cert-prep-1 / end == -->
+
+<!-- == imptr: cert-prep-2 / begin from: ../snippets/steps/cert-prep.md#47~109 == -->
 
 The second step is to create Kubernetes Secrets holding the generated certificates in the correpsonding clusters.
 
@@ -132,26 +177,16 @@ The second step is to create Kubernetes Secrets holding the generated certificat
 <details>
 <summary>ℹ️ Details</summary>
 
-If you do not create the certificate before Istio is installed to the cluster, Istio will fall back to use its own certificate. This will cause an issue when you try to use your custom cert later on. It's best to get the cert ready first - otherwise you will likely need to run through a bunch of restarts of Istio components and others to ensure the correct cert is picked up.
+If you do not create the certificate before Istio is installed to the cluster, Istio will fall back to use its own certificate. This will cause an issue when you try to use your custom cert later on. It's best to get the cert ready first - otherwise you will likely need to run through a bunch of restarts of Istio components and others to ensure the correct cert is picked up. This will also likely require inevitable downtime.
 
-Each command is associated with some comments to clarify what they do:
+As of writing (April 2021), there is some work being done on Istio to provide support for multiple Root certificates.
+
+Ref: https://github.com/istio/istio/issues/31111
+
+Each command used above is associated with some comments to clarify what they do:
 
 ```bash
 {
-    # Get into certs directory
-    pushd certs > /dev/null
-
-    # Create Root CA, which would then be used to sign Intermediate CAs.
-    make -f ../tools/certs/Makefile.selfsigned.mk root-ca
-
-    # Create Intermediate CA for each cluster. All clusters have their own
-    # certs for security reason.
-    make -f ../tools/certs/Makefile.selfsigned.mk armadillo-cacerts
-    make -f ../tools/certs/Makefile.selfsigned.mk bison-cacerts
-
-    # Get back to previous directory
-    popd > /dev/null
-
     # Create a secret `cacerts`, which is used by Istio.
     # Istio's component `istiod` will use this, and if there is no secret in
     # place before `istiod` starts up, it would fall back to use Istio's
@@ -178,6 +213,7 @@ Each command is associated with some comments to clarify what they do:
 ```
 
 </details>
+<!-- == imptr: cert-prep-2 / end == -->
 
 ---
 
