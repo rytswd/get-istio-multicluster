@@ -9,3 +9,5 @@
 [1]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/kind-based/README.md
 [2]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/k3d-based/README.md
 [3]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/argo-cd-based/README.md
+
+---

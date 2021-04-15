@@ -51,3 +51,5 @@ This step installs "Data Plane" components into the clusters, which are mainly I
 The main difference in the configuration files used above is the name used by various components (Ingress and Egress Gateways have `armadillo-` or `bison-` prefix, and so on). Also, as the previous step created the KinD cluster with different NodePort for Istio IngressGateway, you can see the corresponding port being used in `istio-multicluster-gateways.yaml`.
 
 </details>
+
+---

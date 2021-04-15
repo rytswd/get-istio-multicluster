@@ -28,7 +28,7 @@ For more information about using this repo, you can chekc out the full documenta
 
 ### 1. Start local Kubernetes clusters with KinD
 
-<!-- == imptr: kind-start / begin from: ../snippets/steps/kind-setup.md#5~25 == -->
+<!-- == imptr: kind-start / begin from: ../snippets/steps/kind-setup.md#8~29 == -->
 <!-- == imptr: kind-start / end == -->
 
 ---
