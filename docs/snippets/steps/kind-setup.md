@@ -41,7 +41,7 @@ As you can see `istioctl-input.yaml` in each cluster, the NodePort used are:
 
 KinD clusters can be deleted with `kind delete cluster` - and you can provide `--name` to specify one.
 
-As the above steps creates multiple clusters, this step makes sure to delete all.
+As the above steps created multiple clusters, you will need to run `kind delete cluster` for each cluster created.
 
 Because all the Istio components are inside KinD cluster, deleting the cluster will remove everything that was generated / configured / deployed.
 
