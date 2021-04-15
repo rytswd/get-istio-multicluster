@@ -1,6 +1,10 @@
 # KinD
 
-## Start local Kubernetes clusters with KinD
+KinD is Kubernetes in Docker. You can find more in https://kind.sigs.k8s.io/.
+
+## Start KinD with 2 clusters
+
+### Start local Kubernetes clusters with KinD
 
 ```bash
 {
@@ -23,7 +27,7 @@ As you can see `istioctl-input.yaml` in each cluster, the NodePort used are:
 
 </details>
 
-## Stop KinD clusters
+### Stop KinD clusters
 
 ```bash
 {
@@ -31,3 +35,20 @@ As you can see `istioctl-input.yaml` in each cluster, the NodePort used are:
     kind delete cluster --name bison
 }
 ```
+
+<details>
+<summary>ℹ️ Details</summary>
+
+KinD clusters can be deleted with `kind delete cluster` - and you can provide `--name` to specify one.
+
+As the above steps creates multiple clusters, this step makes sure to delete all.
+
+Because all the Istio components are inside KinD cluster, deleting the cluster will remove everything that was generated / configured / deployed.
+
+</details>
+
+## Start KinD with 3 clusters
+
+To be updated
+
+---

@@ -106,3 +106,32 @@ Each command used above is associated with some comments to clarify what they do
 ```
 
 </details>
+
+## Delete created certificates
+
+Provided that you are using some clone of this repo, you can run
+
+```bash
+{
+    rm -rf certs
+    git checkout certs --force
+}
+```
+
+<details>
+<summary>ℹ️ Details</summary>
+
+Remove the entire `certs` directory, and `git checkout certs --force` to remove all the changes.
+
+If you are simply pulling the files without Git, you can run:
+
+```bash
+{
+    rm -rf certs
+    mkdir certs
+}
+```
+
+</details>
+
+---
