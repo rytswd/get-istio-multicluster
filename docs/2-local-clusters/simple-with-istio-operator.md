@@ -381,5 +381,5 @@ For stopping clusters
 <!-- == imptr: kind-stop / begin from: ../snippets/steps/kind-setup.md#31~49 == -->
 <!-- == imptr: kind-stop / end == -->
 
-<!-- == imptr: cert-removal / begin from: ../snippets/steps/cert-prep.md111~136 == -->
+<!-- == imptr: cert-removal / begin from: ../snippets/steps/cert-prep.md#111~136 == -->
 <!-- == imptr: cert-removal / end == -->
