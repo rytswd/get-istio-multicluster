@@ -1,0 +1,221 @@
+# Handling Istio Custom Resources Manually
+
+## Patch CoreDNS usage
+
+Get IP address of `istiocoredns` Service,
+
+```bash
+{
+    export ARMADILLO_ISTIOCOREDNS_CLUSTER_IP=$(kubectl get svc \
+        --context kind-armadillo \
+        -n istio-system \
+        istiocoredns \
+        -o jsonpath={.spec.clusterIP})
+    echo "$ARMADILLO_ISTIOCOREDNS_CLUSTER_IP"
+}
+```
+
+```sh
+# OUTPUT
+10.xx.xx.xx
+```
+
+And then apply CoreDNS configuration which includes the `istiocoredns` IP.
+
+```bash
+{
+    sed -i '' -e "s/REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP/$ARMADILLO_ISTIOCOREDNS_CLUSTER_IP/" \
+        ./clusters/armadillo/istio/installation/additional-setup/coredns-configmap.yaml
+    kubectl apply --context kind-armadillo \
+        -f ./clusters/armadillo/istio/installation/additional-setup/coredns-configmap.yaml
+}
+```
+
+```sh
+# OUTPUT
+Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
+configmap/coredns configured
+```
+
+The above example is only to update CoreDNS for Armadillo cluster. If you want to have Bison to Armadillo traffic the same way, you'd need to run the same command for Bison cluster as well (with `--context kind-bison`).
+
+<details>
+<summary>ℹ️ Details</summary>
+
+Istio's `istiocoredns` handles DNS lookup, and thus, you need to let Kubernetes know that `istiocoredns` gets the DNS request. Get the K8s Service cluster IP in `ARMADILLO_ISTIOCOREDNS_CLUSTER_IP` env variable, so that you can use that in `coredns-configmap.yaml` as the endpoint.
+
+This will then be applied to `kube-system/coredns` ConfigMap. As KinD comes with CoreDNS as the default DNS and its own ConfigMap, you will see a warning about the original ConfigMap being overridden with the custom one. This is fine for testing, but you may want to carefully examine the DNS setup as that could have significant impact.
+
+</details>
+
+## Armadillo cluster
+
+### Routing Setup
+
+For local routing
+
+```bash
+{
+    kubectl apply --context kind-armadillo \
+        -f ./clusters/armadillo/istio/traffic-management/local/color-svc.yaml \
+        -f ./clusters/armadillo/istio/traffic-management/local/httpbin.yaml
+}
+```
+
+```console
+destinationrule.networking.istio.io/armadillo-color-svc created
+virtualservice.networking.istio.io/armadillo-color-svc-routing created
+virtualservice.networking.istio.io/armadillo-httpbin-chaos-routing created
+```
+
+For multicluster outbound routing
+
+```bash
+{
+    kubectl apply --context kind-armadillo \
+        -f ./clusters/armadillo/istio/traffic-management/multicluster/multicluster-setup.yaml
+}
+```
+
+```sh
+To be updated
+```
+
+<details>
+<summary>ℹ️ Details</summary>
+
+The first command will create local routing within Armadillo to test out the traffic management in a single cluster.
+
+The second command will create multicluster setup for Armadillo. This includes `Gateway` and `EnvoyFilter` Custom Resources which are responsible for inbound traffic, and `DestinationRule` Custom Resource for outbound traffic. Strictly speaking, you would only need the outbound traffic setup for this particular test, but setting up with the above file allows Bison to talk to Armadillo as well.
+
+</details>
+
+### Multicluster Routing Setup
+
+Before completing this, make sure the cluster Bison is also started, and has completed Istio installation.
+
+```bash
+{
+    export ARMADILLO_EGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
+        --context=kind-armadillo \
+        -n istio-system \
+        --selector=app=armadillo-multicluster-egressgateway \
+        -o jsonpath='{.items[0].spec.clusterIP}')
+    echo "$ARMADILLO_EGRESS_GATEWAY_ADDRESS"
+    sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
+        ./clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml
+    sed -i '' -e "s/REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP/$ARMADILLO_EGRESS_GATEWAY_ADDRESS/g" \
+        ./clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml
+}
+```
+
+```sh
+# OUTPUT
+10.xx.xx.xx
+```
+
+```bash
+{
+    export BISON_INGRESS_GATEWAY_ADDRESS=$(kubectl get svc \
+        --context=kind-bison \
+        -n istio-system \
+        --selector=app=istio-ingressgateway \
+        -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo '172.18.0.1')
+    echo "$BISON_INGRESS_GATEWAY_ADDRESS"
+    {
+        sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
+            ./clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml
+        if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
+            sed -i '' -e "s/15443 # Istio Ingress Gateway port/32022/" \
+                ./clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml
+        fi
+        sed -i '' -e "s/REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS/$BISON_INGRESS_GATEWAY_ADDRESS/g" \
+            ./clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml
+        if [[ $BISON_INGRESS_GATEWAY_ADDRESS == '172.18.0.1' ]]; then
+            sed -i '' -e "s/15443 # Istio Ingress Gateway port/32022/" \
+                ./clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml
+        fi
+    }
+}
+```
+
+```sh
+# OUTPUT
+172.18.0.1
+```
+
+```bash
+kubectl apply --context kind-armadillo \
+    -f ./clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml \
+    -f ./clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml
+```
+
+```sh
+# OUTPUT
+serviceentry.networking.istio.io/bison-color-svc created
+virtualservice.networking.istio.io/bison-color-svc-routing created
+serviceentry.networking.istio.io/bison-httpbin created
+virtualservice.networking.istio.io/bison-httpbin-routing created
+```
+
+<details>
+<summary>ℹ️ Details</summary>
+
+**WARNING**: The current setup does NOT go through EgressGateway, and simply skips it. This needs further investigation.
+
+There are 2 places that are being updated in a single file `clusters/armadillo/istio/traffic-management/multicluster/bison-connections.yaml`. The first one is for Armadillo's EgressGateway, and the second is for Bison's IngressGateway. This means the traffic follows the below pattern.
+
+```
+[ Armadillo Cluster]                                  Cluster Border                                         [ Bison Cluster]
+                                                             |
+App Container A ==> Istio Sidecar Proxy ==> Egress Gateway ==|==> Ingress Gateway ==> Istio Sidecar Proxy ==> App Container B
+                                                             |
+```
+
+This means that, when you need App Container A to talk to App Container B on the other cluster, you need to provide 2 endpoints.
+
+In order for 2 KinD clusters to talk to each other, the extra `sed` takes place to fallback to use `172.18.0.1` as endpoint address (which is a mapping outside of cluster), and because Bison's Ingress Gateway is set up with NodePort of `32022`, we replace the default port of `15443` with `32022`.
+
+The command may look confusing, but the update is simple. If you cloned this repo at the step 0, you can easily see from git diff.
+
+</details>
+
+## Bison cluster
+
+### Routing Setup
+
+For local routing
+
+```bash
+{
+    kubectl apply --context kind-bison \
+        -f ./clusters/bison/istio/traffic-management/local/color-svc.yaml \
+        -f ./clusters/bison/istio/traffic-management/local/httpbin.yaml
+
+}
+```
+
+For multicluster outbound routing
+
+```bash
+{
+    kubectl apply --context kind-bison \
+        -f ./clusters/bison/istio/traffic-management/multicluster/multicluster-setup.yaml
+}
+```
+
+<details>
+<summary>ℹ️ Details</summary>
+
+To be updated
+
+</details>
+
+## Istio v1.6
+
+If you are using Istio v1.6, you will get an error from the above. You need to run the following command:
+
+```bash
+kubectl apply --context kind-bison \
+    -f ./clusters/bison/istio/traffic-management/archive-for-istio-1.6/multicluster-setup-1.6.yaml
+```
