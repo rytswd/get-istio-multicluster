@@ -4,6 +4,8 @@ Assuming that you have httpbin service on target clusters, you can test the mult
 
 ## With curl
 
+<!-- == export: curl-httpbin-2-clusters / begin == -->
+
 Simple curl to verify connection
 
 ```bash
@@ -62,4 +64,4 @@ _TODO: More to be added_
 
 </details>
 
----
+<!-- == export: curl-httpbin-2-clusters / end == -->

@@ -12,7 +12,7 @@ This setup assumes you are using Istio 1.7.5.
 
 ## 📚 Other Setup Steps
 
-<!-- == imptr: other-setup-steps / begin from: ../snippets/links-to-other-steps.md#2~12 == -->
+<!-- == imptr: other-setup-steps / begin from: ../snippets/links-to-other-steps.md#[other-setup-steps] == -->
 
 | Step               | Description |
 | ------------------ | ----------- |
@@ -30,7 +30,7 @@ This setup assumes you are using Istio 1.7.5.
 
 ### 0. Clone this repository
 
-<!-- == imptr: full-clone / begin from: ../snippets/steps/using-this-repo.md#24~36 == -->
+<!-- == imptr: full-clone / begin from: ../snippets/steps/using-this-repo.md#[full-clone-command] == -->
 
 ```bash
 {
@@ -52,7 +52,7 @@ For more information about using this repo, you can chekc out the full documenta
 
 ### 1. Start local Kubernetes clusters with KinD
 
-<!-- == imptr: kind-start / begin from: ../snippets/steps/kind-setup.md#8~29 == -->
+<!-- == imptr: kind-start / begin from: ../snippets/steps/kind-setup.md#[kind-start-2-clusters] == -->
 
 ```bash
 {
@@ -83,7 +83,7 @@ As you can see `istioctl-input.yaml` in each cluster, the NodePort used are:
 
 **NOTE**: You should complete this step before installing Istio to the cluster.
 
-<!-- == imptr: cert-prep-1 / begin from: ../snippets/steps/cert-prep.md#4~45 == -->
+<!-- == imptr: cert-prep-1 / begin from: ../snippets/steps/cert-prep.md#[prep-certs-with-local-ca] == -->
 
 The first step is to generate the certificates.
 
@@ -128,7 +128,7 @@ You can find the original documentation [here](https://github.com/istio/istio/tr
 
 <!-- == imptr: cert-prep-1 / end == -->
 
-<!-- == imptr: cert-prep-2 / begin from: ../snippets/steps/cert-prep.md#47~109 == -->
+<!-- == imptr: cert-prep-2 / begin from: ../snippets/steps/cert-prep.md#[prep-kubernetes-secrets] == -->
 
 The second step is to create Kubernetes Secrets holding the generated certificates in the correpsonding clusters.
 
@@ -201,7 +201,7 @@ Each command used above is associated with some comments to clarify what they do
 <details>
 <summary>With `istioctl`</summary>
 
-<!-- == imptr: install-istio-operator-with-istioctl / begin from: ../snippets/steps/install-istio-operator.md#4~16 == -->
+<!-- == imptr: install-istio-operator-with-istioctl / begin from: ../snippets/steps/install-istio-operator.md#[istio-operator-with-istioctl] == -->
 
 ```bash
 {
@@ -222,7 +222,7 @@ Each command used above is associated with some comments to clarify what they do
 <details>
 <summary>With manifest generation</summary>
 
-<!-- == imptr: install-istio-operator-with-manifest / begin from: ../snippets/steps/install-istio-operator.md#18~36 == -->
+<!-- == imptr: install-istio-operator-with-manifest / begin from: ../snippets/steps/install-istio-operator.md#[istio-operator-with-manifest-generation] == -->
 
 ```bash
 {
@@ -249,7 +249,7 @@ You can simply run the above command one more time. <!--TODO: Add more details--
 <details>
 <summary>ℹ️ Details</summary>
 
-<!-- == imptr: install-istio-operator-details / begin from: ../snippets/steps/install-istio-operator.md#38~44 == -->
+<!-- == imptr: install-istio-operator-details / begin from: ../snippets/steps/install-istio-operator.md#[istio-operator-details] == -->
 
 This prepares for Istio installation by installing IstioOperator Controller. It allows defining IsitoOperator Custom Resource in declarative manner, and IstioOperator Controller to handle the installation.
 
@@ -265,7 +265,7 @@ As this repository aims to be as declarative as possible, the installation specs
 
 ### 4. Install Istio Control Plane into Clusters
 
-<!-- == imptr: use-istio-operator-control-plane / begin from: ../snippets/steps/use-istio-operator.md#6~29 == -->
+<!-- == imptr: use-istio-operator-control-plane / begin from: ../snippets/steps/use-istio-operator.md#[install-control-plane-for-2-clusters] == -->
 
 ```bash
 {
@@ -296,7 +296,7 @@ This installation uses the IstioOperator manifest with `minimal` profile, meanin
 
 ### 5. Install Istio Data Plane (i.e. Gateways) into Clusters
 
-<!-- == imptr: use-istio-operator-data-plane / begin from: ../snippets/steps/use-istio-operator.md#31~54 == -->
+<!-- == imptr: use-istio-operator-data-plane / begin from: ../snippets/steps/use-istio-operator.md#[install-data-plane-for-2-clusters] == -->
 
 ```bash
 {
@@ -327,7 +327,7 @@ The main difference in the configuration files used above is the name used by va
 
 ### 6. Install Debug Processes
 
-<!-- == imptr: deploy-debug-services / begin from: ../snippets/steps/deploy-debug-services.md#2~49 == -->
+<!-- == imptr: deploy-debug-services / begin from: ../snippets/steps/deploy-debug-services.md#[for-2-clusters] == -->
 
 ```bash
 {
@@ -389,7 +389,7 @@ Each cluster has different resources. Check out the documentation one by one.
 
 #### 7.1. Add `istiocoredns` as a part of CoreDNS ConfigMap
 
-<!-- == imptr: manual-coredns / begin from: ../snippets/steps/handling-istio-resources-manually.md#4~50 == -->
+<!-- == imptr: manual-coredns / begin from: ../snippets/steps/handling-istio-resources-manually.md#[armadillo-coredns] == -->
 
 Get IP address of `istiocoredns` Service,
 
@@ -443,7 +443,7 @@ This will then be applied to `kube-system/coredns` ConfigMap. As KinD comes with
 
 #### 7.2. Add traffic routing for Armadillo local, and prepare for multicluster outbound
 
-<!-- == imptr: manual-routing-armadillo / begin from: ../snippets/steps/handling-istio-resources-manually.md#54~92 == -->
+<!-- == imptr: manual-routing-armadillo / begin from: ../snippets/steps/handling-istio-resources-manually.md#[armadillo-local] == -->
 
 For local routing
 
@@ -489,7 +489,7 @@ The second command will create multicluster setup for Armadillo. This includes `
 
 #### 7.3. Add ServiceEntry for Bison connection
 
-<!-- == imptr: manual-multicluster-routing-armadillo / begin from: ../snippets/steps/handling-istio-resources-manually.md#94~182 == -->
+<!-- == imptr: manual-multicluster-routing-armadillo / begin from: ../snippets/steps/handling-istio-resources-manually.md#[armadillo-multicluster-bison] == -->
 
 Before completing this, make sure the cluster Bison is also started, and has completed Istio installation.
 
@@ -588,9 +588,7 @@ The command may look confusing, but the update is simple. If you cloned this rep
 <details>
 <summary>For Bison</summary>
 
-<!-- == imptr: manual-routing-bison / begin from: ../snippets/steps/handling-istio-resources-manually.md#184~213 == -->
-
-### Routing Setup
+<!-- == imptr: manual-routing-bison / begin from: ../snippets/steps/handling-istio-resources-manually.md#[bison-local] == -->
 
 For local routing
 
@@ -599,7 +597,6 @@ For local routing
     kubectl apply --context kind-bison \
         -f ./clusters/bison/istio/traffic-management/local/color-svc.yaml \
         -f ./clusters/bison/istio/traffic-management/local/httpbin.yaml
-
 }
 ```
 
@@ -627,7 +624,7 @@ To be updated
 
 ### 8. Verify
 
-<!-- == imptr: verify-with-httpbin / begin from: ../snippets/steps/verify-with-httpbin.md#6~64 == -->
+<!-- == imptr: verify-with-httpbin / begin from: ../snippets/steps/verify-with-httpbin.md#[curl-httpbin-2-clusters] == -->
 
 Simple curl to verify connection
 
@@ -695,7 +692,7 @@ _TODO: More to be added_
 
 For stopping clusters
 
-<!-- == imptr: kind-stop / begin from: ../snippets/steps/kind-setup.md#31~49 == -->
+<!-- == imptr: kind-stop / begin from: ../snippets/steps/kind-setup.md#[kind-stop-2-clusters] == -->
 
 ```bash
 {
@@ -717,7 +714,7 @@ Because all the Istio components are inside KinD cluster, deleting the cluster w
 
 <!-- == imptr: kind-stop / end == -->
 
-<!-- == imptr: cert-removal / begin from: ../snippets/steps/cert-prep.md#111~136 == -->
+<!-- == imptr: cert-removal / begin from: ../snippets/steps/cert-prep.md#[delete-certs] == -->
 
 Provided that you are using some clone of this repo, you can run
 

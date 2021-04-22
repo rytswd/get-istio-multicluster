@@ -1,5 +1,7 @@
 ## 📚 Setup Steps
 
+<!-- == export: other-setup-steps / begin == -->
+
 | Step               | Description |
 | ------------------ | ----------- |
 | [KinD based][1]    | TBD         |
@@ -10,4 +12,4 @@
 [2]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/k3d-based/README.md
 [3]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/argo-cd-based/README.md
 
----
+<!-- == export: other-setup-steps / end == -->

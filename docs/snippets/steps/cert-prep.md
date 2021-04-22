@@ -2,6 +2,8 @@
 
 ## Create Certificate using Istio's Certificate generation Makefile
 
+<!-- == export: prep-certs-with-local-ca / begin == -->
+
 The first step is to generate the certificates.
 
 ```bash
@@ -43,7 +45,11 @@ You can find the original documentation [here](https://github.com/istio/istio/tr
 
 </details>
 
+<!-- == export: prep-certs-with-local-ca / end == -->
+
 ## Create Kubernetes Secrets with above certificates
+
+<!-- == export: prep-kubernetes-secrets / begin == -->
 
 The second step is to create Kubernetes Secrets holding the generated certificates in the correpsonding clusters.
 
@@ -107,7 +113,11 @@ Each command used above is associated with some comments to clarify what they do
 
 </details>
 
+<!-- == export: prep-kubernetes-secrets / end == -->
+
 ## Delete created certificates
+
+<!-- == export: delete-certs / begin == -->
 
 Provided that you are using some clone of this repo, you can run
 
@@ -134,4 +144,4 @@ If you are simply pulling the files without Git, you can run:
 
 </details>
 
----
+<!-- == export: delete-certs / end == -->

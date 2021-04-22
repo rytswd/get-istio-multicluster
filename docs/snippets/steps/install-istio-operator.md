@@ -2,6 +2,8 @@
 
 ## Using `istioctl`
 
+<!-- == export: istio-operator-with-istioctl / begin == -->
+
 ```bash
 {
     istioctl --context kind-armadillo \
@@ -14,7 +16,11 @@
 }
 ```
 
+<!-- == export: istio-operator-with-istioctl / end == -->
+
 ## Using manifest
+
+<!-- == export: istio-operator-with-manifest-generation / begin == -->
 
 ```bash
 {
@@ -34,7 +40,11 @@ Error from server (NotFound): error when creating "./clusters/armadillo/istio/in
 
 You can simply run the above command one more time. <!--TODO: Add more details-->
 
+<!-- == export: istio-operator-with-manifest-generation / end == -->
+
 ## What is Istio Operator install
+
+<!-- == export: istio-operator-details / begin == -->
 
 This prepares for Istio installation by installing IstioOperator Controller. It allows defining IsitoOperator Custom Resource in declarative manner, and IstioOperator Controller to handle the installation.
 
@@ -42,4 +52,4 @@ You can use `istioctl operator init` to install, or get the IstioOperator Contro
 
 As this repository aims to be as declarative as possible, the installation specs are saved using `istioctl operator dump`, and saved under each cluster spec. You can use `get-istio-multicluster/tools/internal/update-istio-operator-install.sh` script to update all the IstioOperator Controller installation spec in one go.
 
----
+<!-- == export: istio-operator-details / end == -->

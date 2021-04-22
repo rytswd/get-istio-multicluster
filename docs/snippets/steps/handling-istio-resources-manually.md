@@ -2,6 +2,10 @@
 
 ## Patch CoreDNS usage
 
+For intercluster DNS resolution, you need to apply the following to all clusters.
+
+<!-- == export: armadillo-coredns / begin == -->
+
 Get IP address of `istiocoredns` Service,
 
 ```bash
@@ -48,9 +52,13 @@ This will then be applied to `kube-system/coredns` ConfigMap. As KinD comes with
 
 </details>
 
+<!-- == export: armadillo-coredns / end == -->
+
 ## Armadillo cluster
 
 ### Routing Setup
+
+<!-- == export: armadillo-local / begin == -->
 
 For local routing
 
@@ -90,7 +98,11 @@ The second command will create multicluster setup for Armadillo. This includes `
 
 </details>
 
+<!-- == export: armadillo-local / end == -->
+
 ### Multicluster Routing Setup
+
+<!-- == export: armadillo-multicluster-bison / begin == -->
 
 Before completing this, make sure the cluster Bison is also started, and has completed Istio installation.
 
@@ -180,9 +192,13 @@ The command may look confusing, but the update is simple. If you cloned this rep
 
 </details>
 
+<!-- == export: armadillo-multicluster-bison / end == -->
+
 ## Bison cluster
 
 ### Routing Setup
+
+<!-- == export: bison-local / begin == -->
 
 For local routing
 
@@ -191,7 +207,6 @@ For local routing
     kubectl apply --context kind-bison \
         -f ./clusters/bison/istio/traffic-management/local/color-svc.yaml \
         -f ./clusters/bison/istio/traffic-management/local/httpbin.yaml
-
 }
 ```
 
@@ -210,6 +225,8 @@ For multicluster outbound routing
 To be updated
 
 </details>
+
+<!-- == export: bison-local / end == -->
 
 ## Istio v1.6
 

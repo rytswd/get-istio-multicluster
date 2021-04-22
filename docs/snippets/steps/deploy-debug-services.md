@@ -1,5 +1,7 @@
 # Deploy Debug Services
 
+<!-- == export: for-2-clusters / begin == -->
+
 ```bash
 {
     kubectl create namespace --context kind-armadillo armadillo-offerings
@@ -47,4 +49,4 @@ For both `color-svc` and `toolkit-alpine`, [`tools`](https://github.com/rytswd/g
 
 </details>
 
----
+<!-- == export: for-2-clusters / end == -->

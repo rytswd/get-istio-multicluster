@@ -22,6 +22,8 @@ The simplest approach is to clone this entire repository, without forking. That 
 
 ### Full clone
 
+<!-- == export: full-clone-command / begin == -->
+
 ```bash
 {
     pwd
@@ -33,6 +35,8 @@ The simplest approach is to clone this entire repository, without forking. That 
     # /some/path/at/get-istio-multicluster
 }
 ```
+
+<!-- == export: full-clone-command / end == -->
 
 ### Shallow clone
 

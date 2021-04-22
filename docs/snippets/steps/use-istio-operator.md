@@ -4,6 +4,8 @@ You can use IstioOperator Custom Resuorce with `istioctl`, or you can have Istio
 
 ## Install Istio Control Plane components to 2 clusters
 
+<!-- == export: install-control-plane-for-2-clusters / begin == -->
+
 ```bash
 {
     kubectl apply --context kind-armadillo \
@@ -27,7 +29,11 @@ This installation uses the IstioOperator manifest with `minimal` profile, meanin
 
 </details>
 
+<!-- == export: install-control-plane-for-2-clusters / end == -->
+
 ## Install Istio Data Plane (i.e. Gateways) into 2 clusters
+
+<!-- == export: install-data-plane-for-2-clusters / begin == -->
 
 ```bash
 {
@@ -52,4 +58,4 @@ The main difference in the configuration files used above is the name used by va
 
 </details>
 
----
+<!-- == export: install-data-plane-for-2-clusters / end == -->
