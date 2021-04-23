@@ -272,6 +272,13 @@ For local routing
 }
 ```
 
+```sh
+# OUTPUT
+destinationrule.networking.istio.io/bison-color-svc created
+virtualservice.networking.istio.io/bison-color-svc-routing created
+virtualservice.networking.istio.io/bison-httpbin-routing created
+```
+
 For multicluster outbound routing
 
 ```bash
@@ -281,10 +288,17 @@ For multicluster outbound routing
 }
 ```
 
+```sh
+# OUTPUT
+gateway.networking.istio.io/bison-multicluster-ingressgateway created
+envoyfilter.networking.istio.io/bison-multicluster-ingressgateway created
+destinationrule.networking.istio.io/multicluster-traffic-from-bison created
+```
+
 <details>
 <summary>ℹ️ Details</summary>
 
-To be updated
+This is the same step as done in Armadillo cluster setup, but for Bison.
 
 </details>
 
