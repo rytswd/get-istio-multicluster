@@ -119,7 +119,7 @@ Each command used above is associated with some comments to clarify what they do
 
 <!-- == export: delete-certs / begin == -->
 
-Provided that you are using some clone of this repo, you can run
+Provided that you are using some clone of this repo, you can run the following to remove certs.
 
 ```bash
 {

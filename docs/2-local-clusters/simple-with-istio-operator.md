@@ -803,7 +803,7 @@ Because all the Istio components are inside KinD cluster, deleting the cluster w
 
 <!-- == imptr: cert-removal / begin from: ../snippets/steps/prep-cert.md#[delete-certs] == -->
 
-Provided that you are using some clone of this repo, you can run
+Provided that you are using some clone of this repo, you can run the following to remove certs.
 
 ```bash
 {
@@ -829,3 +829,9 @@ If you are simply pulling the files without Git, you can run:
 </details>
 
 <!-- == imptr: cert-removal / end == -->
+
+If you have updated the local files with some of commands above, you may want to clean up those changes as well.
+
+```bash
+git reset --hard
+```
