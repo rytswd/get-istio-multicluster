@@ -199,7 +199,7 @@ Each command used above is associated with some comments to clarify what they do
 ### 3. Install IstioOperator Controller into Clusters
 
 <details>
-<summary>With `istioctl`</summary>
+<summary>With `istioctl` </summary>
 
 <!-- == imptr: install-istio-operator-with-istioctl / begin from: ../snippets/steps/install-istio-operator.md#[istio-operator-with-istioctl] == -->
 
