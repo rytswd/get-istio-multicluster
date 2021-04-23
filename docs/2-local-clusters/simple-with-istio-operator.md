@@ -438,6 +438,22 @@ Istio's `istiocoredns` handles DNS lookup, and thus, you need to let Kubernetes 
 
 This will then be applied to `kube-system/coredns` ConfigMap. As KinD comes with CoreDNS as the default DNS and its own ConfigMap, you will see a warning about the original ConfigMap being overridden with the custom one. This is fine for testing, but you may want to carefully examine the DNS setup as that could have significant impact.
 
+The `sed` command may look confusing, but the change is very minimal and straighforward. If you cloned this repo at the step 0, you can easily see from git diff.
+
+```diff
+diff --git a/clusters/armadillo/istio/installation/additional-setup/coredns-configmap.yaml b/clusters/armadillo/istio/installation/additional-setup/coredns-configmap.yaml
+index 9ffb5e8..d55a977 100644
+--- a/clusters/armadillo/istio/installation/additional-setup/coredns-configmap.yaml
++++ b/clusters/armadillo/istio/installation/additional-setup/coredns-configmap.yaml
+@@ -26,5 +26,5 @@ data:
+     global:53 {
+         errors
+         cache 30
+-        forward . REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP:53
++        forward . 10.96.238.217:53
+     }
+```
+
 </details>
 
 <!-- == imptr: manual-coredns / end == -->
@@ -587,6 +603,50 @@ This means that, when you need App Container A to talk to App Container B on the
 In order for 2 KinD clusters to talk to each other, the extra `sed` takes place to fallback to use `172.18.0.1` as endpoint address (which is a mapping outside of cluster), and because Bison's Ingress Gateway is set up with NodePort of `32022`, we replace the default port of `15443` with `32022`.
 
 The command may look confusing, but the update is simple. If you cloned this repo at the step 0, you can easily see from git diff.
+
+```diff
+diff --git a/clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml b/clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml
+index 8d5eabc..0d455c4 100644
+--- a/clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml
++++ b/clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml
+@@ -18,11 +18,11 @@ spec:
+   addresses:
+     - 240.0.0.2
+   endpoints:
+-    - address: REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS
++    - address: 172.18.0.1
+       network: external
+       ports:
+-        http-bison: 15443 # Istio Ingress Gateway port
+-    - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
++        http-bison: 32022
++    - address: 10.96.52.18
+       ports:
+         http-bison: 15443
+ ---
+```
+
+```diff
+diff --git a/clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml b/clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml
+index 0d73f22..34a3762 100644
+--- a/clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml
++++ b/clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml
+@@ -18,11 +18,11 @@ spec:
+   addresses:
+     - 240.0.0.1
+   endpoints:
+-    - address: REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS
++    - address: 172.18.0.1
+       network: external
+       ports:
+-        http-bison: 15443 # Istio Ingress Gateway port
+-    - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
++        http-bison: 32022
++    - address: 10.96.52.18
+       ports:
+         http-bison: 15443
+ ---
+```
 
 </details>
 
