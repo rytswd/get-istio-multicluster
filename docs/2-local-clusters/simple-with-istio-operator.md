@@ -387,10 +387,10 @@ For both `color-svc` and `toolkit-alpine`, [`tools`](https://github.com/rytswd/g
 
 Each cluster has different resources. Check out the documentation one by one.
 
-<details>
-<summary>For Armadillo</summary>
+### For Armadillo
 
-#### 7.1. Add `istiocoredns` as a part of CoreDNS ConfigMap
+<details>
+<summary>7.1. Add <code>istiocoredns</code> as a part of CoreDNS ConfigMap</summary>
 
 <!-- == imptr: manual-coredns / begin from: ../snippets/steps/handle-istio-resources-manually.md#[armadillo-coredns] == -->
 
@@ -444,7 +444,10 @@ This will then be applied to `kube-system/coredns` ConfigMap. As KinD comes with
 
 ---
 
-#### 7.2. Add traffic routing for Armadillo local, and prepare for multicluster outbound
+</details>
+
+<details>
+<summary>7.2. Add traffic routing for Armadillo local, and prepare for multicluster outbound</summary>
 
 <!-- == imptr: manual-routing-armadillo / begin from: ../snippets/steps/handle-istio-resources-manually.md#[armadillo-local] == -->
 
@@ -490,7 +493,10 @@ The second command will create multicluster setup for Armadillo. This includes `
 
 ---
 
-#### 7.3. Add ServiceEntry for Bison connection
+</details>
+
+<details>
+<summary>7.3. Add ServiceEntry for Bison connection</summary>
 
 <!-- == imptr: manual-multicluster-routing-armadillo / begin from: ../snippets/steps/handle-istio-resources-manually.md#[armadillo-multicluster-bison] == -->
 
@@ -588,8 +594,10 @@ The command may look confusing, but the update is simple. If you cloned this rep
 
 </details>
 
+### For Bison
+
 <details>
-<summary>For Bison</summary>
+<summary>7.4. Add traffic routing for Bison local, and prepare for multicluster outbound</summary>
 
 <!-- == imptr: manual-routing-bison / begin from: ../snippets/steps/handle-istio-resources-manually.md#[bison-local] == -->
 
