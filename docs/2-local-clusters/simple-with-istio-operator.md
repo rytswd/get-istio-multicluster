@@ -12,7 +12,7 @@ This setup assumes you are using Istio 1.7.5.
 
 ## 📚 Other Setup Steps
 
-<!-- == imptr: other-setup-steps / begin from: ../snippets/links-to-other-steps.md#[other-setup-steps] == -->
+<!-- == imptr: setup-steps / begin from: ../snippets/common-info.md#[setup-steps] == -->
 
 | Step               | Description |
 | ------------------ | ----------- |
@@ -24,7 +24,7 @@ This setup assumes you are using Istio 1.7.5.
 [2]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/k3d-based/README.md
 [3]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/argo-cd-based/README.md
 
-<!-- == imptr: other-setup-steps / end == -->
+<!-- == imptr: setup-steps / end == -->
 
 ## 🐾 Steps
 
