@@ -85,16 +85,18 @@ For multicluster outbound routing
 }
 ```
 
-```sh
-To be updated
+```console
+gateway.networking.istio.io/armadillo-multicluster-ingressgateway created
+envoyfilter.networking.istio.io/armadillo-multicluster-ingressgateway created
+destinationrule.networking.istio.io/multicluster-traffic-from-armadillo created
 ```
 
 <details>
 <summary>ℹ️ Details</summary>
 
-The first command will create local routing within Armadillo to test out the traffic management in a single cluster.
+The first command will create local routing setup within Armadillo for testing traffic management in a single cluster.
 
-The second command will create multicluster setup for Armadillo. This includes `Gateway` and `EnvoyFilter` Custom Resources which are responsible for inbound traffic, and `DestinationRule` Custom Resource for outbound traffic. Strictly speaking, you would only need the outbound traffic setup for this particular test, but setting up with the above file allows Bison to talk to Armadillo as well.
+The second command will create multicluster setup for Armadillo. This includes `Gateway` and `EnvoyFilter` Custom Resources which are responsible for inbound traffic, and `DestinationRule` Custom Resource for outbound traffic. Strictly speaking, you would only need the outbound traffic setup for Armadillo cluster to talk to remote clusters, but setting up with the above file allows other clusters to talk to Armadillo as well.
 
 </details>
 
