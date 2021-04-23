@@ -115,6 +115,20 @@ Each command used above is associated with some comments to clarify what they do
 
 <!-- == export: prep-kubernetes-secrets / end == -->
 
+### Certificate Management with GitOps
+
+<!-- == export: gitops-consideration / begin == -->
+
+In truly GitOps setup, you will want to keep secrcets as a part of Git repo. That would pose another challenge on how you securely store the secret data in Git, while keeping its secrecy.
+
+One solution is to use solution such as [sealed-secret](https://github.com/bitnami-labs/sealed-secrets), so that you can use Git to store credentials while keeping it secure.
+
+Another approach would be to use completely separate logic for pulling secrets from external source such as KMS or [Vault](https://www.vaultproject.io/).
+
+This is an extremely important aspect to consider when setting up production environment. Do NOT simply store credentials such as certs and GitHub access token in Git, because if you do, you will be leaking the token forever, as Git keeps the commit history.
+
+<!-- == export: gitops-consideration / end == -->
+
 ## Delete created certificates
 
 <!-- == export: delete-certs / begin == -->
