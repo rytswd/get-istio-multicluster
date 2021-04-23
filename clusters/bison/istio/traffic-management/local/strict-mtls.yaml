@@ -1,0 +1,10 @@
+---
+# Turn on mTLS by default for all workloads
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default-mtls-required
+  namespace: istio-system
+spec:
+  mtls:
+    mode: STRICT

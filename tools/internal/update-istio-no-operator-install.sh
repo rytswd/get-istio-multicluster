@@ -8,7 +8,7 @@ ISTIO_VERSION=1.7.5
 __temp_dir=$(mktemp -d)
 pushd "$__temp_dir" >/dev/null || {
     echo "failed to change directory"
-    aexit 1
+    exit 1
 }
 
 echo "Installing Istio v$ISTIO_VERSION for istioctl"
