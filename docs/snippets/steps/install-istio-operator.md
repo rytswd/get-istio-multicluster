@@ -5,7 +5,7 @@
 <!-- == export: istio-operator-with-istioctl / begin == -->
 
 > 📝 **NOTE**:  
-> This will install Istio version based on `istioctl` version you have on your machine. You will need to manage your `istioctl` version separately, or you could take manifest generation approach instead.
+> This will install Istio version based on `istioctl` version you have on your machine. You will need to manage your `istioctl` version separately, or you could take manifest generation approach instead, which is based on declarative and static definitions.
 
 ```bash
 {
