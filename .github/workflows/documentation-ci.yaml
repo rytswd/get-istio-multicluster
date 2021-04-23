@@ -1,6 +1,9 @@
 name: Run Importer for Markdowns
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
