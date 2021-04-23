@@ -30,7 +30,7 @@ This setup assumes you are using Istio 1.7.5.
 
 ### 0. Clone this repository
 
-<!-- == imptr: full-clone / begin from: ../snippets/steps/using-this-repo.md#[full-clone-command] == -->
+<!-- == imptr: full-clone / begin from: ../snippets/steps/use-this-repo.md#[full-clone-command] == -->
 
 ```bash
 {
@@ -46,7 +46,7 @@ This setup assumes you are using Istio 1.7.5.
 
 <!-- == imptr: full-clone / end == -->
 
-For more information about using this repo, you can chekc out the full documentation in [Using this repo](https://github.com/rytswd/get-istio-multicluster/blob/main/docs/snippets/steps/using-this-repo.md).
+For more information about using this repo, you can chekc out the full documentation in [Using this repo](https://github.com/rytswd/get-istio-multicluster/blob/main/docs/snippets/steps/use-this-repo.md).
 
 ---
 
@@ -83,7 +83,7 @@ As you can see `istioctl-input.yaml` in each cluster, the NodePort used are:
 
 **NOTE**: You should complete this step before installing Istio to the cluster.
 
-<!-- == imptr: cert-prep-1 / begin from: ../snippets/steps/cert-prep.md#[prep-certs-with-local-ca] == -->
+<!-- == imptr: cert-prep-1 / begin from: ../snippets/steps/prep-cert.md#[prep-certs-with-local-ca] == -->
 
 The first step is to generate the certificates.
 
@@ -128,7 +128,7 @@ You can find the original documentation [here](https://github.com/istio/istio/tr
 
 <!-- == imptr: cert-prep-1 / end == -->
 
-<!-- == imptr: cert-prep-2 / begin from: ../snippets/steps/cert-prep.md#[prep-kubernetes-secrets] == -->
+<!-- == imptr: cert-prep-2 / begin from: ../snippets/steps/prep-cert.md#[prep-kubernetes-secrets] == -->
 
 The second step is to create Kubernetes Secrets holding the generated certificates in the correpsonding clusters.
 
@@ -389,7 +389,7 @@ Each cluster has different resources. Check out the documentation one by one.
 
 #### 7.1. Add `istiocoredns` as a part of CoreDNS ConfigMap
 
-<!-- == imptr: manual-coredns / begin from: ../snippets/steps/handling-istio-resources-manually.md#[armadillo-coredns] == -->
+<!-- == imptr: manual-coredns / begin from: ../snippets/steps/handle-istio-resources-manually.md#[armadillo-coredns] == -->
 
 Get IP address of `istiocoredns` Service,
 
@@ -443,7 +443,7 @@ This will then be applied to `kube-system/coredns` ConfigMap. As KinD comes with
 
 #### 7.2. Add traffic routing for Armadillo local, and prepare for multicluster outbound
 
-<!-- == imptr: manual-routing-armadillo / begin from: ../snippets/steps/handling-istio-resources-manually.md#[armadillo-local] == -->
+<!-- == imptr: manual-routing-armadillo / begin from: ../snippets/steps/handle-istio-resources-manually.md#[armadillo-local] == -->
 
 For local routing
 
@@ -489,7 +489,7 @@ The second command will create multicluster setup for Armadillo. This includes `
 
 #### 7.3. Add ServiceEntry for Bison connection
 
-<!-- == imptr: manual-multicluster-routing-armadillo / begin from: ../snippets/steps/handling-istio-resources-manually.md#[armadillo-multicluster-bison] == -->
+<!-- == imptr: manual-multicluster-routing-armadillo / begin from: ../snippets/steps/handle-istio-resources-manually.md#[armadillo-multicluster-bison] == -->
 
 Before completing this, make sure the cluster Bison is also started, and has completed Istio installation.
 
@@ -588,7 +588,7 @@ The command may look confusing, but the update is simple. If you cloned this rep
 <details>
 <summary>For Bison</summary>
 
-<!-- == imptr: manual-routing-bison / begin from: ../snippets/steps/handling-istio-resources-manually.md#[bison-local] == -->
+<!-- == imptr: manual-routing-bison / begin from: ../snippets/steps/handle-istio-resources-manually.md#[bison-local] == -->
 
 For local routing
 
@@ -714,7 +714,7 @@ Because all the Istio components are inside KinD cluster, deleting the cluster w
 
 <!-- == imptr: kind-stop / end == -->
 
-<!-- == imptr: cert-removal / begin from: ../snippets/steps/cert-prep.md#[delete-certs] == -->
+<!-- == imptr: cert-removal / begin from: ../snippets/steps/prep-cert.md#[delete-certs] == -->
 
 Provided that you are using some clone of this repo, you can run
 
