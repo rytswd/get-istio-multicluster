@@ -203,6 +203,8 @@ Each command used above is associated with some comments to clarify what they do
 
 <!-- == imptr: install-istio-operator-with-istioctl / begin from: ../snippets/steps/install-istio-operator.md#[istio-operator-with-istioctl] == -->
 
+NOTE: This will install Istio version based on `istioctl` version you have on your machine. You will need to manage your `istioctl` version separately, or you could take manifest generation approach instead.
+
 ```bash
 {
     istioctl --context kind-armadillo \
