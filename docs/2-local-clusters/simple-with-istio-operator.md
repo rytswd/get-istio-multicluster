@@ -20,7 +20,7 @@ This setup assumes you are using Istio 1.7.5.
 | [k3d based][2]     | TBD         |
 | [Argo CD based][3] | TBD         |
 
-[1]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/kind-based/README.md
+[1]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/2-local-clusters/simple-with-istio-operator.md
 [2]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/k3d-based/README.md
 [3]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/argo-cd-based/README.md
 
