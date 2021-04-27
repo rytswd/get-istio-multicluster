@@ -434,6 +434,20 @@ This means, although this step is rather an imperative step which seemmingly doe
 #### Bison
 
 <!-- == imptr: use-argo-cd-bison / begin from: ../snippets/steps/use-argo-cd.md#[bison] == -->
+
+```bash
+{
+    pushd clusters/bison/argocd > /dev/null
+
+    kubectl apply -n argocd \
+        --context kind-bison \
+        -f ./init/argo-cd-project.yaml \
+        -f ./init/argo-cd-app-demo-2.yaml
+
+    popd > /dev/null
+}
+```
+
 <!-- == imptr: use-argo-cd-bison / end == -->
 
 <details>
@@ -463,7 +477,7 @@ The important Custom Resources are:
 
 ---
 
-### 8. Verify
+### 6. Verify
 
 <!-- == imptr: verify-with-httpbin / begin from: ../snippets/steps/verify-with-httpbin.md#[curl-httpbin-2-clusters] == -->
 
