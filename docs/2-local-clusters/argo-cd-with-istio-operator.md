@@ -433,24 +433,7 @@ This means, although this step is rather an imperative step which seemmingly doe
 
 #### Bison
 
-<!-- == imptr: use-argo-cd-bison / begin from: ../snippets/steps/use-argo-cd.md#[details] == -->
-
-You can find more about Argo CD Custom Resource in the official documentation.
-
-- https://argo-cd.readthedocs.io/en/latest/understand_the_basics/
-- https://argo-cd.readthedocs.io/en/latest/core_concepts/
-- https://argo-cd.readthedocs.io/en/latest/getting_started/
-
-The important Custom Resources are:
-
-**`Application`**:
-
-`Application` is for Argo CD to understand which Git repository it needs to check against. You need to provide information such as URL, branch / tag, synchnonisation logic, etc. This works hand in hand with `Project` Custom Resource below.
-
-**`AppProject` or `Project`**:
-
-`Project` (aka `AppProject`) defines scope. It is crucial to have appropriate access control defined in GitOps solutions, and a lot is handled by `Project`, such as targetted namespace(s), resource whitelist/blacklist, etc. You can think of `Project` as a parent of `Application`, as each `Application` needs at least one `Project`.
-
+<!-- == imptr: use-argo-cd-bison / begin from: ../snippets/steps/use-argo-cd.md#[bison] == -->
 <!-- == imptr: use-argo-cd-bison / end == -->
 
 <details>
