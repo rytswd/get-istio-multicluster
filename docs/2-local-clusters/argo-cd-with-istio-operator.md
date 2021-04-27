@@ -284,40 +284,25 @@ $ export userToken=<GITHUB_USER_TOKEN_FROM_STEP>
 
 #### Bison
 
-<!-- == imptr: install-argo-cd-bison / begin from: ../snippets/steps/install-argo-cd.md#[details] == -->
+<!-- == imptr: install-argo-cd-bison / begin from: ../snippets/steps/install-argo-cd.md#[bison] == -->
 
 ```bash
 {
-    # Get into cluster's directory.
-    # This one is taken from Armadillo installation.
-    pushd clusters/armadillo/argocd > /dev/null
+    pushd clusters/bison/argocd > /dev/null
 
-    # Create namespace for Argo CD. The default installation assumes Argo CD is
-    # installed under argocd namespace, and thus the same is applied here.
     kubectl apply \
-        --context kind-armadillo \
+        --context kind-bison \
         -f ./init/namespace-argocd.yaml
-    # Create Kubernetes Secret of GitHub Token. This is a naïve approach, and
-    # is not production ready. With token, you shouldn't need any other
-    # information in the secret, but there used to be some issue with missing
-    # username. For that reason, although username isn't actually used,
-    # providing a placeholder as a part of Secret.
-    kubectl create secret generic access-secret -n argocd \
-        --context kind-armadillo \
+    kubectl -n argocd create secret generic access-secret \
+        --context kind-bison \
         --from-literal=username=placeholder \
         --from-literal=token=$userToken
-    # Install Argo CD. You can find more about the installation spec in
-    #   /clusters/armadillo/argocd/installation/README.md
     kubectl apply -n argocd \
-        --context kind-armadillo \
+        --context kind-bison \
         -f ./installation/argo-cd-install.yaml
 
-    # Patch Argo CD's default secret. This updates the admin password.
-    # Obviously, this is not recommended for production use case, and it is
-    # even recommended to disable the default admin access once the initial
-    # configuration is complete.
     kubectl patch secret argocd-secret -n argocd \
-        --context kind-armadillo \
+        --context kind-bison \
         -p \
             "{\"data\": \
                     {\
@@ -325,12 +310,9 @@ $ export userToken=<GITHUB_USER_TOKEN_FROM_STEP>
                     \"admin.passwordMtime\": \"$(date +%FT%T%Z | base64)\" \
             }}"
 
-    # Get back to the previous directory.
     popd > /dev/null
 }
 ```
-
-**NOTE**: `kubectl patch` against `argocd-secret` updates the login password to `admin`.
 
 <!-- == imptr: install-argo-cd-bison / end == -->
 
