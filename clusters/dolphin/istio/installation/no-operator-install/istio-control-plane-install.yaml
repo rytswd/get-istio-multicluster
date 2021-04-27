@@ -6783,6 +6783,7 @@ rules:
       - "security.istio.io"
       - "networking.istio.io"
       - "authentication.istio.io"
+      - "rbac.istio.io"
     resources: ["*"]
     verbs: ["get", "list", "watch"]
   - apiGroups: [""]
@@ -6823,7 +6824,9 @@ rules:
     verbs: ["get", "list", "watch", "update"]
 
   # istio configuration
-  - apiGroups: ["config.istio.io", "security.istio.io", "networking.istio.io", "authentication.istio.io"]
+  # removing CRD permissions can break older versions of Istio running alongside this control plane (https://github.com/istio/istio/issues/29382)
+  # please proceed with caution
+  - apiGroups: ["config.istio.io", "security.istio.io", "networking.istio.io", "authentication.istio.io", "rbac.istio.io"]
     verbs: ["get", "watch", "list"]
     resources: ["*"]
 
@@ -7806,7 +7809,7 @@ data:
         "sts": {
           "servicePort": 0
         },
-        "tag": "1.7.5",
+        "tag": "1.7.8",
         "telemetryNamespace": "istio-system",
         "tracer": {
           "datadog": {
@@ -8542,7 +8545,7 @@ spec:
           value: Kubernetes
         - name: CENTRAL_ISTIOD
           value: "false"
-        image: docker.io/istio/pilot:1.7.5
+        image: docker.io/istio/pilot:1.7.8
         name: discovery
         ports:
         - containerPort: 8080

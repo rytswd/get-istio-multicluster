@@ -8,7 +8,7 @@ After following all the steps below, you would get
 - 1 mesh
 - `armadillo` to send request to `bison`
 
-This setup assumes you are using Istio 1.7.5.
+This setup assumes you are using Istio 1.7.8.
 
 ## 📚 Other Setup Steps
 
