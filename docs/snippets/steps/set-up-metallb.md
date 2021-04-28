@@ -4,6 +4,8 @@ MetalLB allows using LoadBalancer in KinD clusters.
 
 ## Using KinD and MetalLB
 
+### For Armadillo
+
 <!-- == export: armadillo / begin == -->
 
 ```bash
@@ -23,6 +25,8 @@ MetalLB allows using LoadBalancer in KinD clusters.
 
 <!-- == export: armadillo / end == -->
 
+### For Bison
+
 <!-- == export: bison / begin == -->
 
 ```bash
@@ -41,6 +45,8 @@ MetalLB allows using LoadBalancer in KinD clusters.
 ```
 
 <!-- == export: bison / end == -->
+
+### Details
 
 <!-- == export: details / begin == -->
 
