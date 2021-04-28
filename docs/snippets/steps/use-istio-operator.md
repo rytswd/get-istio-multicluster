@@ -8,12 +8,10 @@ You can use IstioOperator Custom Resuorce with `istioctl`, or you can have Istio
 
 ```bash
 {
-    kubectl create namespace istio-system --context kind-armadillo
     kubectl apply --context kind-armadillo \
         -n istio-system \
         -f ./clusters/armadillo/istio/installation/operator-usage/istio-control-plane.yaml
 
-    kubectl create namespace istio-system --context kind-bison
     kubectl apply --context kind-bison \
         -n istio-system \
         -f ./clusters/bison/istio/installation/operator-usage/istio-control-plane.yaml
