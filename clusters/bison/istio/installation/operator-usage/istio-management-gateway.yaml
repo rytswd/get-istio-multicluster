@@ -22,7 +22,7 @@ spec:
             # need to adjust this LB IP and also MetalLB IP ranges.
             # In real use cases, you will likely want to create an LB IP
             # beforehand, and use that IP here.
-            loadBalancerIP: 172.18.101.152
+            loadBalancerIP: 172.18.102.152
 
             ports:
               - port: 80
