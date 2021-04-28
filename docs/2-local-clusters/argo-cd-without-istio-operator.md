@@ -516,6 +516,46 @@ This means, although this step is rather an imperative step which seemmingly doe
 
 </details>
 
+<details>
+<summary>ℹ️ Note about External IP</summary>
+
+Istio Ingress Gateway is created with `type: LoadBalancer` by default. This means that External IP will be associated with the Service, allowing Istio to handle incoming traffic from outside the mesh / cluster.
+
+In this document, it is assumed that the cluster is KinD, and IP ranges are matching what MetalLB configuration above is using. If you are seeing different IP ranges for your Docker environment, you need to ensure your GitOps driven YAML files are also in line to have the corresponding IPs.
+
+For example, the following is the YAML file snippet for Armadillo Multicluster Gateway
+
+```yaml
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: bison-istio-multicluster-gateways
+  # ... snip ...
+spec:
+  # Profile empty is used to create Gateways only.
+  profile: empty
+
+  components:
+    # ... snip ...
+    ingressGateways:
+      - enabled: true
+        name: bison-multicluster-ingressgateway
+        label:
+          app: bison-multicluster-ingressgateway
+        k8s:
+          service:
+            # This is assuming that you are using MetalLB with KinD. Your KinD
+            # network may be differently set up, and in that case, you would
+            # need to adjust this LB IP and also MetalLB IP ranges.
+            # In real use cases, you will likely want to create an LB IP
+            # beforehand, and use that IP here.
+            loadBalancerIP: 172.18.102.150
+```
+
+This setup allows declarative setup even for LB IP, and also wiring up multiple clusters is made easier. But as this depends on your running environment, if you are seeing some unexpected traffic errors, you would want to double chcek if the IPs are associated correctly.
+
+</details>
+
 ---
 
 ### 6. Add Argo CD Custom Resources
