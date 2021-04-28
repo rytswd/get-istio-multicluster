@@ -644,6 +644,7 @@ metadata:
   name: armadillo-external-ingressgateway
   namespace: istio-system
 spec:
+  loadBalancerIP: 172.18.101.151
   ports:
   - name: http2
     nodePort: 32011
