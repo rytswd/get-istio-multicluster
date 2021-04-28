@@ -8,10 +8,12 @@ You can use IstioOperator Custom Resuorce with `istioctl`, or you can have Istio
 
 ```bash
 {
+    kubectl create namespace istio-system --context kind-armadillo
     kubectl apply --context kind-armadillo \
         -n istio-system \
         -f ./clusters/armadillo/istio/installation/operator-usage/istio-control-plane.yaml
 
+    kubectl create namespace istio-system --context kind-bison
     kubectl apply --context kind-bison \
         -n istio-system \
         -f ./clusters/bison/istio/installation/operator-usage/istio-control-plane.yaml
@@ -21,9 +23,9 @@ You can use IstioOperator Custom Resuorce with `istioctl`, or you can have Istio
 <details>
 <summary>ℹ️ Details</summary>
 
-As detailed in the previous step, this step simply deploys IstioOperator CustomResource to the cluster, and rely on IstioOperator Controller to deploy Istio into the cluster.
+This step simply deploys IstioOperator CustomResource to the cluster, and rely on IstioOperator Controller to deploy Istio into the cluster.
 
-As to the configuration files, the above commands use basically identical cluster setup input.
+As to the configuration files, the above commands use basically identical cluster setup input for 2 clusters.
 
 This installation uses the IstioOperator manifest with `minimal` profile, meaning this would be used for installing Istio "Control Plane" components. They are the core copmonents of Istio to provide its rich traffic management, security, and observability features, and mainly driven by an image of `istiod` (and a few more things around it). Some more differences would be seen for "Data Plane" components, and that would be dealt in the next step.
 
