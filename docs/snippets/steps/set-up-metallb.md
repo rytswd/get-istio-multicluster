@@ -79,7 +79,7 @@ resources:
   - github.com/metallb/metallb//manifests?ref=v0.9.6
 ```
 
-<details>
+</details>
 
 Finally, you need to let MetalLB know which IP range it can use to assign to the LoadBalancers.
 
