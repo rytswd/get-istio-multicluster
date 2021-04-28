@@ -626,10 +626,13 @@ The second command will create multicluster setup for Armadillo. This includes `
 
 <!-- == imptr: manual-multicluster-routing-armadillo / begin from: ../snippets/steps/handle-istio-resources-manually.md#[armadillo-multicluster-bison] == -->
 
-```console
+```bash
 $ kubectl apply --context kind-armadillo \
     -f ./clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml \
     -f ./clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml
+```
+
+```console
 serviceentry.networking.istio.io/bison-color-svc created
 virtualservice.networking.istio.io/bison-color-svc-routing created
 serviceentry.networking.istio.io/bison-httpbin created
