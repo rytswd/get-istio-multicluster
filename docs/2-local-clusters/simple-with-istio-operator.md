@@ -196,7 +196,115 @@ Each command used above is associated with some comments to clarify what they do
 
 ---
 
-### 3. Install IstioOperator Controller into Clusters
+### 3. Intsall and Configure MetalLB
+
+#### Armadillo
+
+<!-- == imptr: install-metallb-armadillo / begin from: ../snippets/steps/set-up-metallb.md#[armadillo] == -->
+
+```bash
+{
+    kubectl apply --context kind-armadillo \
+        -f ./tools/metallb/installation/metallb-namespace.yaml
+    kubectl apply --context kind-armadillo \
+        -f ./tools/metallb/installation/metallb-install.yaml
+
+    kubectl create secret --context kind-armadillo \
+        generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+
+    kubectl apply --context kind-armadillo \
+        -f ./tools/metallb/usage/metallb-ip-config-101.yaml
+}
+```
+
+<!-- == imptr: install-metallb-armadillo / end == -->
+
+#### Bison
+
+<!-- == imptr: install-metallb-bison / begin from: ../snippets/steps/set-up-metallb.md#[bison] == -->
+
+```bash
+{
+    kubectl apply --context kind-bison \
+        -f ./tools/metallb/installation/metallb-namespace.yaml
+    kubectl apply --context kind-bison \
+        -f ./tools/metallb/installation/metallb-install.yaml
+
+    kubectl create secret --context kind-bison \
+        generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+
+    kubectl apply --context kind-bison \
+        -f ./tools/metallb/usage/metallb-ip-config-102.yaml
+}
+```
+
+<!-- == imptr: install-metallb-bison / end == -->
+
+<details>
+<summary>ℹ️ Details</summary>
+
+<!-- == imptr: install-metallb-details / begin from: ../snippets/steps/set-up-metallb.md#[details] == -->
+
+MetalLB allows associating external IP to LoadBalancer Service even in environment such as KinD. The actual installation is simple and straightforward - with the default installation spec, you need to create a namespace `metallb-system` and deploy all the components to that namespace.
+
+```bash
+    kubectl apply --context kind-armadillo \
+        -f ./tools/metallb/installation/metallb-namespace.yaml
+    kubectl apply --context kind-armadillo \
+        -f ./tools/metallb/installation/metallb-install.yaml
+```
+
+As MetalLB requires a generic secret called `memberlist`, create one with some random data.
+
+```bash
+    kubectl create secret --context kind-armadillo \
+        generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+```
+
+All the files under `/tools/metallb/installation` are simply copied from the official release. If you prefer using Kustomize and pull in from the official release directly, you can have the following Kustomize spec. This repository aims to prepare all the manifests in the local filesystem, and thus this approach is not taken here.
+
+<details>
+<summary>Kustomization spec</summary>
+
+```yaml
+# kustomization.yml
+namespace: metallb-system
+
+resources:
+  - github.com/metallb/metallb//manifests?ref=v0.9.6
+```
+
+</details>
+
+Finally, you need to let MetalLB know which IP range it can use to assign to the LoadBalancers.
+
+```bash
+    kubectl apply --context kind-armadillo \
+        -f ./tools/metallb/usage/metallb-ip-config-101.yaml
+```
+
+⚠️ **NOTE** ⚠️:
+
+This step assumes your IP range for Docker network is `172.18.0.0/16`. You can find your Docker network setup with the following command:
+
+```bash
+docker network inspect -f '{{.IPAM.Config}}' kind
+```
+
+```bash
+# ASSUMED OUTPUT
+[{172.18.0.0/16  172.18.0.1 map[]} {fc00:f853:ccd:e793::/64  fc00:f853:ccd:e793::1 map[]}]
+```
+
+If your IP ranges do not match with the above assumed IP ranges, you will need to adjust the configs to ensure correct IP ranges are provided to MetalLB. If this IP mapping was incorrect, you will find multicluster communication to fail because the clusters cannot talk to each other. In case you corrected the wrong configuration after MetalLB associated incorrect IP to the LoadBalancer, you may find MetalLB not updating the LoadBalancer's external IP. You should be able to delete MetalLB contorller Pod so that it can reassign the IP.
+
+<!-- == imptr: install-metallb-details / end == -->
+
+</details>
+
+---
+
+### 4. Install IstioOperator Controller into Clusters
 
 <details>
 <summary>With istioctl</summary>
@@ -266,7 +374,7 @@ As this repository aims to be as declarative as possible, the installation specs
 
 ---
 
-### 4. Install Istio Control Plane into Clusters
+### 5. Install Istio Control Plane into Clusters
 
 <!-- == imptr: use-istio-operator-control-plane / begin from: ../snippets/steps/use-istio-operator.md#[install-control-plane-for-2-clusters] == -->
 
@@ -297,7 +405,7 @@ This installation uses the IstioOperator manifest with `minimal` profile, meanin
 
 ---
 
-### 5. Install Istio Data Plane (i.e. Gateways) into Clusters
+### 6. Install Istio Data Plane (i.e. Gateways) into Clusters
 
 <!-- == imptr: use-istio-operator-data-plane / begin from: ../snippets/steps/use-istio-operator.md#[install-data-plane-for-2-clusters] == -->
 
@@ -328,7 +436,7 @@ The main difference in the configuration files used above is the name used by va
 
 ---
 
-### 6. Install Debug Processes
+### 7. Install Debug Processes
 
 <!-- == imptr: deploy-debug-services / begin from: ../snippets/steps/deploy-debug-services.md#[for-2-clusters] == -->
 
@@ -383,14 +491,14 @@ For both `color-svc` and `toolkit-alpine`, [`tools`](https://github.com/rytswd/g
 
 ---
 
-### 7. Apply Istio Custom Resources
+### 8. Apply Istio Custom Resources
 
 Each cluster has different resources. Check out the documentation one by one.
 
 ### For Armadillo
 
 <details>
-<summary>7.1. Add <code>istiocoredns</code> as a part of CoreDNS ConfigMap</summary>
+<summary>8.1. Add <code>istiocoredns</code> as a part of CoreDNS ConfigMap</summary>
 
 <!-- == imptr: manual-coredns / begin from: ../snippets/steps/handle-istio-resources-manually.md#[armadillo-coredns] == -->
 
@@ -463,7 +571,7 @@ index 9ffb5e8..d55a977 100644
 </details>
 
 <details>
-<summary>7.2. Add traffic routing for Armadillo local, and prepare for multicluster outbound</summary>
+<summary>8.2. Add traffic routing for Armadillo local, and prepare for multicluster outbound</summary>
 
 <!-- == imptr: manual-routing-armadillo / begin from: ../snippets/steps/handle-istio-resources-manually.md#[armadillo-local] == -->
 
@@ -514,7 +622,7 @@ The second command will create multicluster setup for Armadillo. This includes `
 </details>
 
 <details>
-<summary>7.3. Add ServiceEntry for Bison connection</summary>
+<summary>8.3. Add ServiceEntry for Bison connection</summary>
 
 <!-- == imptr: manual-multicluster-routing-armadillo / begin from: ../snippets/steps/handle-istio-resources-manually.md#[armadillo-multicluster-bison] == -->
 
@@ -659,7 +767,7 @@ index 0d73f22..34a3762 100644
 ### For Bison
 
 <details>
-<summary>7.4. Add traffic routing for Bison local, and prepare for multicluster outbound</summary>
+<summary>8.4. Add traffic routing for Bison local, and prepare for multicluster outbound</summary>
 
 <!-- == imptr: manual-routing-bison / begin from: ../snippets/steps/handle-istio-resources-manually.md#[bison-local] == -->
 
@@ -709,7 +817,7 @@ This is the same step as done in Armadillo cluster setup, but for Bison.
 
 ---
 
-### 8. Verify
+### 9. Verify
 
 <!-- == imptr: verify-with-httpbin / begin from: ../snippets/steps/verify-with-httpbin.md#[curl-httpbin-2-clusters] == -->
 
