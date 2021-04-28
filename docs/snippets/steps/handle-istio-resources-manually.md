@@ -123,7 +123,7 @@ The second command will create multicluster setup for Armadillo. This includes `
 <!-- == export: armadillo-multicluster-bison / begin == -->
 
 ```bash
-$ kubectl apply --context kind-armadillo \
+kubectl apply --context kind-armadillo \
     -f ./clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml \
     -f ./clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml
 ```
