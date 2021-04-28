@@ -122,6 +122,31 @@ The second command will create multicluster setup for Armadillo. This includes `
 
 <!-- == export: armadillo-multicluster-bison / begin == -->
 
+```console
+$ kubectl apply --context kind-armadillo \
+    -f ./clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml \
+    -f ./clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml
+serviceentry.networking.istio.io/bison-color-svc created
+virtualservice.networking.istio.io/bison-color-svc-routing created
+serviceentry.networking.istio.io/bison-httpbin created
+virtualservice.networking.istio.io/bison-httpbin-routing created
+```
+
+<details>
+<summary>ℹ️ Details</summary>
+
+To be updated
+
+</details>
+
+<!-- == export: armadillo-multicluster-bison / end == -->
+
+### OLD - Multicluster Routing Setup
+
+If you are following IstioCon materials, the below was the scripts used for that.
+
+<!-- == export: armadillo-multicluster-bison-old / begin == -->
+
 Before completing this, make sure the cluster Bison is also started, and has completed Istio installation.
 
 ```bash
@@ -254,7 +279,7 @@ index 0d73f22..34a3762 100644
 
 </details>
 
-<!-- == export: armadillo-multicluster-bison / end == -->
+<!-- == export: armadillo-multicluster-bison-old / end == -->
 
 ## Bison cluster
 
