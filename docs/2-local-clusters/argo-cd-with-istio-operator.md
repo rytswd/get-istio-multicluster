@@ -234,7 +234,115 @@ This is an extremely important aspect to consider when setting up production env
 
 ---
 
-### 4. Install Argo CD
+### 4. Intsall and Configure MetalLB
+
+#### Armadillo
+
+<!-- == imptr: install-metallb-armadillo / begin from: ../snippets/steps/set-up-metallb.md#[armadillo] == -->
+
+```bash
+{
+    kubectl apply --context kind-armadillo \
+        -f ./tools/metallb/installation/metallb-namespace.yaml
+    kubectl apply --context kind-armadillo \
+        -f ./tools/metallb/installation/metallb-install.yaml
+
+    kubectl create secret --context kind-armadillo \
+        generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+
+    kubectl apply --context kind-armadillo \
+        -f ./tools/metallb/usage/metallb-ip-config-101.yaml
+}
+```
+
+<!-- == imptr: install-metallb-armadillo / end == -->
+
+#### Bison
+
+<!-- == imptr: install-metallb-bison / begin from: ../snippets/steps/set-up-metallb.md#[bison] == -->
+
+```bash
+{
+    kubectl apply --context kind-bison \
+        -f ./tools/metallb/installation/metallb-namespace.yaml
+    kubectl apply --context kind-bison \
+        -f ./tools/metallb/installation/metallb-install.yaml
+
+    kubectl create secret --context kind-bison \
+        generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+
+    kubectl apply --context kind-bison \
+        -f ./tools/metallb/usage/metallb-ip-config-102.yaml
+}
+```
+
+<!-- == imptr: install-metallb-bison / end == -->
+
+<details>
+<summary>ℹ️ Details</summary>
+
+<!-- == imptr: install-metallb-details / begin from: ../snippets/steps/set-up-metallb.md#[details] == -->
+
+MetalLB is installed as a Kubernetes service monitoring. The actual installation is simple and straightforward - with the default installation spec, you need to create a namespace `metallb-system` and deploy all the components to that namespace.
+
+```bash
+    kubectl apply --context kind-armadillo \
+        -f ./tools/metallb/installation/metallb-namespace.yaml
+    kubectl apply --context kind-armadillo \
+        -f ./tools/metallb/installation/metallb-install.yaml
+```
+
+As MetalLB requires a generic secret called `memberlist`, create one with some random data.
+
+```bash
+    kubectl create secret --context kind-armadillo \
+        generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+```
+
+All the files under `/tools/metallb/installation` are simply copied from the official release. If you prefer using Kustomize and pull in from the official release directly, you can have the following Kustomize spec. This repository aims to prepare all the manifests in the local filesystem, and thus this approach is not taken here.
+
+<details>
+<summary>Kustomization spec</summary>
+
+```yaml
+# kustomization.yml
+namespace: metallb-system
+
+resources:
+  - github.com/metallb/metallb//manifests?ref=v0.9.6
+```
+
+</details>
+
+Finally, you need to let MetalLB know which IP range it can use to assign to the LoadBalancers.
+
+```bash
+    kubectl apply --context kind-armadillo \
+        -f ./tools/metallb/usage/metallb-ip-config-101.yaml
+```
+
+⚠️ **NOTE** ⚠️:
+
+This step assumes your IP range for Docker network is `172.18.0.0/16`. You can find your Docker network setup with the following command:
+
+```bash
+docker network inspect -f '{{.IPAM.Config}}' kind
+```
+
+```bash
+# ASSUMED OUTPUT
+[{172.18.0.0/16  172.18.0.1 map[]} {fc00:f853:ccd:e793::/64  fc00:f853:ccd:e793::1 map[]}]
+```
+
+If your IP ranges do not match with the above assumed IP ranges, you will need to adjust the configs to ensure correct IP ranges are provided to MetalLB. If this IP mapping was incorrect, you will find multicluster communication to fail because the clusters cannot talk to each other. In case you corrected the wrong configuration after MetalLB associated incorrect IP to the LoadBalancer, you may find MetalLB not updating the LoadBalancer's external IP. You should be able to delete MetalLB contorller Pod so that it can reassign the IP.
+
+<!-- == imptr: install-metallb-details / end == -->
+
+</details>
+
+---
+
+### 5. Install Argo CD
 
 #### Set GitHub Token
 
@@ -373,7 +481,7 @@ $ export userToken=<GITHUB_USER_TOKEN_FROM_STEP>
 
 ---
 
-### Before 5. Install Istio Control Plane into Clusters
+### Before 6. Install Istio Control Plane into Clusters
 
 In order to speed up the deployment, it is recommended to install Istio before going ahead with GitOps configuartion.
 
@@ -384,16 +492,16 @@ The next step will install Argo CD drive Git repository sync, and that would ove
     kubectl apply \
         --context kind-armadillo \
         -f ./clusters/armadillo/istio/installation/no-operator-install/istio-control-plane-install.yaml \
+        -f ./clusters/armadillo/istio/installation/no-operator-install/istio-multicluster-gateways-install.yaml \
         -f ./clusters/armadillo/istio/installation/no-operator-install/istio-external-gateways-install.yaml \
-        -f ./clusters/armadillo/istio/installation/no-operator-install/istio-management-gateway-install.yaml \
-        -f ./clusters/armadillo/istio/installation/no-operator-install/istio-multicluster-gateways-install.yaml
+        -f ./clusters/armadillo/istio/installation/no-operator-install/istio-management-gateway-install.yaml
 
     kubectl apply \
         --context kind-bison \
         -f ./clusters/bison/istio/installation/no-operator-install/istio-control-plane-install.yaml \
+        -f ./clusters/bison/istio/installation/no-operator-install/istio-multicluster-gateways-install.yaml \
         -f ./clusters/bison/istio/installation/no-operator-install/istio-external-gateways-install.yaml \
-        -f ./clusters/bison/istio/installation/no-operator-install/istio-management-gateway-install.yaml \
-        -f ./clusters/bison/istio/installation/no-operator-install/istio-multicluster-gateways-install.yaml
+        -f ./clusters/bison/istio/installation/no-operator-install/istio-management-gateway-install.yaml
 }
 ```
 
@@ -410,7 +518,7 @@ This means, although this step is rather an imperative step which seemmingly doe
 
 ---
 
-### 5. Add Argo CD Custom Resources
+### 6. Add Argo CD Custom Resources
 
 #### Armadillo
 
@@ -477,7 +585,7 @@ The important Custom Resources are:
 
 ---
 
-### 6. Verify
+### 7. Verify
 
 <!-- == imptr: verify-with-httpbin / begin from: ../snippets/steps/verify-with-httpbin.md#[curl-httpbin-2-clusters] == -->
 
