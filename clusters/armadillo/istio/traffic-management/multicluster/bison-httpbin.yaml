@@ -22,9 +22,10 @@ spec:
       network: external
       ports:
         http-bison: 15443
-    - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
-      ports:
-        http-bison: 15443
+    # Taking out Egress mapping for now
+    # - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
+    #   ports:
+    #     http-bison: 15443
 ---
 # VirtualService definition on Bison side won't be able to handle the chaos setup.
 # TODO: Check if this can be handled at IngressGateway instead
