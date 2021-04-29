@@ -8,9 +8,9 @@
 
 | # of Clusters | Istio Installation Method | Cluster Setup |
 | :-----------: | ------------------------- | ------------- |
-|       2       | Istio Operator            | KinD          |
+|       2       | Istio Operator            | [KinD][kind]  |
 
-**Additional Tools involved**: MetalLB
+**Additional Tools involved**: [MetalLB][metallb]
 
 #### [Simple k3d based Setup][2]
 
@@ -18,9 +18,9 @@
 
 | # of Clusters | Istio Installation Method | Cluster Setup |
 | :-----------: | ------------------------- | ------------- |
-|       2       | TBC                       | k3d           |
+|       2       | TBC                       | [k3d]         |
 
-**Additional Tools involved**: MetalLB
+**Additional Tools involved**: [MetalLB][metallb]
 
 #### [Argo CD based GitOps Multicluster][3]
 
@@ -28,13 +28,20 @@
 
 | # of Clusters | Istio Installation Method | Cluster Setup |
 | :-----------: | ------------------------- | ------------- |
-|       2       | Manifest Generation       | KinD          |
+|       2       | Manifest Generation       | [KinD][kind]  |
 
-**Additional Tools involved**: MetalLB, Argo CD, Prometheus, Grafana, Kiali
+**Additional Tools involved**: [MetalLB][metallb], [Argo CD][argo-cd], [Prometheus][prometheus], [Grafana][grafana], [Kiali][kiali]
 
 [1]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/2-local-clusters/simple-with-istio-operator.md
 [2]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/k3d-based/README.md
 [3]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/2-local-clusters/argo-cd-without-istio-operator.md
+[kind]: https://kind.sigs.k8s.io/
+[k3d]: https://k3d.io/
+[metallb]: https://metallb.universe.tf/
+[argo-cd]: https://argo-cd.readthedocs.io/en/latest/
+[prometheus]: https://prometheus.io/
+[grafana]: https://grafana.com/grafana/
+[kiali]: https://kiali.io/
 
 <!-- == export: setup-steps / end == -->
 
