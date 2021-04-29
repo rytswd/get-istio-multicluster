@@ -6,4 +6,3 @@ resources:
 
   - armadillo-color-svc.yaml
   - armadillo-httpbin.yaml
-  - coredns-configmap.yaml
