@@ -562,7 +562,7 @@ This setup allows declarative setup even for LB IP, and also wiring up multiple 
 
 > 📍 **WARNING** 📍  
 > This step is NOT a part of GitOps, because there is no easy way to have it in a declarative manner, due to the cluster IP associated with `istiocoredns` is only confirmed once the Service is created. However, if you are trying to have GitOps setup similar to this repository, you can follow the below instructions, and then place `coredns-configmap.yaml` file as a part of GitOps.  
-> Also, it's worth mentioning that `istiocoredns` is not recommended for later version of Istio. This step is here to provide some reference point, but depending on your setup requirement and Isito version used, you could skip this part.
+> Also, it's worth mentioning that `istiocoredns` is not recommended for newer version of Istio (v1.8+). This step is here to provide some reference point, but depending on your setup requirement and Isito version used, you could skip this part.
 
 <details>
 <summary>For Armadillo</summary>
