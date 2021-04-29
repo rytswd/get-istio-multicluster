@@ -12,19 +12,55 @@ This setup assumes you are using Istio 1.7.8.
 
 ## 📚 Other Setup Steps
 
+<details>
+<summary>Click to expand</summary>
+
 <!-- == imptr: setup-steps / begin from: ../snippets/common-info.md#[setup-steps] == -->
 
-| Step               | Description |
-| ------------------ | ----------- |
-| [KinD based][1]    | TBD         |
-| [k3d based][2]     | TBD         |
-| [Argo CD based][3] | TBD         |
+#### [Simple KinD based Setup][1]
+
+**Description**: This setup is the easiest to follow, and takes imperative setup steps.
+
+| # of Clusters | Istio Installation Method | Cluster Setup |
+| :-----------: | ------------------------- | ------------- |
+|       2       | Istio Operator            | [KinD][kind]  |
+
+**Additional Tools involved**: [MetalLB][metallb]
+
+#### [Simple k3d based Setup][2]
+
+**Description**: To be confirmed
+
+| # of Clusters | Istio Installation Method | Cluster Setup |
+| :-----------: | ------------------------- | ------------- |
+|       2       | TBC                       | [k3d]         |
+
+**Additional Tools involved**: [MetalLB][metallb]
+
+#### [Argo CD based GitOps Multicluster][3]
+
+**Description**: Uses Argo CD to wire up all the necessary tools. This allows simple enough installation steps, while providing breadth of other tools useful to have alongside with Istio.
+
+| # of Clusters | Istio Installation Method | Cluster Setup |
+| :-----------: | ------------------------- | ------------- |
+|       2       | Manifest Generation       | [KinD][kind]  |
+
+**Additional Tools involved**: [MetalLB][metallb], [Argo CD][argo-cd], [Prometheus][prometheus], [Grafana][grafana], [Kiali][kiali]
 
 [1]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/2-local-clusters/simple-with-istio-operator.md
 [2]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/k3d-based/README.md
-[3]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/argo-cd-based/README.md
+[3]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/2-local-clusters/argo-cd-without-istio-operator.md
+[kind]: https://kind.sigs.k8s.io/
+[k3d]: https://k3d.io/
+[metallb]: https://metallb.universe.tf/
+[argo-cd]: https://argo-cd.readthedocs.io/en/latest/
+[prometheus]: https://prometheus.io/
+[grafana]: https://grafana.com/grafana/
+[kiali]: https://kiali.io/
 
 <!-- == imptr: setup-steps / end == -->
+
+</details>
 
 ## 🐾 Steps
 
@@ -560,7 +596,8 @@ This setup allows declarative setup even for LB IP, and also wiring up multiple 
 
 ### Before 6. Part 2 - Ensure `istiocoredns` setup
 
-> 📍 **WARNING** 📍  
+#### 📍 WARNING 📍
+
 > This step is NOT a part of GitOps, because there is no easy way to have it in a declarative manner, due to the cluster IP associated with `istiocoredns` is only confirmed once the Service is created. However, if you are trying to have GitOps setup similar to this repository, you can follow the below instructions, and then place `coredns-configmap.yaml` file as a part of GitOps.  
 > Also, it's worth mentioning that `istiocoredns` is not recommended for newer version of Istio (v1.8+). This step is here to provide some reference point, but depending on your setup requirement and Isito version used, you could skip this part.
 

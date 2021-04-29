@@ -22,20 +22,6 @@ This should allow you to have a quick deep-dive into the Istio offerings. Many o
 
 ## 🌅 Contents
 
-<!-- == imptr: setup-steps / begin from: ./docs/snippets/common-info.md#[setup-steps] == -->
-
-| Step               | Description |
-| ------------------ | ----------- |
-| [KinD based][1]    | TBD         |
-| [k3d based][2]     | TBD         |
-| [Argo CD based][3] | TBD         |
-
-[1]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/2-local-clusters/simple-with-istio-operator.md
-[2]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/k3d-based/README.md
-[3]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/argo-cd-based/README.md
-
-<!-- == imptr: setup-steps / end == -->
-
 ### ⚙️ Prerequisites
 
 For most of the setup, you will need the following tools installed:
@@ -48,6 +34,53 @@ For most of the setup, you will need the following tools installed:
 - [istioctl](https://istio.io/latest/docs/setup/install/istioctl/)
 
 <!-- == imptr: common-prerequisites / end == -->
+
+### 📚 Setup Steps
+
+<!-- == imptr: setup-steps / begin from: ./docs/snippets/common-info.md#[setup-steps] == -->
+
+#### [Simple KinD based Setup][1]
+
+**Description**: This setup is the easiest to follow, and takes imperative setup steps.
+
+| # of Clusters | Istio Installation Method | Cluster Setup |
+| :-----------: | ------------------------- | ------------- |
+|       2       | Istio Operator            | [KinD][kind]  |
+
+**Additional Tools involved**: [MetalLB][metallb]
+
+#### [Simple k3d based Setup][2]
+
+**Description**: To be confirmed
+
+| # of Clusters | Istio Installation Method | Cluster Setup |
+| :-----------: | ------------------------- | ------------- |
+|       2       | TBC                       | [k3d]         |
+
+**Additional Tools involved**: [MetalLB][metallb]
+
+#### [Argo CD based GitOps Multicluster][3]
+
+**Description**: Uses Argo CD to wire up all the necessary tools. This allows simple enough installation steps, while providing breadth of other tools useful to have alongside with Istio.
+
+| # of Clusters | Istio Installation Method | Cluster Setup |
+| :-----------: | ------------------------- | ------------- |
+|       2       | Manifest Generation       | [KinD][kind]  |
+
+**Additional Tools involved**: [MetalLB][metallb], [Argo CD][argo-cd], [Prometheus][prometheus], [Grafana][grafana], [Kiali][kiali]
+
+[1]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/2-local-clusters/simple-with-istio-operator.md
+[2]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/k3d-based/README.md
+[3]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/2-local-clusters/argo-cd-without-istio-operator.md
+[kind]: https://kind.sigs.k8s.io/
+[k3d]: https://k3d.io/
+[metallb]: https://metallb.universe.tf/
+[argo-cd]: https://argo-cd.readthedocs.io/en/latest/
+[prometheus]: https://prometheus.io/
+[grafana]: https://grafana.com/grafana/
+[kiali]: https://kiali.io/
+
+<!-- == imptr: setup-steps / end == -->
 
 ### 🌍 Clusters
 
