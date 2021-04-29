@@ -14,7 +14,9 @@ This setup assumes you are using Istio 1.7.8.
 
 <!-- == imptr: setup-steps / begin from: ../snippets/common-info.md#[setup-steps] == -->
 
-### [Simple KinD based Setup][1]
+#### [Simple KinD based Setup][1]
+
+**Description**: This setup is the easiest to follow, and takes imperative setup steps.
 
 | # of Clusters | Istio Installation Method | Cluster Setup |
 | :-----------: | ------------------------- | ------------- |
@@ -22,9 +24,9 @@ This setup assumes you are using Istio 1.7.8.
 
 **Additional Tools involved**: MetalLB
 
-**Description**: This setup is the easiest to follow, and takes imperative setup steps.
+#### [Simple k3d based Setup][2]
 
-### [Simple k3d based Setup][2]
+**Description**: To be confirmed
 
 | # of Clusters | Istio Installation Method | Cluster Setup |
 | :-----------: | ------------------------- | ------------- |
@@ -32,17 +34,15 @@ This setup assumes you are using Istio 1.7.8.
 
 **Additional Tools involved**: MetalLB
 
-**Description**: To be confirmed
+#### [Argo CD based GitOps Multicluster][3]
 
-### [Argo CD based GitOps Multicluster][3]
+**Description**: Uses Argo CD to wire up all the necessary tools. This allows simple enough installation steps, while providing breadth of other tools useful to have alongside with Istio.
 
 | # of Clusters | Istio Installation Method | Cluster Setup |
 | :-----------: | ------------------------- | ------------- |
-|       2       | Manifest Generation       | k3d           |
+|       2       | Manifest Generation       | KinD          |
 
 **Additional Tools involved**: MetalLB, Argo CD, Prometheus, Grafana, Kiali
-
-**Description**: Uses Argo CD to wire up all the necessary tools. This allows simple enough installation steps, while providing breadth of other tools useful to have alongside with Istio.
 
 [1]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/2-local-clusters/simple-with-istio-operator.md
 [2]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/k3d-based/README.md
