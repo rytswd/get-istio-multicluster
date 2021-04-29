@@ -558,7 +558,155 @@ This setup allows declarative setup even for LB IP, and also wiring up multiple 
 
 ---
 
-### 6. Add Argo CD Custom Resources
+### 6. Ensure `istiocoredns` setup
+
+> 📍 **WARNING** 📍: This step is NOT a part of GitOps, because there is no easy way to have it in declarative manner, due to the cluster IP associated with `istiocoredns` is only confirmed once the Service is created. However, if you are trying to set up GitOps setup similar to this repository, you can follow the below instructions, and then place `coredns-configmap.yaml` file as a part of GitOps.
+> Also, it's worth mentioning that `istiocoredns` is not recommended for later version of Istio. This step is here to provide some reference point, but depending on your setup requirement and Isito version used, you could skip this part.
+
+<details>
+<summary>For Armadillo</summary>
+
+<!-- == imptr: manual-coredns-armadillo / begin from: ../snippets/steps/handle-istio-resources-manually.md#[armadillo-coredns] == -->
+
+Get IP address of `istiocoredns` Service,
+
+```bash
+{
+    export ARMADILLO_ISTIOCOREDNS_CLUSTER_IP=$(kubectl get svc \
+        --context kind-armadillo \
+        -n istio-system \
+        istiocoredns \
+        -o jsonpath={.spec.clusterIP})
+    echo "$ARMADILLO_ISTIOCOREDNS_CLUSTER_IP"
+}
+```
+
+```sh
+# OUTPUT
+10.xx.xx.xx
+```
+
+And then apply CoreDNS configuration which includes the `istiocoredns` IP.
+
+```bash
+{
+    sed -i '' -e "s/REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP/$ARMADILLO_ISTIOCOREDNS_CLUSTER_IP/" \
+        ./clusters/armadillo/istio/installation/additional-setup/coredns-configmap.yaml
+    kubectl apply --context kind-armadillo \
+        -f ./clusters/armadillo/istio/installation/additional-setup/coredns-configmap.yaml
+}
+```
+
+```sh
+# OUTPUT
+Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
+configmap/coredns configured
+```
+
+The above example is only to update CoreDNS for Armadillo cluster, meaning traffic initiated from Armadillo cluster.
+
+<details>
+<summary>ℹ️ Details</summary>
+
+Istio's `istiocoredns` handles DNS lookup, and thus, you need to let Kubernetes know that `istiocoredns` gets the DNS request. Get the K8s Service cluster IP in `ARMADILLO_ISTIOCOREDNS_CLUSTER_IP` env variable, so that you can use that in `coredns-configmap.yaml` as the endpoint.
+
+This will then be applied to `kube-system/coredns` ConfigMap. As KinD comes with CoreDNS as the default DNS and its own ConfigMap, you will see a warning about the original ConfigMap being overridden with the custom one. This is fine for testing, but you may want to carefully examine the DNS setup as that could have significant impact.
+
+The `sed` command may look confusing, but the change is very minimal and straighforward. If you cloned this repo at the step 0, you can easily see from git diff.
+
+```diff
+diff --git a/clusters/armadillo/istio/installation/additional-setup/coredns-configmap.yaml b/clusters/armadillo/istio/installation/additional-setup/coredns-configmap.yaml
+index 9ffb5e8..d55a977 100644
+--- a/clusters/armadillo/istio/installation/additional-setup/coredns-configmap.yaml
++++ b/clusters/armadillo/istio/installation/additional-setup/coredns-configmap.yaml
+@@ -26,5 +26,5 @@ data:
+     global:53 {
+         errors
+         cache 30
+-        forward . REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP:53
++        forward . 10.96.238.217:53
+     }
+```
+
+</details>
+
+<!-- == imptr: manual-coredns-armadillo / end == -->
+</details>
+
+<details>
+<summary>For Armadillo</summary>
+
+<!-- == imptr: manual-coredns-bison / begin from: ../snippets/steps/handle-istio-resources-manually.md#[bison-coredns] == -->
+
+Get IP address of `istiocoredns` Service,
+
+```bash
+{
+    export BISON_ISTIOCOREDNS_CLUSTER_IP=$(kubectl get svc \
+        --context kind-bison \
+        -n istio-system \
+        istiocoredns \
+        -o jsonpath={.spec.clusterIP})
+    echo "$BISON_ISTIOCOREDNS_CLUSTER_IP"
+}
+```
+
+```sh
+# OUTPUT
+10.xx.xx.xx
+```
+
+And then apply CoreDNS configuration which includes the `istiocoredns` IP.
+
+```bash
+{
+    sed -i '' -e "s/REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP/$BISON_ISTIOCOREDNS_CLUSTER_IP/" \
+        ./clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml
+    kubectl apply --context kind-bison \
+        -f ./clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml
+}
+```
+
+```sh
+# OUTPUT
+Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
+configmap/coredns configured
+```
+
+The above example is only to update CoreDNS for Bison cluster, meaning traffic initiated from Bison cluster.
+
+<details>
+<summary>ℹ️ Details</summary>
+
+Istio's `istiocoredns` handles DNS lookup, and thus, you need to let Kubernetes know that `istiocoredns` gets the DNS request. Get the K8s Service cluster IP in `BISON_ISTIOCOREDNS_CLUSTER_IP` env variable, so that you can use that in `coredns-configmap.yaml` as the endpoint.
+
+This will then be applied to `kube-system/coredns` ConfigMap. As KinD comes with CoreDNS as the default DNS and its own ConfigMap, you will see a warning about the original ConfigMap being overridden with the custom one. This is fine for testing, but you may want to carefully examine the DNS setup as that could have significant impact.
+
+The `sed` command may look confusing, but the change is very minimal and straighforward. If you cloned this repo at the step 0, you can easily see from git diff.
+
+```diff
+diff --git a/clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml b/clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml
+index 9ffb5e8..d55a977 100644
+--- a/clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml
++++ b/clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml
+@@ -26,5 +26,5 @@ data:
+     global:53 {
+         errors
+         cache 30
+-        forward . REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP:53
++        forward . 10.96.238.217:53
+     }
+```
+
+</details>
+
+<!-- == imptr: manual-coredns-bison / end == -->
+
+</details>
+
+---
+
+### 7. Add Argo CD Custom Resources
 
 #### Armadillo
 
@@ -625,7 +773,7 @@ The important Custom Resources are:
 
 ---
 
-### 7. Verify
+### 8. Verify
 
 <!-- == imptr: verify-with-httpbin / begin from: ../snippets/steps/verify-with-httpbin.md#[curl-httpbin-2-clusters] == -->
 

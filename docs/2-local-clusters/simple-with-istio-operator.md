@@ -537,7 +537,7 @@ Warning: kubectl apply should be used on resource created by either kubectl crea
 configmap/coredns configured
 ```
 
-The above example is only to update CoreDNS for Armadillo cluster. If you want to have Bison to Armadillo traffic the same way, you'd need to run the same command for Bison cluster as well (with `--context kind-bison`).
+The above example is only to update CoreDNS for Armadillo cluster, meaning traffic initiated from Armadillo cluster.
 
 <details>
 <summary>ℹ️ Details</summary>
