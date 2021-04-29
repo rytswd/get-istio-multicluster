@@ -558,7 +558,7 @@ This setup allows declarative setup even for LB IP, and also wiring up multiple 
 
 ---
 
-### 6. Ensure `istiocoredns` setup
+### Before 6. Part 2 - Ensure `istiocoredns` setup
 
 > 📍 **WARNING** 📍  
 > This step is NOT a part of GitOps, because there is no easy way to have it in a declarative manner, due to the cluster IP associated with `istiocoredns` is only confirmed once the Service is created. However, if you are trying to have GitOps setup similar to this repository, you can follow the below instructions, and then place `coredns-configmap.yaml` file as a part of GitOps.  
@@ -707,7 +707,7 @@ index 9ffb5e8..d55a977 100644
 
 ---
 
-### 7. Add Argo CD Custom Resources
+### 6. Add Argo CD Custom Resources
 
 #### Armadillo
 
@@ -774,7 +774,7 @@ The important Custom Resources are:
 
 ---
 
-### 8. Verify
+### 7. Verify
 
 <!-- == imptr: verify-with-httpbin / begin from: ../snippets/steps/verify-with-httpbin.md#[curl-httpbin-2-clusters] == -->
 
