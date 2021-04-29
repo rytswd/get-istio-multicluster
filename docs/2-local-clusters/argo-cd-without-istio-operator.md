@@ -635,7 +635,7 @@ index 9ffb5e8..d55a977 100644
 </details>
 
 <details>
-<summary>For Armadillo</summary>
+<summary>For Bison</summary>
 
 <!-- == imptr: manual-coredns-bison / begin from: ../snippets/steps/handle-istio-resources-manually.md#[bison-coredns] == -->
 
