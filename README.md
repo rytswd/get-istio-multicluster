@@ -35,18 +35,6 @@ For most of the setup, you will need the following tools installed:
 
 <!-- == imptr: common-prerequisites / end == -->
 
-### 🌍 Clusters
-
-The clusters used in this repository are given easily identifiable names. They don't convey any special meaning.
-
-For some cluster, there are some peculiarities over the others.
-
-- `armadillo`: cluster with shared Istio Control Plane (with `cougar`)
-- `bison`: cluster with dedicated Istio Control Plane
-- `cougar` ⚠️ WIP ⚠️: clustter with shared Istio Control Plane (with `armadillo`)
-- `dolphin`: cluster with dedicated Istio Control Plane
-- `zebra` ⚠️ WIP ⚠️: cluster without Istio, as external cluster
-
 ### 📚 Setup Steps
 
 <!-- == imptr: setup-steps / begin from: ./docs/snippets/common-info.md#[setup-steps] == -->
@@ -93,3 +81,15 @@ For some cluster, there are some peculiarities over the others.
 [kiali]: https://kiali.io/
 
 <!-- == imptr: setup-steps / end == -->
+
+### 🌍 Clusters
+
+The clusters used in this repository are given easily identifiable names. They don't convey any special meaning.
+
+For some cluster, there are some peculiarities over the others.
+
+- `armadillo`: cluster with shared Istio Control Plane (with `cougar`)
+- `bison`: cluster with dedicated Istio Control Plane
+- `cougar` ⚠️ WIP ⚠️: clustter with shared Istio Control Plane (with `armadillo`)
+- `dolphin`: cluster with dedicated Istio Control Plane
+- `zebra` ⚠️ WIP ⚠️: cluster without Istio, as external cluster
