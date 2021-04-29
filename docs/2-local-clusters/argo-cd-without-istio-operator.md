@@ -82,7 +82,7 @@ This setup assumes you are using Istio 1.7.8.
 
 <!-- == imptr: full-clone / end == -->
 
-For more information about using this repo, you can chekc out the full documentation in [Using this repo](https://github.com/rytswd/get-istio-multicluster/blob/main/docs/snippets/steps/use-this-repo.md).
+For more information about using this repo, you can check out the full documentation in [Using this repo](https://github.com/rytswd/get-istio-multicluster/blob/main/docs/snippets/steps/use-this-repo.md).
 
 ---
 
