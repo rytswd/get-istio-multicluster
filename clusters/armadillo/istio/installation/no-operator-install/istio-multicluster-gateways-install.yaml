@@ -60,7 +60,7 @@ spec:
       serviceAccountName: armadillo-multicluster-egressgateway-service-account
       containers:
         - name: istio-proxy
-          image: "docker.io/istio/proxyv2:1.7.5"
+          image: "docker.io/istio/proxyv2:1.7.8"
           ports:
             - containerPort: 8080
             - containerPort: 8443
@@ -381,7 +381,7 @@ spec:
           value: sni-dnat
         - name: ISTIO_META_CLUSTER_ID
           value: Kubernetes
-        image: docker.io/istio/proxyv2:1.7.5
+        image: docker.io/istio/proxyv2:1.7.8
         name: istio-proxy
         ports:
         - containerPort: 8080
@@ -644,6 +644,7 @@ metadata:
   name: armadillo-multicluster-ingressgateway
   namespace: istio-system
 spec:
+  loadBalancerIP: 172.18.101.150
   ports:
   - name: http2
     port: 80

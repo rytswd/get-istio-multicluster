@@ -1,4 +1,4 @@
-# KinD-based Setup
+# Argo CD based Setup
 
 ## 📝 Setup Details
 
@@ -50,7 +50,28 @@ For more information about using this repo, you can chekc out the full documenta
 
 ---
 
-### 1. Start local Kubernetes clusters with KinD
+### 1. Prepare GitHub Token
+
+<!-- == imptr: prep-github-token / begin from: ../snippets/steps/prep-github-token.md#[generate-github-token] == -->
+
+In order for GitOps engine to sync with a remote repository like this one, you will need to prepare GitHub Personal Access Token ready.
+
+Go to https://github.com/settings/tokens, and generate a new token.
+
+<details>
+<summary>ℹ️ Details</summary>
+
+GitOps engine such as Argo CD will be running within a Kubernetes cluster. In case of Argo CD, it will try to fetch the configurations, which, for this repo, would be `https://github.com/rytswd/get-istio-multicluster`. At that point, it would need some credential so that it can actually access GitHub and retrieve all the relevant files. For this repo to work in GitOps manner, this step is absolutely necessary.
+
+As to how the token works, you can find more in [the official documentation of GitHub access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line).
+
+</details>
+
+<!-- == imptr: prep-github-token / end == -->
+
+---
+
+### 2. Start local Kubernetes clusters with KinD
 
 <!-- == imptr: kind-start / begin from: ../snippets/steps/kind-setup.md#[kind-start-2-clusters] == -->
 
@@ -79,7 +100,7 @@ As you can see `istioctl-input.yaml` in each cluster, the NodePort used are:
 
 ---
 
-### 2. Prepare CA Certs
+### 3. Prepare CA Certs
 
 **NOTE**: You should complete this step before installing Istio to the cluster.
 
@@ -194,9 +215,26 @@ Each command used above is associated with some comments to clarify what they do
 
 <!-- == imptr: cert-prep-2 / end == -->
 
+<details>
+<summary>📝 NOTE: GitOps Consideration</summary>
+
+<!-- == imptr: gitops-consideration / begin from: ../snippets/steps/prep-cert.md#[gitops-consideration] == -->
+
+In truly GitOps setup, you will want to keep secrcets as a part of Git repo. That would pose another challenge on how you securely store the secret data in Git, while keeping its secrecy.
+
+One solution is to use solution such as [sealed-secret](https://github.com/bitnami-labs/sealed-secrets), so that you can use Git to store credentials while keeping it secure.
+
+Another approach would be to use completely separate logic for pulling secrets from external source such as KMS or [Vault](https://www.vaultproject.io/).
+
+This is an extremely important aspect to consider when setting up production environment. Do NOT simply store credentials such as certs and GitHub access token in Git, because if you do, you will be leaking the token forever, as Git keeps the commit history.
+
+<!-- == imptr: gitops-consideration / end == -->
+
+</details>
+
 ---
 
-### 3. Intsall and Configure MetalLB
+### 4. Intsall and Configure MetalLB
 
 #### Armadillo
 
@@ -304,203 +342,232 @@ If your IP ranges do not match with the above assumed IP ranges, you will need t
 
 ---
 
-### 4. Install IstioOperator Controller into Clusters
+### 5. Install Argo CD
 
-<details>
-<summary>With istioctl</summary>
+#### Set GitHub Token
 
-<!-- == imptr: install-istio-operator-with-istioctl / begin from: ../snippets/steps/install-istio-operator.md#[istio-operator-with-istioctl] == -->
+<!-- == imptr: install-argo-cd-prerequisite / begin from: ../snippets/steps/install-argo-cd.md#[prerequisite] == -->
 
-> 📝 **NOTE**:  
-> This will install Istio version based on `istioctl` version you have on your machine. You will need to manage your `istioctl` version separately, or you could take manifest generation approach instead, which is based on declarative and static definitions.
+In order to follow the below steps, it is assumed you have your GitHub Token in the env variable.
+
+```bash
+$ export userToken=<GITHUB_USER_TOKEN_FROM_STEP>
+```
+
+<!-- == imptr: install-argo-cd-prerequisite / end == -->
+
+#### Armadillo
+
+<!-- == imptr: install-argo-cd-armadillo / begin from: ../snippets/steps/install-argo-cd.md#[armadillo] == -->
 
 ```bash
 {
-    istioctl --context kind-armadillo \
-        operator init \
-        -f ./clusters/armadillo/istio/installation/operator-install/istio-operator-install.yaml
+    pushd clusters/armadillo/argocd > /dev/null
 
-    istioctl --context kind-bison \
-        operator init \
-        -f ./clusters/bison/istio/installation/operator-install/istio-operator-install.yaml
+    kubectl apply \
+        --context kind-armadillo \
+        -f ./init/namespace-argocd.yaml
+    kubectl create secret generic access-secret -n argocd \
+        --context kind-armadillo \
+        --from-literal=username=placeholder \
+        --from-literal=token=$userToken
+    kubectl apply -n argocd \
+        --context kind-armadillo \
+        -f ./installation/argo-cd-install.yaml
+
+    kubectl patch secret argocd-secret -n argocd \
+        --context kind-armadillo \
+        -p \
+            "{\"data\": \
+                    {\
+                    \"admin.password\": \"$(echo -n '$2a$10$p9R9u6JBwOVTPa3tpcS68OifxvqIPjCFceiLul2aPwOaIlEJ6fGMi' | base64)\", \
+                    \"admin.passwordMtime\": \"$(date +%FT%T%Z | base64)\" \
+            }}"
+
+    popd > /dev/null
 }
 ```
 
-<!-- == imptr: install-istio-operator-with-istioctl / end == -->
+<!-- == imptr: install-argo-cd-armadillo / end == -->
 
-</details>
+#### Bison
 
-<details>
-<summary>With manifest generation</summary>
-
-<!-- == imptr: install-istio-operator-with-manifest / begin from: ../snippets/steps/install-istio-operator.md#[istio-operator-with-manifest-generation] == -->
+<!-- == imptr: install-argo-cd-bison / begin from: ../snippets/steps/install-argo-cd.md#[bison] == -->
 
 ```bash
 {
-    kubectl apply --context kind-armadillo \
-        -f ./clusters/armadillo/istio/installation/operator-install/istio-operator-install.yaml
+    pushd clusters/bison/argocd > /dev/null
 
-    kubectl apply --context kind-bison \
-        -f ./clusters/bison/istio/installation/operator-install/istio-operator-install.yaml
+    kubectl apply \
+        --context kind-bison \
+        -f ./init/namespace-argocd.yaml
+    kubectl -n argocd create secret generic access-secret \
+        --context kind-bison \
+        --from-literal=username=placeholder \
+        --from-literal=token=$userToken
+    kubectl apply -n argocd \
+        --context kind-bison \
+        -f ./installation/argo-cd-install.yaml
+
+    kubectl patch secret argocd-secret -n argocd \
+        --context kind-bison \
+        -p \
+            "{\"data\": \
+                    {\
+                    \"admin.password\": \"$(echo -n '$2a$10$p9R9u6JBwOVTPa3tpcS68OifxvqIPjCFceiLul2aPwOaIlEJ6fGMi' | base64)\", \
+                    \"admin.passwordMtime\": \"$(date +%FT%T%Z | base64)\" \
+            }}"
+
+    popd > /dev/null
 }
 ```
 
-When you see error messages such as:
-
-```console
-Error from server (NotFound): error when creating "./clusters/armadillo/istio/installation/operator-install/istio-operator-install.yaml": namespaces "istio-operator" not found
-```
-
-You can simply run the above command one more time. <!--TODO: Add more details-->
-
-<!-- == imptr: install-istio-operator-with-manifest / end == -->
-
-</details>
+<!-- == imptr: install-argo-cd-bison / end == -->
 
 <details>
 <summary>ℹ️ Details</summary>
 
-<!-- == imptr: install-istio-operator-details / begin from: ../snippets/steps/install-istio-operator.md#[istio-operator-details] == -->
+<!-- == imptr: install-argo-cd-details / begin from: ../snippets/steps/install-argo-cd.md#[details] == -->
 
-This prepares for Istio installation by installing IstioOperator Controller. It allows defining IsitoOperator Custom Resource in declarative manner, and IstioOperator Controller to handle the installation.
+```bash
+{
+    # Get into cluster's directory.
+    # This one is taken from Armadillo installation.
+    pushd clusters/armadillo/argocd > /dev/null
 
-You can use `istioctl operator init` to install, or get the IstioOperator Controller installation spec with `istioctl operator dump`. In multicluster scenario, it is safer to have all clusters with the same Istio version, and thus you could technically use the same spec.
+    # Create namespace for Argo CD. The default installation assumes Argo CD is
+    # installed under argocd namespace, and thus the same is applied here.
+    kubectl apply \
+        --context kind-armadillo \
+        -f ./init/namespace-argocd.yaml
+    # Create Kubernetes Secret of GitHub Token. This is a naïve approach, and
+    # is not production ready. With token, you shouldn't need any other
+    # information in the secret, but there used to be some issue with missing
+    # username. For that reason, although username isn't actually used,
+    # providing a placeholder as a part of Secret.
+    kubectl create secret generic access-secret -n argocd \
+        --context kind-armadillo \
+        --from-literal=username=placeholder \
+        --from-literal=token=$userToken
+    # Install Argo CD. You can find more about the installation spec in
+    #   /clusters/armadillo/argocd/installation/README.md
+    kubectl apply -n argocd \
+        --context kind-armadillo \
+        -f ./installation/argo-cd-install.yaml
 
-As this repository aims to be as declarative as possible, the installation specs are saved using `istioctl operator dump`, and saved under each cluster spec. You can use `get-istio-multicluster/tools/internal/update-istio-operator-install.sh` script to update all the IstioOperator Controller installation spec in one go.
+    # Patch Argo CD's default secret. This updates the admin password.
+    # Obviously, this is not recommended for production use case, and it is
+    # even recommended to disable the default admin access once the initial
+    # configuration is complete.
+    kubectl patch secret argocd-secret -n argocd \
+        --context kind-armadillo \
+        -p \
+            "{\"data\": \
+                    {\
+                    \"admin.password\": \"$(echo -n '$2a$10$p9R9u6JBwOVTPa3tpcS68OifxvqIPjCFceiLul2aPwOaIlEJ6fGMi' | base64)\", \
+                    \"admin.passwordMtime\": \"$(date +%FT%T%Z | base64)\" \
+            }}"
 
-<!-- == imptr: install-istio-operator-details / end == -->
+    # Get back to the previous directory.
+    popd > /dev/null
+}
+```
+
+**NOTE**: `kubectl patch` against `argocd-secret` updates the login password to `admin`.
+
+<!-- == imptr: install-argo-cd-details / end == -->
 
 </details>
 
 ---
 
-### 5. Install Istio Control Plane into Clusters
+### Before 6. Install Istio Control Plane into Clusters
 
-<!-- == imptr: use-istio-operator-control-plane / begin from: ../snippets/steps/use-istio-operator.md#[install-control-plane-for-2-clusters] == -->
+In order to speed up the deployment, it is recommended to install Istio before going ahead with GitOps configuartion.
+
+The next step will install Argo CD drive Git repository sync, and that would override Istio installation. The same step is taken for Argo CD itself.
 
 ```bash
 {
-    kubectl apply --context kind-armadillo \
-        -n istio-system \
-        -f ./clusters/armadillo/istio/installation/operator-usage/istio-control-plane.yaml
+    kubectl apply \
+        --context kind-armadillo \
+        -f ./clusters/armadillo/istio/installation/no-operator-install/istio-control-plane-install.yaml \
+        -f ./clusters/armadillo/istio/installation/no-operator-install/istio-multicluster-gateways-install.yaml \
+        -f ./clusters/armadillo/istio/installation/no-operator-install/istio-external-gateways-install.yaml \
+        -f ./clusters/armadillo/istio/installation/no-operator-install/istio-management-gateway-install.yaml
 
-    kubectl apply --context kind-bison \
-        -n istio-system \
-        -f ./clusters/bison/istio/installation/operator-usage/istio-control-plane.yaml
+    kubectl apply \
+        --context kind-bison \
+        -f ./clusters/bison/istio/installation/no-operator-install/istio-control-plane-install.yaml \
+        -f ./clusters/bison/istio/installation/no-operator-install/istio-multicluster-gateways-install.yaml \
+        -f ./clusters/bison/istio/installation/no-operator-install/istio-external-gateways-install.yaml \
+        -f ./clusters/bison/istio/installation/no-operator-install/istio-management-gateway-install.yaml
 }
 ```
 
 <details>
 <summary>ℹ️ Details</summary>
 
-This step simply deploys IstioOperator CustomResource to the cluster, and rely on IstioOperator Controller to deploy Istio into the cluster.
+Argo CD takes a look at the Git repository, and tries to apply configurations all at once. This means, with this repository, it will try to apply Istio itself, debug process, Istio Custom Resources, Observability tooling, etc. In most cases, this is expected of GitOps, but there is one complication when doing so with Istio. Istio works with having a sidecar component into each Pod, and thus, if Istio is installed Pods have been fully started, Istio won't have a chance to inject the sidecar Pod. You can stop already running Pod in order for Istio to inject the sidecar, but if you have many components, this can be tedious and time consuming.
 
-As to the configuration files, the above commands use basically identical cluster setup input for 2 clusters.
+For that reason, if you install Istio before GitOps integration takes place, you can ensure Istio can inject the sidecar into newly deployed Pods. Also, it is worth mentioning that, when Argo CD configurations in this repository are applied, Argo CD will find already running Istio, and take over its management from there on. This is because Argo CD `Application` Custom Resource is defined to install Istio in this repository, and when Argo CD reconciles the spec, it would first check for already running Istio.
 
-This installation uses the IstioOperator manifest with `minimal` profile, meaning this would be used for installing Istio "Control Plane" components. They are the core copmonents of Istio to provide its rich traffic management, security, and observability features, and mainly driven by an image of `istiod` (and a few more things around it). Some more differences would be seen for "Data Plane" components, and that would be dealt in the next step.
+This means, although this step is rather an imperative step which seemmingly does not fit in GitOps setup, it is only imperative until Argo CD custom configurations are applied. Also, if you update Istio spec in Git repository after completing the next step, it would be picked up by Argo CD, and you do not need to run `kubectl apply` anymore.
 
 </details>
 
-<!-- == imptr: use-istio-operator-control-plane / end == -->
+<details>
+<summary>ℹ️ Note about External IP</summary>
 
----
+Istio Ingress Gateway is created with `type: LoadBalancer` by default. This means that External IP will be associated with the Service, allowing Istio to handle incoming traffic from outside the mesh / cluster.
 
-### 6. Install Istio Data Plane (i.e. Gateways) into Clusters
+In this document, it is assumed that the cluster is KinD, and IP ranges are matching what MetalLB configuration above is using. If you are seeing different IP ranges for your Docker environment, you need to ensure your GitOps driven YAML files are also in line to have the corresponding IPs.
 
-<!-- == imptr: use-istio-operator-data-plane / begin from: ../snippets/steps/use-istio-operator.md#[install-data-plane-for-2-clusters] == -->
+For example, the following is the YAML file snippet for Armadillo Multicluster Gateway
 
-```bash
-{
-    kubectl apply --context kind-armadillo \
-        -n istio-system \
-        -f clusters/armadillo/istio/installation/operator-usage/istio-external-gateways.yaml \
-        -f clusters/armadillo/istio/installation/operator-usage/istio-multicluster-gateways.yaml
+```yaml
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: bison-istio-multicluster-gateways
+  # ... snip ...
+spec:
+  # Profile empty is used to create Gateways only.
+  profile: empty
 
-    kubectl apply --context kind-bison \
-        -n istio-system \
-        -f clusters/bison/istio/installation/operator-usage/istio-external-gateways.yaml \
-        -f clusters/bison/istio/installation/operator-usage/istio-multicluster-gateways.yaml
-}
+  components:
+    # ... snip ...
+    ingressGateways:
+      - enabled: true
+        name: bison-multicluster-ingressgateway
+        label:
+          app: bison-multicluster-ingressgateway
+        k8s:
+          service:
+            # This is assuming that you are using MetalLB with KinD. Your KinD
+            # network may be differently set up, and in that case, you would
+            # need to adjust this LB IP and also MetalLB IP ranges.
+            # In real use cases, you will likely want to create an LB IP
+            # beforehand, and use that IP here.
+            loadBalancerIP: 172.18.102.150
 ```
 
-<details>
-<summary>ℹ️ Details</summary>
-
-This step installs "Data Plane" components into the clusters, which are mainly Istio Ingress and Egress Gateways. You can think of Data Plane components as actually running service (in this case IngressGateway which is `docker.io/istio/proxyv2` image), and they will be controlled by Control Plane components (`istiod`).
-
-The main difference in the configuration files used above is the name used by various components (Ingress and Egress Gateways have `armadillo-` or `bison-` prefix, and so on). Also, as the previous step created the KinD cluster with different NodePort for Istio IngressGateway, you can see the corresponding port being used in `istio-multicluster-gateways.yaml`.
+This setup allows declarative setup even for LB IP, and also wiring up multiple clusters is made easier. But as this depends on your running environment, if you are seeing some unexpected traffic errors, you would want to double chcek if the IPs are associated correctly.
 
 </details>
 
-<!-- == imptr: use-istio-operator-data-plane / end == -->
-
 ---
 
-### 7. Install Debug Processes
+### Before 6. Part 2 - Ensure `istiocoredns` setup
 
-<!-- == imptr: deploy-debug-services / begin from: ../snippets/steps/deploy-debug-services.md#[for-2-clusters] == -->
-
-```bash
-{
-    kubectl create namespace --context kind-armadillo armadillo-offerings
-    kubectl label namespace --context kind-armadillo armadillo-offerings istio-injection=enabled
-    kubectl apply --context kind-armadillo \
-        -n armadillo-offerings \
-        -f clusters/armadillo/other/httpbin.yaml \
-        -f clusters/armadillo/other/color-svc-account.yaml \
-        -f clusters/armadillo/other/color-svc-only-blue.yaml \
-        -f clusters/armadillo/other/toolkit-alpine.yaml
-
-    kubectl create namespace --context kind-bison bison-offerings
-    kubectl label namespace --context kind-bison bison-offerings istio-injection=enabled
-    kubectl apply --context kind-bison \
-        -n bison-offerings \
-        -f clusters/bison/other/httpbin.yaml \
-        -f clusters/bison/other/color-svc-account.yaml \
-        -f clusters/bison/other/color-svc-only-red.yaml \
-        -f clusters/bison/other/toolkit-alpine.yaml
-}
-```
+> 📍 **WARNING** 📍  
+> This step is NOT a part of GitOps, because there is no easy way to have it in a declarative manner, due to the cluster IP associated with `istiocoredns` is only confirmed once the Service is created. However, if you are trying to have GitOps setup similar to this repository, you can follow the below instructions, and then place `coredns-configmap.yaml` file as a part of GitOps.  
+> Also, it's worth mentioning that `istiocoredns` is not recommended for newer version of Istio (v1.8+). This step is here to provide some reference point, but depending on your setup requirement and Isito version used, you could skip this part.
 
 <details>
-<summary>ℹ️ Details</summary>
+<summary>For Armadillo</summary>
 
-There are 3 actions happening, and for 2 clusters (Armadillo and Bison).
-
-Firstly, `kubectl create namespace` is called to create namespaces where the debug processes are being installed.
-
-Secondly, `kubectl label namespace default istio-injection=enabled` marks that namespace (in this case `default` namespace) as Istio Sidecar enabled. This means any Pod that gets created in this namespace will go through Istio's MutatingWebhook, and Istio's Sidecar component (`istio-proxy`) will be embedded into the Pod. Without this setup, you will need to add Sidecar separately by running `istioctl` commands, which may be ok for testing, but certainly not scalable.
-
-Third action is to install the testing tools.
-
-- `httpbin` is a copy of httpbin.org, which can handle incoming HTTP request and return arbitrary output based on the input path.
-- [`color-svc`](color-svc) is a simple web server which handles incoming HTTP request, and returns some random color. The configurations used in each cluster are slightly different, and produces different set of colors.
-- [`toolkit-alpine`](toolkit-alpine) is a lightweight container which has a few tools useful for testing, such as `curl`, `dig`, etc.
-
-For both `color-svc` and `toolkit-alpine`, [`tools`](https://github.com/rytswd/get-istio-multicluster/tree/main/tools) directory has the copy of the predefined YAML files. You can find more about how they are created in their repos.
-
-- [github.com/rytswd/color-svc](color-svc)
-- [github.com/rytswd/docker-toolkit-images](toolkit-alpine)
-
-[color-svc]: https://github.com/rytswd/color-svc
-[toolkit-alpine]: https://github.com/rytswd/docker-toolkit-images
-
-</details>
-
-<!-- == imptr: deploy-debug-services / end == -->
-
----
-
-### 8. Apply Istio Custom Resources
-
-Each cluster has different resources. Check out the documentation one by one.
-
-### For Armadillo
-
-<details>
-<summary>8.1. Add <code>istiocoredns</code> as a part of CoreDNS ConfigMap</summary>
-
-<!-- == imptr: manual-coredns / begin from: ../snippets/steps/handle-istio-resources-manually.md#[armadillo-coredns] == -->
+<!-- == imptr: manual-coredns-armadillo / begin from: ../snippets/steps/handle-istio-resources-manually.md#[armadillo-coredns] == -->
 
 Get IP address of `istiocoredns` Service,
 
@@ -564,148 +631,150 @@ index 9ffb5e8..d55a977 100644
 
 </details>
 
-<!-- == imptr: manual-coredns / end == -->
-
----
-
+<!-- == imptr: manual-coredns-armadillo / end == -->
 </details>
 
 <details>
-<summary>8.2. Add traffic routing for Armadillo local, and prepare for multicluster outbound</summary>
+<summary>For Bison</summary>
 
-<!-- == imptr: manual-routing-armadillo / begin from: ../snippets/steps/handle-istio-resources-manually.md#[armadillo-local] == -->
+<!-- == imptr: manual-coredns-bison / begin from: ../snippets/steps/handle-istio-resources-manually.md#[bison-coredns] == -->
 
-For local routing
+Get IP address of `istiocoredns` Service,
 
 ```bash
 {
-    kubectl apply --context kind-armadillo \
-        -f ./clusters/armadillo/istio/traffic-management/local/color-svc.yaml \
-        -f ./clusters/armadillo/istio/traffic-management/local/httpbin.yaml
-}
-```
-
-```console
-destinationrule.networking.istio.io/armadillo-color-svc created
-virtualservice.networking.istio.io/armadillo-color-svc-routing created
-virtualservice.networking.istio.io/armadillo-httpbin-chaos-routing created
-```
-
-For multicluster outbound routing
-
-```bash
-{
-    kubectl apply --context kind-armadillo \
-        -f ./clusters/armadillo/istio/traffic-management/multicluster/multicluster-setup.yaml
-}
-```
-
-```console
-gateway.networking.istio.io/armadillo-multicluster-ingressgateway created
-envoyfilter.networking.istio.io/armadillo-multicluster-ingressgateway created
-destinationrule.networking.istio.io/multicluster-traffic-from-armadillo created
-```
-
-<details>
-<summary>ℹ️ Details</summary>
-
-The first command will create local routing setup within Armadillo for testing traffic management in a single cluster.
-
-The second command will create multicluster setup for Armadillo. This includes `Gateway` and `EnvoyFilter` Custom Resources which are responsible for inbound traffic, and `DestinationRule` Custom Resource for outbound traffic. Strictly speaking, you would only need the outbound traffic setup for Armadillo cluster to talk to remote clusters, but setting up with the above file allows other clusters to talk to Armadillo as well.
-
-</details>
-
-<!-- == imptr: manual-routing-armadillo / end == -->
-
----
-
-</details>
-
-<details>
-<summary>8.3. Add ServiceEntry for Bison connection</summary>
-
-<!-- == imptr: manual-multicluster-routing-armadillo / begin from: ../snippets/steps/handle-istio-resources-manually.md#[armadillo-multicluster-bison] == -->
-
-```bash
-kubectl apply --context kind-armadillo \
-    -f ./clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml \
-    -f ./clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml
-```
-
-```console
-serviceentry.networking.istio.io/bison-color-svc created
-virtualservice.networking.istio.io/bison-color-svc-routing created
-serviceentry.networking.istio.io/bison-httpbin created
-virtualservice.networking.istio.io/bison-httpbin-routing created
-```
-
-<details>
-<summary>ℹ️ Details</summary>
-
-To be updated
-
-</details>
-
-<!-- == imptr: manual-multicluster-routing-armadillo / end == -->
-
----
-
-</details>
-
-### For Bison
-
-<details>
-<summary>8.4. Add traffic routing for Bison local, and prepare for multicluster outbound</summary>
-
-<!-- == imptr: manual-routing-bison / begin from: ../snippets/steps/handle-istio-resources-manually.md#[bison-local] == -->
-
-For local routing
-
-```bash
-{
-    kubectl apply --context kind-bison \
-        -f ./clusters/bison/istio/traffic-management/local/color-svc.yaml \
-        -f ./clusters/bison/istio/traffic-management/local/httpbin.yaml
+    export BISON_ISTIOCOREDNS_CLUSTER_IP=$(kubectl get svc \
+        --context kind-bison \
+        -n istio-system \
+        istiocoredns \
+        -o jsonpath={.spec.clusterIP})
+    echo "$BISON_ISTIOCOREDNS_CLUSTER_IP"
 }
 ```
 
 ```sh
 # OUTPUT
-destinationrule.networking.istio.io/bison-color-svc created
-virtualservice.networking.istio.io/bison-color-svc-routing created
-virtualservice.networking.istio.io/bison-httpbin-routing created
+10.xx.xx.xx
 ```
 
-For multicluster outbound routing
+And then apply CoreDNS configuration which includes the `istiocoredns` IP.
 
 ```bash
 {
+    sed -i '' -e "s/REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP/$BISON_ISTIOCOREDNS_CLUSTER_IP/" \
+        ./clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml
     kubectl apply --context kind-bison \
-        -f ./clusters/bison/istio/traffic-management/multicluster/multicluster-setup.yaml
+        -f ./clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml
 }
 ```
 
 ```sh
 # OUTPUT
-gateway.networking.istio.io/bison-multicluster-ingressgateway created
-envoyfilter.networking.istio.io/bison-multicluster-ingressgateway created
-destinationrule.networking.istio.io/multicluster-traffic-from-bison created
+Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
+configmap/coredns configured
 ```
+
+The above example is only to update CoreDNS for Bison cluster, meaning traffic initiated from Bison cluster.
 
 <details>
 <summary>ℹ️ Details</summary>
 
-This is the same step as done in Armadillo cluster setup, but for Bison.
+Istio's `istiocoredns` handles DNS lookup, and thus, you need to let Kubernetes know that `istiocoredns` gets the DNS request. Get the K8s Service cluster IP in `BISON_ISTIOCOREDNS_CLUSTER_IP` env variable, so that you can use that in `coredns-configmap.yaml` as the endpoint.
+
+This will then be applied to `kube-system/coredns` ConfigMap. As KinD comes with CoreDNS as the default DNS and its own ConfigMap, you will see a warning about the original ConfigMap being overridden with the custom one. This is fine for testing, but you may want to carefully examine the DNS setup as that could have significant impact.
+
+The `sed` command may look confusing, but the change is very minimal and straighforward. If you cloned this repo at the step 0, you can easily see from git diff.
+
+```diff
+diff --git a/clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml b/clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml
+index 9ffb5e8..d55a977 100644
+--- a/clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml
++++ b/clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml
+@@ -26,5 +26,5 @@ data:
+     global:53 {
+         errors
+         cache 30
+-        forward . REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP:53
++        forward . 10.96.238.217:53
+     }
+```
 
 </details>
 
-<!-- == imptr: manual-routing-bison / end == -->
+<!-- == imptr: manual-coredns-bison / end == -->
 
 </details>
 
 ---
 
-### 9. Verify
+### 6. Add Argo CD Custom Resources
+
+#### Armadillo
+
+<!-- == imptr: use-argo-cd-armadillo / begin from: ../snippets/steps/use-argo-cd.md#[armadillo] == -->
+
+```bash
+{
+    pushd clusters/armadillo/argocd > /dev/null
+
+    kubectl apply -n argocd \
+        --context kind-armadillo \
+        -f ./init/argo-cd-project.yaml \
+        -f ./init/argo-cd-app-demo-2.yaml
+
+    popd > /dev/null
+}
+```
+
+<!-- == imptr: use-argo-cd-armadillo / end == -->
+
+#### Bison
+
+<!-- == imptr: use-argo-cd-bison / begin from: ../snippets/steps/use-argo-cd.md#[bison] == -->
+
+```bash
+{
+    pushd clusters/bison/argocd > /dev/null
+
+    kubectl apply -n argocd \
+        --context kind-bison \
+        -f ./init/argo-cd-project.yaml \
+        -f ./init/argo-cd-app-demo-2.yaml
+
+    popd > /dev/null
+}
+```
+
+<!-- == imptr: use-argo-cd-bison / end == -->
+
+<details>
+<summary>ℹ️ Details</summary>
+
+<!-- == imptr: use-argo-cd-details / begin from: ../snippets/steps/use-argo-cd.md#[details] == -->
+
+You can find more about Argo CD Custom Resource in the official documentation.
+
+- https://argo-cd.readthedocs.io/en/latest/understand_the_basics/
+- https://argo-cd.readthedocs.io/en/latest/core_concepts/
+- https://argo-cd.readthedocs.io/en/latest/getting_started/
+
+The important Custom Resources are:
+
+**`Application`**:
+
+`Application` is for Argo CD to understand which Git repository it needs to check against. You need to provide information such as URL, branch / tag, synchnonisation logic, etc. This works hand in hand with `Project` Custom Resource below.
+
+**`AppProject` or `Project`**:
+
+`Project` (aka `AppProject`) defines scope. It is crucial to have appropriate access control defined in GitOps solutions, and a lot is handled by `Project`, such as targetted namespace(s), resource whitelist/blacklist, etc. You can think of `Project` as a parent of `Application`, as each `Application` needs at least one `Project`.
+
+<!-- == imptr: use-argo-cd-details / end == -->
+
+</details>
+
+---
+
+### 7. Verify
 
 <!-- == imptr: verify-with-httpbin / begin from: ../snippets/steps/verify-with-httpbin.md#[curl-httpbin-2-clusters] == -->
 

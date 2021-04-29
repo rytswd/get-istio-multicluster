@@ -3,7 +3,7 @@
 __tools_dir=$(dirname "$0")/..
 __root_dir="$__tools_dir"/..
 
-ISTIO_VERSION=1.7.5
+ISTIO_VERSION=1.7.8
 
 __temp_dir=$(mktemp -d)
 pushd "$__temp_dir" >/dev/null || {

@@ -4,6 +4,8 @@
 
 For intercluster DNS resolution, you need to apply the following to all clusters.
 
+### For Armadillo
+
 <!-- == export: armadillo-coredns / begin == -->
 
 Get IP address of `istiocoredns` Service,
@@ -41,7 +43,7 @@ Warning: kubectl apply should be used on resource created by either kubectl crea
 configmap/coredns configured
 ```
 
-The above example is only to update CoreDNS for Armadillo cluster. If you want to have Bison to Armadillo traffic the same way, you'd need to run the same command for Bison cluster as well (with `--context kind-bison`).
+The above example is only to update CoreDNS for Armadillo cluster, meaning traffic initiated from Armadillo cluster.
 
 <details>
 <summary>ℹ️ Details</summary>
@@ -69,6 +71,74 @@ index 9ffb5e8..d55a977 100644
 </details>
 
 <!-- == export: armadillo-coredns / end == -->
+
+### For Bison
+
+<!-- == export: bison-coredns / begin == -->
+
+Get IP address of `istiocoredns` Service,
+
+```bash
+{
+    export BISON_ISTIOCOREDNS_CLUSTER_IP=$(kubectl get svc \
+        --context kind-bison \
+        -n istio-system \
+        istiocoredns \
+        -o jsonpath={.spec.clusterIP})
+    echo "$BISON_ISTIOCOREDNS_CLUSTER_IP"
+}
+```
+
+```sh
+# OUTPUT
+10.xx.xx.xx
+```
+
+And then apply CoreDNS configuration which includes the `istiocoredns` IP.
+
+```bash
+{
+    sed -i '' -e "s/REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP/$BISON_ISTIOCOREDNS_CLUSTER_IP/" \
+        ./clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml
+    kubectl apply --context kind-bison \
+        -f ./clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml
+}
+```
+
+```sh
+# OUTPUT
+Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
+configmap/coredns configured
+```
+
+The above example is only to update CoreDNS for Bison cluster, meaning traffic initiated from Bison cluster.
+
+<details>
+<summary>ℹ️ Details</summary>
+
+Istio's `istiocoredns` handles DNS lookup, and thus, you need to let Kubernetes know that `istiocoredns` gets the DNS request. Get the K8s Service cluster IP in `BISON_ISTIOCOREDNS_CLUSTER_IP` env variable, so that you can use that in `coredns-configmap.yaml` as the endpoint.
+
+This will then be applied to `kube-system/coredns` ConfigMap. As KinD comes with CoreDNS as the default DNS and its own ConfigMap, you will see a warning about the original ConfigMap being overridden with the custom one. This is fine for testing, but you may want to carefully examine the DNS setup as that could have significant impact.
+
+The `sed` command may look confusing, but the change is very minimal and straighforward. If you cloned this repo at the step 0, you can easily see from git diff.
+
+```diff
+diff --git a/clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml b/clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml
+index 9ffb5e8..d55a977 100644
+--- a/clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml
++++ b/clusters/bison/istio/installation/additional-setup/coredns-configmap.yaml
+@@ -26,5 +26,5 @@ data:
+     global:53 {
+         errors
+         cache 30
+-        forward . REPLACE_WITH_ISTIOCOREDNS_CLUSTER_IP:53
++        forward . 10.96.238.217:53
+     }
+```
+
+</details>
+
+<!-- == export: bison-coredns / end == -->
 
 ## Armadillo cluster
 
@@ -121,6 +191,34 @@ The second command will create multicluster setup for Armadillo. This includes `
 ### Multicluster Routing Setup
 
 <!-- == export: armadillo-multicluster-bison / begin == -->
+
+```bash
+kubectl apply --context kind-armadillo \
+    -f ./clusters/armadillo/istio/traffic-management/multicluster/bison-color-svc.yaml \
+    -f ./clusters/armadillo/istio/traffic-management/multicluster/bison-httpbin.yaml
+```
+
+```console
+serviceentry.networking.istio.io/bison-color-svc created
+virtualservice.networking.istio.io/bison-color-svc-routing created
+serviceentry.networking.istio.io/bison-httpbin created
+virtualservice.networking.istio.io/bison-httpbin-routing created
+```
+
+<details>
+<summary>ℹ️ Details</summary>
+
+To be updated
+
+</details>
+
+<!-- == export: armadillo-multicluster-bison / end == -->
+
+### OLD - Multicluster Routing Setup
+
+If you are following IstioCon materials, the below was the scripts used for that.
+
+<!-- == export: armadillo-multicluster-bison-old / begin == -->
 
 Before completing this, make sure the cluster Bison is also started, and has completed Istio installation.
 
@@ -254,7 +352,7 @@ index 0d73f22..34a3762 100644
 
 </details>
 
-<!-- == export: armadillo-multicluster-bison / end == -->
+<!-- == export: armadillo-multicluster-bison-old / end == -->
 
 ## Bison cluster
 

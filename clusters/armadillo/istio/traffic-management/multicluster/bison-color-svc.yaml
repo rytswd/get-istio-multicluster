@@ -18,13 +18,14 @@ spec:
   addresses:
     - 240.0.0.2
   endpoints:
-    - address: REPLACE_WITH_BISON_INGRESS_GATEWAY_ADDRESS
+    - address: 172.18.102.150
       network: external
       ports:
-        http-bison: 15443 # Istio Ingress Gateway port
-    - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
-      ports:
         http-bison: 15443
+    # Taking out Egress mapping for now
+    # - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
+    #   ports:
+    #     http-bison: 15443
 ---
 # VirtualService definition on Bison side won't be able to handle the chaos setup.
 apiVersion: networking.istio.io/v1alpha3
