@@ -12,6 +12,9 @@ This setup assumes you are using Istio 1.7.8.
 
 ## 📚 Other Setup Steps
 
+<details>
+<summary>Click to expand</summary>
+
 <!-- == imptr: setup-steps / begin from: ../snippets/common-info.md#[setup-steps] == -->
 
 #### [Simple KinD based Setup][1]
@@ -56,6 +59,8 @@ This setup assumes you are using Istio 1.7.8.
 [kiali]: https://kiali.io/
 
 <!-- == imptr: setup-steps / end == -->
+
+</details>
 
 ## 🐾 Steps
 
