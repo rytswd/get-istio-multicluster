@@ -527,17 +527,17 @@ The next step will install Argo CD drive Git repository sync, and that would ove
 {
     kubectl apply \
         --context kind-armadillo \
-        -f ./clusters/armadillo/istio/installation/no-operator-install/istio-control-plane-install.yaml \
-        -f ./clusters/armadillo/istio/installation/no-operator-install/istio-multicluster-gateways-install.yaml \
-        -f ./clusters/armadillo/istio/installation/no-operator-install/istio-external-gateways-install.yaml \
-        -f ./clusters/armadillo/istio/installation/no-operator-install/istio-management-gateway-install.yaml
+        -f ./clusters/armadillo/istio/installation/no-operator-install/1.7.8/istio-control-plane-install.yaml \
+        -f ./clusters/armadillo/istio/installation/no-operator-install/1.7.8/istio-multicluster-gateways-install.yaml \
+        -f ./clusters/armadillo/istio/installation/no-operator-install/1.7.8/istio-external-gateways-install.yaml \
+        -f ./clusters/armadillo/istio/installation/no-operator-install/1.7.8/istio-management-gateway-install.yaml
 
     kubectl apply \
         --context kind-bison \
-        -f ./clusters/bison/istio/installation/no-operator-install/istio-control-plane-install.yaml \
-        -f ./clusters/bison/istio/installation/no-operator-install/istio-multicluster-gateways-install.yaml \
-        -f ./clusters/bison/istio/installation/no-operator-install/istio-external-gateways-install.yaml \
-        -f ./clusters/bison/istio/installation/no-operator-install/istio-management-gateway-install.yaml
+        -f ./clusters/bison/istio/installation/no-operator-install/1.7.8/istio-control-plane-install.yaml \
+        -f ./clusters/bison/istio/installation/no-operator-install/1.7.8/istio-multicluster-gateways-install.yaml \
+        -f ./clusters/bison/istio/installation/no-operator-install/1.7.8/istio-external-gateways-install.yaml \
+        -f ./clusters/bison/istio/installation/no-operator-install/1.7.8/istio-management-gateway-install.yaml
 }
 ```
 
