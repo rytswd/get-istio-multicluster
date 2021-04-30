@@ -12,7 +12,7 @@ pushd "$__temp_dir" >/dev/null || {
     exit 1
 }
 
-echo "Installing Istio v$ISTIO_VERSION to get istioctl..."
+echo "Getting istioctl based on Istio v$ISTIO_VERSION..."
 {
     curl -sSL https://istio.io/downloadIstio | ISTIO_VERSION=$ISTIO_VERSION sh - >/dev/null
 }
