@@ -1,9 +1,10 @@
 #!/bin/bash
 
+ISTIO_VERSION=1.9.4
+
 __tools_dir=$(dirname "$0")/..
 __root_dir="$__tools_dir"/..
-
-ISTIO_VERSION=1.7.8
+__revision=$(echo $ISTIO_VERSION | tr '.' '-')
 
 __temp_dir=$(mktemp -d)
 pushd "$__temp_dir" >/dev/null || {
@@ -11,11 +12,11 @@ pushd "$__temp_dir" >/dev/null || {
     exit 1
 }
 
-echo "Installing Istio v$ISTIO_VERSION for istioctl"
+echo "Installing Istio v$ISTIO_VERSION to get istioctl..."
 {
     curl -sSL https://istio.io/downloadIstio | ISTIO_VERSION=$ISTIO_VERSION sh - >/dev/null
 }
-PATH="$__temp_dir/istio-$ISTIO_VERSION/bin/"
+PATH="$__temp_dir/istio-$ISTIO_VERSION/bin/:$PATH"
 echo "  Complete."
 
 popd >/dev/null || {
@@ -25,27 +26,46 @@ popd >/dev/null || {
 
 for e in "armadillo" "bison" "dolphin"; do
     echo "Running istioctl manifest generate for '$e' cluster..."
-    pushd "$__root_dir"/clusters/"$e"/istio/installation/no-operator-install/ >/dev/null || {
+
+    target_dir="$__root_dir"/clusters/"$e"/istio/installation/no-operator-install/"$ISTIO_VERSION"
+    mkdir "$target_dir"
+    pushd "$target_dir" >/dev/null || {
         echo "failed to change directory"
         exit 1
     }
 
     istioctl manifest generate \
-        -f ../operator-usage/istio-control-plane.yaml \
+        --revision "$__revision" \
+        -f ../../operator-usage/istio-control-plane.yaml \
         -s values.global.jwtPolicy=first-party-jwt \
         >./istio-control-plane-install.yaml
     istioctl manifest generate \
-        -f ../operator-usage/istio-external-gateways.yaml \
+        --revision "$__revision" \
+        -f ../../operator-usage/istio-external-gateways.yaml \
         -s values.global.jwtPolicy=first-party-jwt \
         >./istio-external-gateways-install.yaml
     istioctl manifest generate \
-        -f ../operator-usage/istio-multicluster-gateways.yaml \
+        --revision "$__revision" \
+        -f ../../operator-usage/istio-multicluster-gateways.yaml \
         -s values.global.jwtPolicy=first-party-jwt \
         >./istio-multicluster-gateways-install.yaml
     istioctl manifest generate \
-        -f ../operator-usage/istio-management-gateway.yaml \
+        --revision "$__revision" \
+        -f ../../operator-usage/istio-management-gateway.yaml \
         -s values.global.jwtPolicy=first-party-jwt \
         >./istio-management-gateway-install.yaml
+
+    cat >kustomization.yaml <<EOF
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ./istio-control-plane-install.yaml
+  - ./istio-external-gateways-install.yaml
+  - ./istio-multicluster-gateways-install.yaml
+  - ./istio-management-gateway-install.yaml
+EOF
+
     echo "  Complete."
 
     popd >/dev/null || {
@@ -55,4 +75,4 @@ for e in "armadillo" "bison" "dolphin"; do
 done
 
 # Clean up Istio installation
-/bin/rm -rf "$__temp_dir"
+rm -rf "$__temp_dir"

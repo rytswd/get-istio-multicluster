@@ -1,10 +1,9 @@
 #!/bin/bash
 
-ISTIO_VERSION=1.9.2
+ISTIO_VERSION=1.9.4
 
 __tools_dir=$(dirname "$0")/..
 __root_dir="$__tools_dir"/..
-
 __revision=$(echo $ISTIO_VERSION | tr '.' '-')
 
 __temp_dir=$(mktemp -d)
@@ -13,11 +12,11 @@ pushd "$__temp_dir" >/dev/null || {
     exit 1
 }
 
-echo "Installing Istio v$ISTIO_VERSION for istioctl"
+echo "Installing Istio v$ISTIO_VERSION to get istioctl..."
 {
     curl -sSL https://istio.io/downloadIstio | ISTIO_VERSION=$ISTIO_VERSION sh - >/dev/null
 }
-PATH="$__temp_dir/istio-$ISTIO_VERSION/bin/"
+PATH="$__temp_dir/istio-$ISTIO_VERSION/bin/:$PATH"
 echo "  Complete."
 
 popd >/dev/null || {
@@ -26,11 +25,14 @@ popd >/dev/null || {
 }
 
 for e in "armadillo" "bison" "dolphin"; do
-    echo "Updating operator spec for '$e'"
-    istioctl operator dump --revision "$__revision" \
+    echo "Running istioctl operator dump for '$e' cluster..."
+
+    istioctl operator dump \
+        --revision "$__revision" \
         >"$__root_dir"/clusters/$e/istio/installation/operator-install/istio-operator-install-"$ISTIO_VERSION".yaml
+
     echo "  Complete."
 done
 
 # Clean up Istio installation
-/bin/rm -rf "$__temp_dir"
+rm -rf "$__temp_dir"
