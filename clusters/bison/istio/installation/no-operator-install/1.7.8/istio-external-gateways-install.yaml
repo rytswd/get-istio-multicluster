@@ -644,7 +644,7 @@ metadata:
   name: bison-external-ingressgateway
   namespace: istio-system
 spec:
-  loadBalancerIP: 172.18.101.151
+  loadBalancerIP: 172.18.102.151
   ports:
   - name: http2
     nodePort: 32012
