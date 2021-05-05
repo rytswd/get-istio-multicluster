@@ -13,7 +13,7 @@
     kubectl apply -n argocd \
         --context kind-armadillo \
         -f ./init/argo-cd-project.yaml \
-        -f ./init/argo-cd-app-demo-2.yaml
+        -f ./init/argo-cd-app-without-istio-operator.yaml
 
     popd > /dev/null
 }
@@ -32,7 +32,7 @@
     kubectl apply -n argocd \
         --context kind-bison \
         -f ./init/argo-cd-project.yaml \
-        -f ./init/argo-cd-app-demo-2.yaml
+        -f ./init/argo-cd-app-without-istio-operator.yaml
 
     popd > /dev/null
 }
