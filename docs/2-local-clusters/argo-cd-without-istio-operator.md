@@ -757,7 +757,7 @@ index 9ffb5e8..d55a977 100644
     kubectl apply -n argocd \
         --context kind-armadillo \
         -f ./init/argo-cd-project.yaml \
-        -f ./init/argo-cd-app-demo-2.yaml
+        -f ./init/argo-cd-app-without-istio-operator.yaml
 
     popd > /dev/null
 }
@@ -776,7 +776,7 @@ index 9ffb5e8..d55a977 100644
     kubectl apply -n argocd \
         --context kind-bison \
         -f ./init/argo-cd-project.yaml \
-        -f ./init/argo-cd-app-demo-2.yaml
+        -f ./init/argo-cd-app-without-istio-operator.yaml
 
     popd > /dev/null
 }
