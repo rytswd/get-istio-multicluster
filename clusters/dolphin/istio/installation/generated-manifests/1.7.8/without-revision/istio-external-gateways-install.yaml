@@ -384,10 +384,12 @@ spec:
         image: docker.io/istio/proxyv2:1.7.8
         name: istio-proxy
         ports:
-        - containerPort: 15021
         - containerPort: 8080
         - containerPort: 8443
+        - containerPort: 15021
         - containerPort: 15443
+        - containerPort: 15012
+        - containerPort: 15017
         - containerPort: 15090
           name: http-envoy-prom
           protocol: TCP
@@ -634,33 +636,37 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: dolphin-external-ingressgateway
-  namespace: istio-system
-  annotations:
+  annotations: null
   labels:
     app: dolphin-external-ingressgateway
     istio: ingressgateway
     release: istio
+  name: dolphin-external-ingressgateway
+  namespace: istio-system
 spec:
-  type: LoadBalancer
+  loadBalancerIP: 172.18.104.151
+  ports:
+  - name: http2
+    nodePort: 32014
+    port: 80
+    targetPort: 8080
+  - name: https
+    port: 443
+    targetPort: 8443
+  - name: status-port
+    port: 15021
+    targetPort: 15021
+  - name: tls
+    port: 15443
+    targetPort: 15443
+  - name: tls-istiod
+    port: 15012
+    targetPort: 15012
+  - name: tls-webhook
+    port: 15017
+    targetPort: 15017
   selector:
     app: dolphin-external-ingressgateway
     istio: ingressgateway
-  ports:
-    -
-      name: status-port
-      port: 15021
-      targetPort: 15021
-    -
-      name: http2
-      port: 80
-      targetPort: 8080
-    -
-      name: https
-      port: 443
-      targetPort: 8443
-    -
-      name: tls
-      port: 15443
-      targetPort: 15443
+  type: LoadBalancer
 ---
