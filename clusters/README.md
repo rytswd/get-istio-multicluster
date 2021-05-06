@@ -24,7 +24,7 @@ On top of Istio, each cluster can be configured with the following
 
 Each tool can be updated separately in each cluster directory.
 
-Otherwise the version upgrade can take place for all the clusters via scripts under [`/tools/internal/`](https://github.com/rytswd/get-istio-multicluster/tree/main/tools/internal).
+Otherwise the version upgrade can take place for all the clusters via scripts under [`/tools/internal/`](/tools/internal).
 
 ## Armadillo
 
