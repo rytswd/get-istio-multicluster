@@ -1,7 +1,7 @@
 apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 metadata:
-  name: dolphin-istio-external-gateways
+  name: dolphin-istio-management-gateway
   annotations:
     # ArgoCD Wave setup for controlling the timing of sync.
     argocd.argoproj.io/sync-wave: "2"
@@ -10,17 +10,11 @@ spec:
   profile: empty
 
   components:
-    egressGateways:
-      - enabled: true
-        name: dolphin-external-egressgateway
-        label:
-          app: dolphin-external-egressgateway
-
     ingressGateways:
       - enabled: true
-        name: dolphin-external-ingressgateway
+        name: dolphin-management-ingressgateway
         label:
-          app: dolphin-external-ingressgateway
+          app: dolphin-management-ingressgateway
         k8s:
           service:
             # This is assuming that you are using MetalLB with KinD. Your KinD
@@ -28,13 +22,13 @@ spec:
             # need to adjust this LB IP and also MetalLB IP ranges.
             # In real use cases, you will likely want to create an LB IP
             # beforehand, and use that IP here.
-            loadBalancerIP: 172.18.104.151
+            loadBalancerIP: 172.18.104.152
 
             ports:
               - port: 80
                 targetPort: 8080
                 name: http2
-                nodePort: 32014 # This is for KinD based testing. Make sure this doesn't clash with other mesh definitions.
+                nodePort: 32034 # This is for KinD based testing. Make sure this doesn't clash with other mesh definitions.
               - port: 443
                 targetPort: 8443
                 name: https
@@ -58,7 +52,7 @@ spec:
               requiredDuringSchedulingIgnoredDuringExecution:
                 - labelSelector:
                     matchLabels:
-                      app: dolphin-external-ingressgateway
+                      app: dolphin-management-ingressgateway
                   topologyKey: kubernetes.io/hostname
           # HPA setup, which is commented out for local testing.
           # hpaSpec:
@@ -72,4 +66,4 @@ spec:
           #   scaleTargetRef:
           #     apiVersion: apps/v1
           #     kind: Deployment
-          #     name: dolphin-external-ingressgateway
+          #     name: dolphin-management-ingressgateway
