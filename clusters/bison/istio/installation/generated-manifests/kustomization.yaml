@@ -5,12 +5,12 @@ bases:
   # # For simple 1.7.8 with default only
   # - ./1.7.8/without-revision
   
-  # For 1.7.8 as stable, with 1.8.5 as canary
-  - ./1.7.8/without-revision-before-retiring
-  - ./1.8.5/as-canary
+  # # For 1.7.8 as stable, with 1.8.5 as canary
+  # - ./1.7.8/without-revision-before-retiring
+  # - ./1.8.5/as-canary
 
-  # # After 1.8.5 as canary, fully migrate to 1.8.5
-  # - ./1.8.5/full-installation
+  # After 1.8.5 as canary, fully migrate to 1.8.5
+  - ./1.8.5/full-installation
 
   # # For 1.8.5 as canary, with 1.9.4 as canary
   # - ./1.8.5/before-retiring
