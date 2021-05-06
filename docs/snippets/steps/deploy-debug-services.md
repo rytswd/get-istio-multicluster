@@ -39,7 +39,7 @@ Third action is to install the testing tools.
 - [`color-svc`](color-svc) is a simple web server which handles incoming HTTP request, and returns some random color. The configurations used in each cluster are slightly different, and produces different set of colors.
 - [`toolkit-alpine`](toolkit-alpine) is a lightweight container which has a few tools useful for testing, such as `curl`, `dig`, etc.
 
-For both `color-svc` and `toolkit-alpine`, [`tools`](https://github.com/rytswd/get-istio-multicluster/tree/main/tools) directory has the copy of the predefined YAML files. You can find more about how they are created in their repos.
+For both `color-svc` and `toolkit-alpine`, [`tools`](/tools) directory has the copy of the predefined YAML files. You can find more about how they are created in their repos.
 
 - [github.com/rytswd/color-svc](color-svc)
 - [github.com/rytswd/docker-toolkit-images](toolkit-alpine)

@@ -32,9 +32,9 @@
 
 **Additional Tools involved**: [MetalLB][metallb], [Argo CD][argo-cd], [Prometheus][prometheus], [Grafana][grafana], [Kiali][kiali]
 
-[1]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/2-local-clusters/simple-with-istio-operator.md
-[2]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/k3d-based/README.md
-[3]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/2-local-clusters/argo-cd-without-istio-operator.md
+[1]: /docs/2-local-clusters/simple-with-istio-operator.md
+[2]: /docs/k3d-based/README.md
+[3]: /docs/2-local-clusters/argo-cd-with-generated-manifests.md
 [kind]: https://kind.sigs.k8s.io/
 [k3d]: https://k3d.io/
 [metallb]: https://metallb.universe.tf/
