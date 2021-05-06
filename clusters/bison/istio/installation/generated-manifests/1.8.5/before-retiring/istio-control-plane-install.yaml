@@ -5593,13 +5593,6 @@ spec:
         istio.io/rev: 1-8-5
         operator.istio.io/component: Pilot
     spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                app: istiod
-            topologyKey: kubernetes.io/hostname
       containers:
       - args:
         - discovery
