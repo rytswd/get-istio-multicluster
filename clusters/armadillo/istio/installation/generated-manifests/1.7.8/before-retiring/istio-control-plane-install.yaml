@@ -6972,10 +6972,10 @@ webhooks:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: metadata-exchange-1.6
+  name: metadata-exchange-1.6-1-7-8
   namespace: istio-system
   labels:
-    istio.io/rev: default
+    istio.io/rev: 1-7-8
 spec:
   configPatches:
     - applyTo: HTTP_FILTER
@@ -7007,10 +7007,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: metadata-exchange-1.7
+  name: metadata-exchange-1.7-1-7-8
   namespace: istio-system
   labels:
-    istio.io/rev: default
+    istio.io/rev: 1-7-8
 spec:
   configPatches:
     - applyTo: HTTP_FILTER
@@ -7098,10 +7098,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: stats-filter-1.6
+  name: stats-filter-1.6-1-7-8
   namespace: istio-system
   labels:
-    istio.io/rev: default
+    istio.io/rev: 1-7-8
 spec:
   configPatches:
     - applyTo: HTTP_FILTER
@@ -7205,10 +7205,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: stats-filter-1.7
+  name: stats-filter-1.7-1-7-8
   namespace: istio-system
   labels:
-    istio.io/rev: default
+    istio.io/rev: 1-7-8
 spec:
   configPatches:
     - applyTo: HTTP_FILTER
@@ -7318,10 +7318,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: tcp-metadata-exchange-1.6
+  name: tcp-metadata-exchange-1.6-1-7-8
   namespace: istio-system
   labels:
-    istio.io/rev: default
+    istio.io/rev: 1-7-8
 spec:
   configPatches:
     - applyTo: NETWORK_FILTER
@@ -7375,10 +7375,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: tcp-metadata-exchange-1.7
+  name: tcp-metadata-exchange-1.7-1-7-8
   namespace: istio-system
   labels:
-    istio.io/rev: default
+    istio.io/rev: 1-7-8
 spec:
   configPatches:
     - applyTo: NETWORK_FILTER
@@ -7432,10 +7432,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: tcp-stats-filter-1.6
+  name: tcp-stats-filter-1.6-1-7-8
   namespace: istio-system
   labels:
-    istio.io/rev: default
+    istio.io/rev: 1-7-8
 spec:
   configPatches:
     - applyTo: NETWORK_FILTER
@@ -7532,10 +7532,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: tcp-stats-filter-1.7
+  name: tcp-stats-filter-1.7-1-7-8
   namespace: istio-system
   labels:
-    istio.io/rev: default
+    istio.io/rev: 1-7-8
 spec:
   configPatches:
     - applyTo: NETWORK_FILTER
@@ -7663,10 +7663,10 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: istio
+  name: istio-1-7-8
   namespace: istio-system
   labels:
-    istio.io/rev: default
+    istio.io/rev: 1-7-8
     release: istio
 data:
 
@@ -7677,7 +7677,7 @@ data:
   mesh: |-
     accessLogFile: /dev/stdout
     defaultConfig:
-      discoveryAddress: istiod.istio-system.svc:15012
+      discoveryAddress: istiod-1-7-8.istio-system.svc:15012
       proxyMetadata:
         DNS_AGENT: ""
         ISTIO_META_DNS_CAPTURE: "true"
@@ -7692,10 +7692,10 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: istio-sidecar-injector
+  name: istio-sidecar-injector-1-7-8
   namespace: istio-system
   labels:
-    istio.io/rev: default
+    istio.io/rev: 1-7-8
     release: istio
 data:
 
@@ -7836,7 +7836,7 @@ data:
       "istio_cni": {
         "enabled": false
       },
-      "revision": "",
+      "revision": "1-7-8",
       "sidecarInjectorWebhook": {
         "alwaysInjectSelector": [],
         "enableNamespacesByDefault": false,
@@ -8326,17 +8326,17 @@ data:
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingWebhookConfiguration
 metadata:
-  name: istio-sidecar-injector
+  name: istio-sidecar-injector-1-7-8
 
   labels:
-    istio.io/rev: default
+    istio.io/rev: 1-7-8
     app: sidecar-injector
     release: istio
 webhooks:
   - name: sidecar-injector.istio.io
     clientConfig:
       service:
-        name: istiod
+        name: istiod-1-7-8
         namespace: istio-system
         path: "/inject"
       caBundle: ""
@@ -8349,8 +8349,13 @@ webhooks:
     failurePolicy: Fail
     admissionReviewVersions: ["v1beta1", "v1"]
     namespaceSelector:
-      matchLabels:
-        istio-injection: enabled
+      matchExpressions:
+      - key: istio-injection
+        operator: DoesNotExist
+      - key: istio.io/rev
+        operator: In
+        values:
+        - 1-7-8
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -8466,14 +8471,15 @@ metadata:
   labels:
     app: istiod
     istio: pilot
-    istio.io/rev: default
+    istio.io/rev: 1-7-8
     release: istio
-  name: istiod
+  name: istiod-1-7-8
   namespace: istio-system
 spec:
   selector:
     matchLabels:
-      istio: pilot
+      app: istiod
+      istio.io/rev: 1-7-8
   strategy:
     rollingUpdate:
       maxSurge: 100%
@@ -8486,8 +8492,8 @@ spec:
         sidecar.istio.io/inject: "false"
       labels:
         app: istiod
-        istio: pilot
-        istio.io/rev: default
+        istio: istiod
+        istio.io/rev: 1-7-8
     spec:
       affinity:
         podAntiAffinity:
@@ -8508,7 +8514,7 @@ spec:
         - 30m
         env:
         - name: REVISION
-          value: default
+          value: 1-7-8
         - name: JWT_POLICY
           value: first-party-jwt
         - name: PILOT_CERT_PROVIDER
@@ -8537,9 +8543,9 @@ spec:
         - name: PILOT_ENABLE_PROTOCOL_SNIFFING_FOR_INBOUND
           value: "true"
         - name: INJECTION_WEBHOOK_CONFIG_NAME
-          value: istio-sidecar-injector
+          value: istio-sidecar-injector-1-7-8
         - name: ISTIOD_ADDR
-          value: istiod.istio-system.svc:15012
+          value: istiod-1-7-8.istio-system.svc:15012
         - name: PILOT_ENABLE_ANALYSIS
           value: "false"
         - name: CLUSTER_ID
@@ -8604,10 +8610,10 @@ spec:
           optional: true
           secretName: istio-kubeconfig
       - configMap:
-          name: istio-sidecar-injector
+          name: istio-sidecar-injector-1-7-8
         name: inject
       - configMap:
-          name: istio
+          name: istio-1-7-8
         name: config-volume
 ---
 apiVersion: policy/v1beta1
@@ -8628,11 +8634,11 @@ spec:
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: istiod
+  name: istiod-1-7-8
   namespace: istio-system
   labels:
     app: istiod
-    istio.io/rev: default
+    istio.io/rev: 1-7-8
     release: istio
     istio: pilot
 spec:
@@ -8640,7 +8646,7 @@ spec:
   selector:
     matchLabels:
       app: istiod
-      istio: pilot
+      istio.io/rev: 1-7-8
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -8701,19 +8707,19 @@ spec:
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: istiod
+  name: istiod-1-7-8
   namespace: istio-system
   labels:
     app: istiod
     release: istio
-    istio.io/rev: default
+    istio.io/rev: 1-7-8
 spec:
   maxReplicas: 5
   minReplicas: 1
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: istiod
+    name: istiod-1-7-8
   metrics:
   - type: Resource
     resource:
@@ -8742,10 +8748,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: istiod
+  name: istiod-1-7-8
   namespace: istio-system
   labels:
-    istio.io/rev: default
+    istio.io/rev: 1-7-8
     app: istiod
     istio: pilot
     release: istio
@@ -8766,7 +8772,5 @@ spec:
       protocol: TCP
   selector:
     app: istiod
-    # Label used by the 'default' service. For versioned deployments we match with app and version.
-    # This avoids default deployment picking the canary
-    istio: pilot
+    istio.io/rev: 1-7-8
 ---

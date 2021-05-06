@@ -12,4 +12,4 @@ resources:
 # from the newer release instead. In that case, the full installation spec
 # should work.
 patchesStrategicMerge:
-  - ./patch/delete-duplicate-resources-control-plane.yaml
+  - ./patches/delete-duplicate-resources-control-plane.yaml
