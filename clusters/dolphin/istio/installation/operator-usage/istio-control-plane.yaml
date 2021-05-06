@@ -2,6 +2,14 @@ apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 metadata:
   name: dolphin-istio-control-plane
+  annotations:
+    # ArgoCD Wave setup for controlling the timing of sync. This is important
+    # as control plane installation (i.e. istiod installation) needs to happen
+    # at first, otherwise other components such as ingress / egress gateways
+    # get stuck at initialisation.
+    # However, the wave setup of "1" means it takes place after "0", which
+    # includes installation of Istio Operator controller.
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   # The minimal profile is a good base with control plane setup.
   profile: minimal
