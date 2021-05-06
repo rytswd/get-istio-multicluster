@@ -74,10 +74,12 @@ apps:
     namespace: kiali-operator
     loadPath: ../observability/kiali/operator-install
 
+  # Other resources
   - name: other
     enabled: true
     namespace: bison-offerings
     istioSidecar: true
+    istioRevision: 1-8-5
     loadPath: ../other
 #
 # =========================================================================== #
