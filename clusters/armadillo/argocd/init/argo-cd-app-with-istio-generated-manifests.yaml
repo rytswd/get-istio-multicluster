@@ -11,7 +11,7 @@ spec:
     path: clusters/armadillo/argocd/orchestration
     helm:
       valueFiles:
-        - with-gerenated-manifests.yaml
+        - with-generated-manifests.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
