@@ -14,13 +14,6 @@ spec:
   # The minimal profile is a good base with control plane setup.
   profile: minimal
 
-  # TODO: Remove addon components, as these are deprecated
-  # Addon components include Grafana, Jaeger and other useful set. For this
-  # setup, we only get the essential setup, which is istiocoredns.
-  addonComponents:
-    istiocoredns:
-      enabled: true
-
   components:
     # For Istiod setup
     pilot:
@@ -69,7 +62,7 @@ spec:
     global:
       # pilotCertProvider: kubernetes
       multiCluster:
-        # clusterName: bison
+        clusterName: bison
         enabled: true # Only used for istio-sidecar-injector ConfigMap
       podDNSSearchNamespaces:
         - global
