@@ -15,7 +15,7 @@ apps:
   - name: istio-with-generated-manifests-v1.7.8
     namespace: istio-system # Namespace gets created by a template setup.
     enabled: true
-    loadPath: ../istio/installation/generated-manifests/1.7.8/full-installation
+    loadPath: ../istio/installation/generated-manifests
     ignoreDifferences:
       # Ignore caBundle diff due to runtime updates to the config
       - group: admissionregistration.k8s.io
