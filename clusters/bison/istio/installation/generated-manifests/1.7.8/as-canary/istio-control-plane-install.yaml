@@ -7680,7 +7680,6 @@ data:
       discoveryAddress: istiod-1-7-8.istio-system.svc:15012
       proxyMetadata:
         DNS_AGENT: ""
-        ISTIO_META_DNS_CAPTURE: "true"
       tracing:
         zipkin:
           address: zipkin.istio-system:9411
@@ -8495,13 +8494,6 @@ spec:
         istio: istiod
         istio.io/rev: 1-7-8
     spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                app: istiod
-            topologyKey: kubernetes.io/hostname
       containers:
       - args:
         - discovery
