@@ -3,5 +3,6 @@ kind: Kustomization
 
 resources:
   - multicluster-setup.yaml
-  # - armadillo-connections.yaml
-  # - dolphin-connections.yaml
+
+  - armadillo-color-svc.yaml
+  - armadillo-httpbin.yaml
