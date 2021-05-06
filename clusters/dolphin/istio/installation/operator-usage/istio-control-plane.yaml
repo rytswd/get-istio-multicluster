@@ -18,13 +18,15 @@ spec:
     # For Istiod setup
     pilot:
       k8s:
-        affinity:
-          podAntiAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
-              - labelSelector:
-                  matchLabels:
-                    app: istiod
-                topologyKey: kubernetes.io/hostname
+        # For real use cases, it is probably better to have affinity setup.
+        # This is commented out only for simplicity.
+        # affinity:
+        #   podAntiAffinity:
+        #     requiredDuringSchedulingIgnoredDuringExecution:
+        #       - labelSelector:
+        #           matchLabels:
+        #             app: istiod
+        #         topologyKey: kubernetes.io/hostname
 
         # Reduce resource requirements for local testing. This is NOT
         # recommended for the real use cases.
