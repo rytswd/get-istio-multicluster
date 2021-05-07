@@ -62,7 +62,8 @@ spec:
 
   values:
     global:
-      # pilotCertProvider: kubernetes
+      meshID: get-istio-multicluster
+      network: armadillo
       multiCluster:
         clusterName: bison
         enabled: true # Only used for istio-sidecar-injector ConfigMap

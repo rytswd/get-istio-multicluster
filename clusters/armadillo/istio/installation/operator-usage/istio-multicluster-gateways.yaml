@@ -77,13 +77,15 @@ spec:
           #     apiVersion: apps/v1
           #     kind: Deployment
           #     name: armadillo-multicluster-ingressgateway
-  # values:
-  #   global:
-  #     meshID: get-istio-multicluster
-  #     multiCluster:
-  #       clusterName: armadillo
-  #       enabled: true # Only used for istio-sidecar-injector ConfigMap
-  #     podDNSSearchNamespaces:
-  #       - global
-  #     # pilotCertProvider: kubernetes
-  #     # controlPlaneSecurityEnabled: true
+
+  values:
+    global:
+      meshID: get-istio-multicluster
+      network: armadillo
+      multiCluster:
+        clusterName: armadillo
+        # With the below flag commented out, you wouldn't get DR, GW and EF
+        # created as a part of the spec. Because we use multiple Istio
+        # IngressGateways, it is better to manage this separately. Those are
+        # defined in traffic-management/multicluster directory.
+        # enabled: true

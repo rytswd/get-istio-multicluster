@@ -4879,6 +4879,7 @@ data:
     accessLogFile: /dev/stdout
     defaultConfig:
       discoveryAddress: istiod-1-8-5.istio-system.svc:15012
+      meshId: get-istio-multicluster
       proxyMetadata:
         DNS_AGENT: ""
         ISTIO_META_DNS_CAPTURE: "true"
@@ -4939,7 +4940,7 @@ data:
           "enabled": false,
           "useILB": false
         },
-        "meshID": "",
+        "meshID": "get-istio-multicluster",
         "meshNetworks": {},
         "mountMtlsCerts": false,
         "multiCluster": {
@@ -4947,7 +4948,7 @@ data:
           "enabled": true
         },
         "namespace": "istio-system",
-        "network": "",
+        "network": "armadillo",
         "omitSidecarInjectorConfigMap": false,
         "oneNamespace": false,
         "operatorManageWebhooks": false,
