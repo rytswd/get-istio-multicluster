@@ -165,11 +165,13 @@ spec:
             value: armadillo-external-egressgateway
           - name: ISTIO_META_OWNER
             value: kubernetes://apis/apps/v1/namespaces/istio-system/deployments/armadillo-external-egressgateway
+          - name: ISTIO_META_MESH_ID
+            value: "get-istio-multicluster"
           - name: ISTIO_META_ROUTER_MODE
             value: sni-dnat
           
           - name: ISTIO_META_CLUSTER_ID
-            value: "Kubernetes"
+            value: "armadillo"
           volumeMounts:
           - name: istio-envoy
             mountPath: /etc/istio/proxy
@@ -327,12 +329,6 @@ spec:
                 - amd64
                 - ppc64le
                 - s390x
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                app: armadillo-external-ingressgateway
-            topologyKey: kubernetes.io/hostname
       containers:
       - args:
         - proxy
@@ -392,10 +388,14 @@ spec:
           value: armadillo-external-ingressgateway
         - name: ISTIO_META_OWNER
           value: kubernetes://apis/apps/v1/namespaces/istio-system/deployments/armadillo-external-ingressgateway
+        - name: ISTIO_META_MESH_ID
+          value: get-istio-multicluster
         - name: ISTIO_META_ROUTER_MODE
           value: sni-dnat
+        - name: ISTIO_META_NETWORK
+          value: armadillo
         - name: ISTIO_META_CLUSTER_ID
-          value: Kubernetes
+          value: armadillo
         image: docker.io/istio/proxyv2:1.8.5
         name: istio-proxy
         ports:

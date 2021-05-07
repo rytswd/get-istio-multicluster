@@ -329,12 +329,6 @@ spec:
                 - amd64
                 - ppc64le
                 - s390x
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                app: armadillo-multicluster-ingressgateway
-            topologyKey: kubernetes.io/hostname
       containers:
       - args:
         - proxy
