@@ -4951,7 +4951,7 @@ data:
         "omitSidecarInjectorConfigMap": false,
         "oneNamespace": false,
         "operatorManageWebhooks": false,
-        "pilotCertProvider": "kubernetes",
+        "pilotCertProvider": "istiod",
         "podDNSSearchNamespaces": [
           "global"
         ],
@@ -5608,7 +5608,7 @@ spec:
         - name: JWT_POLICY
           value: first-party-jwt
         - name: PILOT_CERT_PROVIDER
-          value: kubernetes
+          value: istiod
         - name: POD_NAME
           valueFrom:
             fieldRef:
