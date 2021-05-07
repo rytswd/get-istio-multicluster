@@ -84,12 +84,6 @@ spec:
                 - amd64
                 - ppc64le
                 - s390x
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                app: bison-management-ingressgateway
-            topologyKey: kubernetes.io/hostname
       containers:
       - args:
         - proxy

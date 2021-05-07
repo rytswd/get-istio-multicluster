@@ -58,12 +58,16 @@ spec:
           # Affinity for IngressGateways, so that pods are separated into
           # different nodes.
           affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                - labelSelector:
-                    matchLabels:
-                      app: bison-multicluster-ingressgateway
-                  topologyKey: kubernetes.io/hostname
+            {}
+            # For real use cases, it is probably better to have affinity setup.
+            # This is commented out only for simplicity.
+            # podAntiAffinity:
+            #   requiredDuringSchedulingIgnoredDuringExecution:
+            #     - labelSelector:
+            #         matchLabels:
+            #           app: bison-multicluster-ingressgateway
+            #       topologyKey: kubernetes.io/hostname
+
           # HPA setup, which is commented out for local testing.
           # hpaSpec:
           #   maxReplicas: 4
