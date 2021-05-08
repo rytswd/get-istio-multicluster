@@ -48,12 +48,13 @@ spec:
             cluster_pattern: \.global$
             cluster_replacement: .svc.cluster.local
           name: envoy.filters.network.tcp_cluster_rewrite
-    # Istio 1.7 - map `.global` to `.svc.cluster.local`
+    # Any other versions - map `.global` to `.svc.cluster.local`
     - applyTo: NETWORK_FILTER
       match:
         context: GATEWAY
-        proxy:
-          proxyVersion: ^1\.7.*
+        # If necessary, Istio version can be specified here.
+        # proxy:
+        #   proxyVersion: ^1\.7.*
         listener:
           filterChain:
             filter:
