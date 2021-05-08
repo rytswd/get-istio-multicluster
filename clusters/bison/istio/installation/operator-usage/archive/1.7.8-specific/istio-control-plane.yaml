@@ -1,0 +1,71 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: bison-istio-control-plane
+  annotations:
+    # ArgoCD Wave setup for controlling the timing of sync. This is important
+    # as control plane installation (i.e. istiod installation) needs to happen
+    # at first, otherwise other components such as ingress / egress gateways
+    # get stuck at initialisation.
+    # However, the wave setup of "1" means it takes place after "0", which
+    # includes installation of Istio Operator controller.
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  # The minimal profile is a good base with control plane setup.
+  profile: minimal
+
+  components:
+    # For Istiod setup
+    pilot:
+      k8s:
+        # For real use cases, it is probably better to have affinity setup.
+        # This is commented out only for simplicity.
+        # affinity:
+        #   podAntiAffinity:
+        #     requiredDuringSchedulingIgnoredDuringExecution:
+        #       - labelSelector:
+        #           matchLabels:
+        #             app: istiod
+        #         topologyKey: kubernetes.io/hostname
+
+        # Reduce resource requirements for local testing. This is NOT
+        # recommended for the real use cases.
+        resources:
+          limits:
+            cpu: 200m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+
+        # HPA setup, which is commented out for local testing.
+        # hpaSpec:
+        #   maxReplicas: 5
+        #   metrics:
+        #     - resource:
+        #         name: cpu
+        #         targetAverageUtilization: 80
+        #       type: Resource
+        #   minReplicas: 3
+        #   scaleTargetRef:
+        #     apiVersion: apps/v1
+        #     kind: Deployment
+        #     name: istiod
+
+  meshConfig:
+    accessLogFile: /dev/stdout
+    defaultConfig:
+      proxyMetadata:
+        # Enable Istio agent to handle DNS requests for known hosts
+        # Unknown hosts will automatically be resolved using upstream dns servers in resolv.conf
+        ISTIO_META_DNS_CAPTURE: "true"
+
+  values:
+    global:
+      meshID: get-istio-multicluster
+      network: armadillo
+      multiCluster:
+        clusterName: bison
+        enabled: true # Only used for istio-sidecar-injector ConfigMap
+      podDNSSearchNamespaces:
+        - global
