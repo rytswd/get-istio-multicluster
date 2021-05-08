@@ -77,15 +77,3 @@ spec:
           #     apiVersion: apps/v1
           #     kind: Deployment
           #     name: bison-external-ingressgateway
-
-  values:
-    global:
-      meshID: get-istio-multicluster
-      network: bison
-      multiCluster:
-        clusterName: bison
-        # With the below flag commented out, you wouldn't get DR, GW and EF
-        # created as a part of the spec. Because we use multiple Istio
-        # IngressGateways, it is better to manage this separately. Those are
-        # defined in traffic-management/multicluster directory.
-        # enabled: true
