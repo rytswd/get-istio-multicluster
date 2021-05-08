@@ -7,7 +7,7 @@ spec:
   project: argo-cd-setup
   source:
     repoURL: https://github.com/rytswd/get-istio-multicluster.git
-    targetRevision: canary-handling # TODO: This is temporary change for testing only
+    targetRevision: main
     path: clusters/armadillo/argocd/orchestration
     helm:
       valueFiles:

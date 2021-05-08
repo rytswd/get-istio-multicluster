@@ -92,7 +92,7 @@ metadata:
 spec:
   source:
     gitRepoUrl: https://github.com/rytswd/get-istio-multicluster
-    targetRevision: canary-handling # TODO: This is temporary change for testing only
+    targetRevision: main
   destination:
     server: https://kubernetes.default.svc
   syncPolicy:
