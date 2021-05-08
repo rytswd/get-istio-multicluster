@@ -47,9 +47,9 @@ This setup assumes you are using Istio 1.7.8.
 
 **Additional Tools involved**: [MetalLB][metallb], [Argo CD][argo-cd], [Prometheus][prometheus], [Grafana][grafana], [Kiali][kiali]
 
-[1]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/2-local-clusters/simple-with-istio-operator.md
-[2]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/k3d-based/README.md
-[3]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/2-local-clusters/argo-cd-without-istio-operator.md
+[1]: /docs/2-local-clusters/simple-with-istio-operator.md
+[2]: /docs/k3d-based/README.md
+[3]: /docs/2-local-clusters/argo-cd-with-generated-manifests.md
 [kind]: https://kind.sigs.k8s.io/
 [k3d]: https://k3d.io/
 [metallb]: https://metallb.universe.tf/
@@ -513,7 +513,7 @@ Third action is to install the testing tools.
 - [`color-svc`](color-svc) is a simple web server which handles incoming HTTP request, and returns some random color. The configurations used in each cluster are slightly different, and produces different set of colors.
 - [`toolkit-alpine`](toolkit-alpine) is a lightweight container which has a few tools useful for testing, such as `curl`, `dig`, etc.
 
-For both `color-svc` and `toolkit-alpine`, [`tools`](https://github.com/rytswd/get-istio-multicluster/tree/main/tools) directory has the copy of the predefined YAML files. You can find more about how they are created in their repos.
+For both `color-svc` and `toolkit-alpine`, [`tools`](/tools) directory has the copy of the predefined YAML files. You can find more about how they are created in their repos.
 
 - [github.com/rytswd/color-svc](color-svc)
 - [github.com/rytswd/docker-toolkit-images](toolkit-alpine)

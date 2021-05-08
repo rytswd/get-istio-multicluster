@@ -14,24 +14,19 @@ spec:
   # The minimal profile is a good base with control plane setup.
   profile: minimal
 
-  # TODO: Remove addon components, as these are deprecated
-  # Addon components include Grafana, Jaeger and other useful set. For this
-  # setup, we only get the essential setup, which is istiocoredns.
-  addonComponents:
-    istiocoredns:
-      enabled: true
-
   components:
     # For Istiod setup
     pilot:
       k8s:
-        affinity:
-          podAntiAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
-              - labelSelector:
-                  matchLabels:
-                    app: istiod
-                topologyKey: kubernetes.io/hostname
+        # For real use cases, it is probably better to have affinity setup.
+        # This is commented out only for simplicity.
+        # affinity:
+        #   podAntiAffinity:
+        #     requiredDuringSchedulingIgnoredDuringExecution:
+        #       - labelSelector:
+        #           matchLabels:
+        #             app: istiod
+        #         topologyKey: kubernetes.io/hostname
 
         # Reduce resource requirements for local testing. This is NOT
         # recommended for the real use cases.
@@ -67,9 +62,10 @@ spec:
 
   values:
     global:
-      # pilotCertProvider: kubernetes
+      meshID: get-istio-multicluster
+      network: armadillo
       multiCluster:
-        # clusterName: armadillo
+        clusterName: armadillo
         enabled: true # Only used for istio-sidecar-injector ConfigMap
       podDNSSearchNamespaces:
         - global

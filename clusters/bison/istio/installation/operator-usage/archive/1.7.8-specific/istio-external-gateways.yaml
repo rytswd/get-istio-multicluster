@@ -1,0 +1,79 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: bison-istio-external-gateways
+  annotations:
+    # ArgoCD Wave setup for controlling the timing of sync.
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  # Profile empty is used to create Gateways only.
+  profile: empty
+
+  components:
+    egressGateways:
+      - enabled: true
+        name: bison-external-egressgateway
+        label:
+          app: bison-external-egressgateway
+
+    ingressGateways:
+      - enabled: true
+        name: bison-external-ingressgateway
+        label:
+          app: bison-external-ingressgateway
+        k8s:
+          service:
+            # This is assuming that you are using MetalLB with KinD. Your KinD
+            # network may be differently set up, and in that case, you would
+            # need to adjust this LB IP and also MetalLB IP ranges.
+            # In real use cases, you will likely want to create an LB IP
+            # beforehand, and use that IP here.
+            loadBalancerIP: 172.18.102.151
+
+            ports:
+              - port: 80
+                targetPort: 8080
+                name: http2
+                nodePort: 32012 # This is for KinD based testing. Make sure this doesn't clash with other mesh definitions.
+              - port: 443
+                targetPort: 8443
+                name: https
+              - name: status-port
+                port: 15021
+                targetPort: 15021
+              - name: tls
+                port: 15443
+                targetPort: 15443
+              - name: tls-istiod
+                port: 15012
+                targetPort: 15012
+              - name: tls-webhook
+                port: 15017
+                targetPort: 15017
+
+          # Affinity for IngressGateways, so that pods are separated into
+          # different nodes.
+          affinity:
+            {}
+            # For real use cases, it is probably better to have affinity setup.
+            # This is commented out only for simplicity.
+            # podAntiAffinity:
+            #   requiredDuringSchedulingIgnoredDuringExecution:
+            #     - labelSelector:
+            #         matchLabels:
+            #           app: bison-external-ingressgateway
+            #       topologyKey: kubernetes.io/hostname
+
+          # HPA setup, which is commented out for local testing.
+          # hpaSpec:
+          #   maxReplicas: 5
+          #   metrics:
+          #     - resource:
+          #         name: cpu
+          #         targetAverageUtilization: 80
+          #       type: Resource
+          #   minReplicas: 3
+          #   scaleTargetRef:
+          #     apiVersion: apps/v1
+          #     kind: Deployment
+          #     name: bison-external-ingressgateway

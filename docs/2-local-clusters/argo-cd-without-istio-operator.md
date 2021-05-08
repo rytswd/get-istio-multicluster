@@ -47,9 +47,9 @@ This setup assumes you are using Istio 1.7.8.
 
 **Additional Tools involved**: [MetalLB][metallb], [Argo CD][argo-cd], [Prometheus][prometheus], [Grafana][grafana], [Kiali][kiali]
 
-[1]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/2-local-clusters/simple-with-istio-operator.md
-[2]: https://github.com/rytswd/get-istio-multicluster/tree/main/docs/k3d-based/README.md
-[3]: https://github.com/rytswd/get-istio-multicluster/blob/main/docs/2-local-clusters/argo-cd-without-istio-operator.md
+[1]: /docs/2-local-clusters/simple-with-istio-operator.md
+[2]: /docs/k3d-based/README.md
+[3]: /docs/2-local-clusters/argo-cd-with-generated-manifests.md
 [kind]: https://kind.sigs.k8s.io/
 [k3d]: https://k3d.io/
 [metallb]: https://metallb.universe.tf/
@@ -757,7 +757,7 @@ index 9ffb5e8..d55a977 100644
     kubectl apply -n argocd \
         --context kind-armadillo \
         -f ./init/argo-cd-project.yaml \
-        -f ./init/argo-cd-app-demo-2.yaml
+        -f ./init/argo-cd-app-with-istio-generated-manifests.yaml
 
     popd > /dev/null
 }
@@ -776,7 +776,7 @@ index 9ffb5e8..d55a977 100644
     kubectl apply -n argocd \
         --context kind-bison \
         -f ./init/argo-cd-project.yaml \
-        -f ./init/argo-cd-app-demo-2.yaml
+        -f ./init/argo-cd-app-with-istio-generated-manifests.yaml
 
     popd > /dev/null
 }

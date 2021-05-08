@@ -58,12 +58,16 @@ spec:
           # Affinity for IngressGateways, so that pods are separated into
           # different nodes.
           affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                - labelSelector:
-                    matchLabels:
-                      app: bison-multicluster-ingressgateway
-                  topologyKey: kubernetes.io/hostname
+            {}
+            # For real use cases, it is probably better to have affinity setup.
+            # This is commented out only for simplicity.
+            # podAntiAffinity:
+            #   requiredDuringSchedulingIgnoredDuringExecution:
+            #     - labelSelector:
+            #         matchLabels:
+            #           app: bison-multicluster-ingressgateway
+            #       topologyKey: kubernetes.io/hostname
+
           # HPA setup, which is commented out for local testing.
           # hpaSpec:
           #   maxReplicas: 4
@@ -77,13 +81,15 @@ spec:
           #     apiVersion: apps/v1
           #     kind: Deployment
           #     name: bison-multicluster-ingressgateway
-  # values:
-  #   global:
-  #     meshID: get-istio-multicluster
-  #     multiCluster:
-  #       clusterName: bison
-  #       enabled: true # Only used for istio-sidecar-injector ConfigMap
-  #     podDNSSearchNamespaces:
-  #       - global
-  #     # pilotCertProvider: kubernetes
-  #     # controlPlaneSecurityEnabled: true
+
+  values:
+    global:
+      meshID: get-istio-multicluster
+      network: bison
+      multiCluster:
+        clusterName: bison
+        # With the below flag commented out, you wouldn't get DR, GW and EF
+        # created as a part of the spec. Because we use multiple Istio
+        # IngressGateways, it is better to manage this separately. Those are
+        # defined in traffic-management/multicluster directory.
+        # enabled: true

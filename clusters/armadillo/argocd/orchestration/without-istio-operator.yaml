@@ -28,9 +28,6 @@ apps:
         jsonPointers:
           - /webhooks/0/clientConfig/caBundle
           - /webhooks/0/failurePolicy
-  - name: istio-multicluster-demo-2-setup
-    enabled: true
-    loadPath: ../istio/for-demo-2
   - name: istio-traffic-management-custom-resources
     enabled: true
     loadPath: ../istio/traffic-management/istio-resources
@@ -40,9 +37,9 @@ apps:
   - name: istio-traffic-management-external
     enabled: true
     loadPath: ../istio/traffic-management/external
-  # - name: istio-traffic-management-multicluster
-  #   enabled: true
-  #   loadPath: ../istio/traffic-management/multicluster
+  - name: istio-traffic-management-multicluster
+    enabled: true
+    loadPath: ../istio/traffic-management/multicluster
 
   # Observability related setup
   - name: prometheus

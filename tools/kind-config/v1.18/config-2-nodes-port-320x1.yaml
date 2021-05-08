@@ -12,6 +12,15 @@ nodes:
         nodeRegistration:
           kubeletExtraArgs:
             node-labels: "ingress-ready=true"
+      # Not sure if this is needed, commenting out for now.
+      # - |
+      #   kind: ClusterConfiguration
+      #   apiServer:
+      #     extraArgs:
+      #       "service-account-issuer": "kubernetes.default.svc"
+      #       "service-account-signing-key-file": "/etc/kubernetes/pki/sa.key"
+      #   networking:
+      #     dnsDomain: global
     extraPortMappings:
       - containerPort: 32011
         hostPort: 32011

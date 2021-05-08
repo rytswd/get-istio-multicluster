@@ -1,0 +1,732 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: armadillo-multicluster-egressgateway-service-account
+  namespace: istio-system
+  labels:
+    app: armadillo-multicluster-egressgateway
+    istio: egressgateway
+    release: istio
+    istio.io/rev: 1-8-5
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "EgressGateways"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: armadillo-multicluster-ingressgateway-service-account
+  namespace: istio-system
+  labels:
+    app: armadillo-multicluster-ingressgateway
+    istio: ingressgateway
+    release: istio
+    istio.io/rev: 1-8-5
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "IngressGateways"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: armadillo-multicluster-egressgateway
+  namespace: istio-system
+  labels:
+    app: armadillo-multicluster-egressgateway
+    istio: egressgateway
+    release: istio
+    istio.io/rev: 1-8-5
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "EgressGateways"
+spec:
+  selector:
+    matchLabels:
+      app: armadillo-multicluster-egressgateway
+      istio: egressgateway
+  strategy:
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: armadillo-multicluster-egressgateway
+        istio: egressgateway
+        heritage: Tiller
+        release: istio
+        chart: gateways
+        service.istio.io/canonical-name: armadillo-multicluster-egressgateway
+        service.istio.io/canonical-revision: 1-8-5
+        istio.io/rev: 1-8-5
+        install.operator.istio.io/owning-resource: unknown
+        operator.istio.io/component: "EgressGateways"
+      annotations:
+        prometheus.io/port: "15020"
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/stats/prometheus"
+        sidecar.istio.io/inject: "false"
+    spec:
+      securityContext:
+        runAsUser: 1337
+        runAsGroup: 1337
+        runAsNonRoot: true
+        fsGroup: 1337
+      serviceAccountName: armadillo-multicluster-egressgateway-service-account
+      containers:
+        - name: istio-proxy
+          image: "docker.io/istio/proxyv2:1.8.5"
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8443
+              protocol: TCP
+            - containerPort: 15443
+              protocol: TCP
+            - containerPort: 15090
+              protocol: TCP
+              name: http-envoy-prom
+          args:
+          - proxy
+          - router
+          - --domain
+          - $(POD_NAMESPACE).svc.cluster.local
+          - --proxyLogLevel=warning
+          - --proxyComponentLogLevel=misc:error
+          - --log_output_level=default:info
+          - --serviceCluster
+          - armadillo-multicluster-egressgateway
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+          readinessProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /healthz/ready
+              port: 15021
+              scheme: HTTP
+            initialDelaySeconds: 1
+            periodSeconds: 2
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 1024Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          env:
+          - name: JWT_POLICY
+            value: first-party-jwt
+          - name: PILOT_CERT_PROVIDER
+            value: istiod
+          - name: CA_ADDR
+            value: istiod-1-8-5.istio-system.svc:15012
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: spec.nodeName
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: INSTANCE_IP
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: status.podIP
+          - name: HOST_IP
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: status.hostIP
+          - name: SERVICE_ACCOUNT
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.serviceAccountName
+          - name: CANONICAL_SERVICE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['service.istio.io/canonical-name']
+          - name: CANONICAL_REVISION
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['service.istio.io/canonical-revision']
+          - name: ISTIO_META_WORKLOAD_NAME
+            value: armadillo-multicluster-egressgateway
+          - name: ISTIO_META_OWNER
+            value: kubernetes://apis/apps/v1/namespaces/istio-system/deployments/armadillo-multicluster-egressgateway
+          - name: ISTIO_META_MESH_ID
+            value: "get-istio-multicluster"
+          - name: ISTIO_META_ROUTER_MODE
+            value: sni-dnat
+          
+          - name: ISTIO_META_CLUSTER_ID
+            value: "armadillo"
+          volumeMounts:
+          - name: istio-envoy
+            mountPath: /etc/istio/proxy
+          - name: config-volume
+            mountPath: /etc/istio/config
+          - mountPath: /var/run/secrets/istio
+            name: istiod-ca-cert
+          - name: gatewaysdsudspath
+            mountPath: /var/run/ingress_gateway
+          - mountPath: /var/lib/istio/data
+            name: istio-data
+          - name: podinfo
+            mountPath: /etc/istio/pod
+          - name: egressgateway-certs
+            mountPath: "/etc/istio/egressgateway-certs"
+            readOnly: true
+          - name: egressgateway-ca-certs
+            mountPath: "/etc/istio/egressgateway-ca-certs"
+            readOnly: true
+      volumes:
+      - name: istiod-ca-cert
+        configMap:
+          name: istio-ca-root-cert
+      - name: podinfo
+        downwardAPI:
+          items:
+            - path: "labels"
+              fieldRef:
+                fieldPath: metadata.labels
+            - path: "annotations"
+              fieldRef:
+                fieldPath: metadata.annotations
+      - name: istio-envoy
+        emptyDir: {}
+      - name: gatewaysdsudspath
+        emptyDir: {}
+      - name: istio-data
+        emptyDir: {}
+      - name: config-volume
+        configMap:
+          name: istio-1-8-5
+          optional: true
+      - name: egressgateway-certs
+        secret:
+          secretName: "istio-egressgateway-certs"
+          optional: true
+      - name: egressgateway-ca-certs
+        secret:
+          secretName: "istio-egressgateway-ca-certs"
+          optional: true
+      affinity:      
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - "amd64"
+                - "ppc64le"
+                - "s390x"
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 2
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - "amd64"
+          - weight: 2
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - "ppc64le"
+          - weight: 2
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - "s390x"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: armadillo-multicluster-ingressgateway
+    install.operator.istio.io/owning-resource: unknown
+    istio: ingressgateway
+    istio.io/rev: 1-8-5
+    operator.istio.io/component: IngressGateways
+    release: istio
+  name: armadillo-multicluster-ingressgateway
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      app: armadillo-multicluster-ingressgateway
+      istio: ingressgateway
+  strategy:
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /stats/prometheus
+        prometheus.io/port: "15020"
+        prometheus.io/scrape: "true"
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: armadillo-multicluster-ingressgateway
+        chart: gateways
+        heritage: Tiller
+        install.operator.istio.io/owning-resource: unknown
+        istio: ingressgateway
+        istio.io/rev: 1-8-5
+        operator.istio.io/component: IngressGateways
+        release: istio
+        service.istio.io/canonical-name: armadillo-multicluster-ingressgateway
+        service.istio.io/canonical-revision: 1-8-5
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - preference:
+              matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+            weight: 2
+          - preference:
+              matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - ppc64le
+            weight: 2
+          - preference:
+              matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - s390x
+            weight: 2
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+                - ppc64le
+                - s390x
+      containers:
+      - args:
+        - proxy
+        - router
+        - --domain
+        - $(POD_NAMESPACE).svc.cluster.local
+        - --proxyLogLevel=warning
+        - --proxyComponentLogLevel=misc:error
+        - --log_output_level=default:info
+        - --serviceCluster
+        - armadillo-multicluster-ingressgateway
+        env:
+        - name: JWT_POLICY
+          value: first-party-jwt
+        - name: PILOT_CERT_PROVIDER
+          value: istiod
+        - name: CA_ADDR
+          value: istiod-1-8-5.istio-system.svc:15012
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: INSTANCE_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+        - name: HOST_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.hostIP
+        - name: SERVICE_ACCOUNT
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.serviceAccountName
+        - name: CANONICAL_SERVICE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['service.istio.io/canonical-name']
+        - name: CANONICAL_REVISION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['service.istio.io/canonical-revision']
+        - name: ISTIO_META_WORKLOAD_NAME
+          value: armadillo-multicluster-ingressgateway
+        - name: ISTIO_META_OWNER
+          value: kubernetes://apis/apps/v1/namespaces/istio-system/deployments/armadillo-multicluster-ingressgateway
+        - name: ISTIO_META_MESH_ID
+          value: get-istio-multicluster
+        - name: ISTIO_META_ROUTER_MODE
+          value: sni-dnat
+        - name: ISTIO_META_NETWORK
+          value: armadillo
+        - name: ISTIO_META_CLUSTER_ID
+          value: armadillo
+        image: docker.io/istio/proxyv2:1.8.5
+        name: istio-proxy
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8443
+          protocol: TCP
+        - containerPort: 15443
+          protocol: TCP
+        - containerPort: 15021
+          protocol: TCP
+        - containerPort: 15012
+          protocol: TCP
+        - containerPort: 15017
+          protocol: TCP
+        - containerPort: 15090
+          name: http-envoy-prom
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /healthz/ready
+            port: 15021
+            scheme: HTTP
+          initialDelaySeconds: 1
+          periodSeconds: 2
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 1024Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - mountPath: /etc/istio/proxy
+          name: istio-envoy
+        - mountPath: /etc/istio/config
+          name: config-volume
+        - mountPath: /var/run/secrets/istio
+          name: istiod-ca-cert
+        - mountPath: /var/run/ingress_gateway
+          name: gatewaysdsudspath
+        - mountPath: /var/lib/istio/data
+          name: istio-data
+        - mountPath: /etc/istio/pod
+          name: podinfo
+        - mountPath: /etc/istio/ingressgateway-certs
+          name: ingressgateway-certs
+          readOnly: true
+        - mountPath: /etc/istio/ingressgateway-ca-certs
+          name: ingressgateway-ca-certs
+          readOnly: true
+      securityContext:
+        fsGroup: 1337
+        runAsGroup: 1337
+        runAsNonRoot: true
+        runAsUser: 1337
+      serviceAccountName: armadillo-multicluster-ingressgateway-service-account
+      volumes:
+      - configMap:
+          name: istio-ca-root-cert
+        name: istiod-ca-cert
+      - downwardAPI:
+          items:
+          - fieldRef:
+              fieldPath: metadata.labels
+            path: labels
+          - fieldRef:
+              fieldPath: metadata.annotations
+            path: annotations
+        name: podinfo
+      - emptyDir: {}
+        name: istio-envoy
+      - emptyDir: {}
+        name: gatewaysdsudspath
+      - emptyDir: {}
+        name: istio-data
+      - configMap:
+          name: istio-1-8-5
+          optional: true
+        name: config-volume
+      - name: ingressgateway-certs
+        secret:
+          optional: true
+          secretName: istio-ingressgateway-certs
+      - name: ingressgateway-ca-certs
+        secret:
+          optional: true
+          secretName: istio-ingressgateway-ca-certs
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: armadillo-multicluster-egressgateway
+  namespace: istio-system
+  labels:
+    app: armadillo-multicluster-egressgateway
+    istio: egressgateway
+    release: istio
+    istio.io/rev: 1-8-5
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "EgressGateways"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: armadillo-multicluster-egressgateway
+      istio: egressgateway
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: armadillo-multicluster-ingressgateway
+  namespace: istio-system
+  labels:
+    app: armadillo-multicluster-ingressgateway
+    istio: ingressgateway
+    release: istio
+    istio.io/rev: 1-8-5
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "IngressGateways"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: armadillo-multicluster-ingressgateway
+      istio: ingressgateway
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: armadillo-multicluster-egressgateway-sds
+  namespace: istio-system
+  labels:
+    release: istio
+    istio.io/rev: 1-8-5
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "EgressGateways"
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: armadillo-multicluster-ingressgateway-sds
+  namespace: istio-system
+  labels:
+    release: istio
+    istio.io/rev: 1-8-5
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "IngressGateways"
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: armadillo-multicluster-egressgateway-sds
+  namespace: istio-system
+  labels:
+    release: istio
+    istio.io/rev: 1-8-5
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "EgressGateways"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: armadillo-multicluster-egressgateway-sds
+subjects:
+  - kind: ServiceAccount
+    name: armadillo-multicluster-egressgateway-service-account
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: armadillo-multicluster-ingressgateway-sds
+  namespace: istio-system
+  labels:
+    release: istio
+    istio.io/rev: 1-8-5
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "IngressGateways"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: armadillo-multicluster-ingressgateway-sds
+subjects:
+- kind: ServiceAccount
+  name: armadillo-multicluster-ingressgateway-service-account
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: armadillo-multicluster-egressgateway
+  namespace: istio-system
+  labels:
+    app: armadillo-multicluster-egressgateway
+    istio: egressgateway
+    release: istio
+    istio.io/rev: 1-8-5
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "EgressGateways"
+spec:
+  maxReplicas: 5
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: armadillo-multicluster-egressgateway
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 80
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: armadillo-multicluster-ingressgateway
+  namespace: istio-system
+  labels:
+    app: armadillo-multicluster-ingressgateway
+    istio: ingressgateway
+    release: istio
+    istio.io/rev: 1-8-5
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "IngressGateways"
+spec:
+  maxReplicas: 5
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: armadillo-multicluster-ingressgateway
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: armadillo-multicluster-egressgateway
+  namespace: istio-system
+  annotations:
+  labels:
+    app: armadillo-multicluster-egressgateway
+    istio: egressgateway
+    release: istio
+    istio.io/rev: 1-8-5
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "EgressGateways"
+spec:
+  type: ClusterIP
+  selector:
+    app: armadillo-multicluster-egressgateway
+    istio: egressgateway
+  ports:
+    -
+      name: http2
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    -
+      name: https
+      port: 443
+      protocol: TCP
+      targetPort: 8443
+    -
+      name: tls
+      port: 15443
+      protocol: TCP
+      targetPort: 15443
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations: null
+  labels:
+    app: armadillo-multicluster-ingressgateway
+    install.operator.istio.io/owning-resource: unknown
+    istio: ingressgateway
+    istio.io/rev: 1-8-5
+    operator.istio.io/component: IngressGateways
+    release: istio
+  name: armadillo-multicluster-ingressgateway
+  namespace: istio-system
+spec:
+  loadBalancerIP: 172.18.101.150
+  ports:
+  - name: http2
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 8443
+  - name: tls
+    nodePort: 32021
+    port: 15443
+    protocol: TCP
+    targetPort: 15443
+  - name: status-port
+    port: 15021
+    protocol: TCP
+    targetPort: 15021
+  - name: tls-istiod
+    port: 15012
+    protocol: TCP
+    targetPort: 15012
+  - name: tls-webhook
+    port: 15017
+    protocol: TCP
+    targetPort: 15017
+  selector:
+    app: armadillo-multicluster-ingressgateway
+    istio: ingressgateway
+  type: LoadBalancer
+---
