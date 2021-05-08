@@ -14,6 +14,13 @@ spec:
   # The minimal profile is a good base with control plane setup.
   profile: minimal
 
+  # TODO: Remove addon components, as these are deprecated
+  # Addon components include Grafana, Jaeger and other useful set. For this
+  # setup, we only get the essential setup, which is istiocoredns.
+  addonComponents:
+    istiocoredns:
+      enabled: true
+
   components:
     # For Istiod setup
     pilot:
@@ -54,18 +61,12 @@ spec:
 
   meshConfig:
     accessLogFile: /dev/stdout
-    defaultConfig:
-      proxyMetadata:
-        # Enable Istio agent to handle DNS requests for known hosts
-        # Unknown hosts will automatically be resolved using upstream dns servers in resolv.conf
-        ISTIO_META_DNS_CAPTURE: "true"
 
   values:
     global:
-      meshID: get-istio-multicluster
-      network: armadillo
+      controlPlaneSecurityEnabled: true
       multiCluster:
-        clusterName: armadillo
+        # clusterName: armadillo
         enabled: true # Only used for istio-sidecar-injector ConfigMap
       podDNSSearchNamespaces:
         - global
