@@ -82,12 +82,17 @@ For most of the setup, you will need the following tools installed:
 
 ### 🌍 Clusters
 
+<!-- == imptr: cluster-info / begin from: ./docs/snippets/cluster-info.md#[overview] == -->
+
 The clusters used in this repository are given easily identifiable names. They don't convey any special meaning.
 
 For some cluster, there are some peculiarities over the others.
 
-- `armadillo`: cluster with shared Istio Control Plane (with `cougar`)
-- `bison`: cluster with dedicated Istio Control Plane
-- `cougar` ⚠️ WIP ⚠️: clustter with shared Istio Control Plane (with `armadillo`)
-- `dolphin`: cluster with dedicated Istio Control Plane
-- `zebra` ⚠️ WIP ⚠️: cluster without Istio, as external cluster
+| Name        | Status   | Description                                                               |
+| ----------- | -------- | ------------------------------------------------------------------------- |
+| `armadillo` | ✅ Ready | Simple cluster with Isito Control Plane, almost identical to `bison`.     |
+| `bison`     | ✅ Ready | Simple cluster with Isito Control Plane, almost identical to `armadillo`. |
+| `cow`       | ⚠️ WIP   | Cluster without Isito components. Used for Remote Control Plane.          |
+| `dolphin`   | ⚠️ WIP   | TBD                                                                       |
+
+<!-- == imptr: cluster-info / end == -->
