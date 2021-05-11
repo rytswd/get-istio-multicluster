@@ -94,7 +94,7 @@ metadata:
 spec:
   source:
     gitRepoUrl: https://github.com/rytswd/get-istio-multicluster
-    targetRevision: main
+    targetRevision: dev
   destination:
     server: https://kubernetes.default.svc
   syncPolicy:
