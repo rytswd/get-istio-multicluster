@@ -20,7 +20,7 @@ This declarative approach is the power of GitOps, but when it comes to starting 
 
 ## 🗃 Versions
 
-Istio versions supported in this step:
+Istio versions supported in this setup:
 
 - v1.7.8
 - v1.8.5
