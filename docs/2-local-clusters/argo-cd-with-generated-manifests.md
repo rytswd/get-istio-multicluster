@@ -1,14 +1,36 @@
 # Argo CD based Setup
 
-## 📝 Setup Details
+## 📝 What You Get from This Setup
 
-After following all the steps below, you would get
+Argo CD based setup uses the power of GitOps to wire up many components at once.
 
-- 2 clusters (`armadillo`, `bison`)
-- 1 mesh
-- `armadillo` to send request to `bison`
+The components included in each cluster is:
 
-This setup assumes you are using Istio 1.7.8.
+- Istio Control Plane (`istiod`)
+- Istio IngressGateway x3 + Istio EgressGateway x2
+- Argo CD
+- Prometheus, deployed with [`prometheus-operator`](https://github.com/prometheus-operator/prometheus-operator)
+- Grafana, deployed based on https://github.com/grafana/helm-charts
+- Kiali, deployed with [`kiali-operator`](https://github.com/kiali/kiali-operator)
+- Jaeger, deployed with [`jaeger-operator`](https://github.com/jaegertracing/jaeger-operator)
+- Other debugging tools such as `httpbin`, [`color-svc`](color-svc), [`toolkit-alpine`](toolkit-alpine), etc.
+
+Istio provides demo setup of Observability tools such as Prometheus, but they are not meant to be used for production use cases. This GitOps setup allows complex configurations of each component in the recommended deployment for each project. Because all the setup is declarative and provided in this repository as YAML files, they can work as a reference point, while keeping the deployment very simple. Once you deploy Argo CD, it would pull in all the YAML files of above tools, and apply them automatically. Argo CD would then watch for any change in the Git repository, allowing any upgardes, even including Argo CD and Istio, to take place without any imperative commands.
+
+This declarative approach is the power of GitOps, but when it comes to starting up a cluster, there are some imperative conifgurations required. Once you complete all the steps in this guide, any configuration changes after that can happen on the YAML files in this repository. Please note that, those imperative configuration steps can result in a declarative file and be kept in the Git repository. This repository tries to keep those imperatively created files out of scope, so that anyone can clone this repository to follow the steps to get Istio Multicluster in action.
+
+[color-svc]: https://github.com/rytswd/color-svc
+[toolkit-alpine]: https://github.com/rytswd/docker-toolkit-images
+
+## 🗃 Versions
+
+Istio versions supported in this setup:
+
+- v1.7.8
+- v1.8.5
+- v1.9.4 (To be confirmed)
+
+Also, this step supports Istio canary upgrade. You can find more in [`/clusters/armadillo/istio/installation/generated-manifests/kustomization.yaml`](/clusters/armadillo/istio/installation/generated-manifests/kustomization.yaml).
 
 ## 📚 Other Setup Steps
 
