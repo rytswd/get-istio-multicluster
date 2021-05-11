@@ -23,18 +23,18 @@ In order to make it visually easy to find which cluster corresponds to which, ea
 
 Armadillo: associated with bluish colours
 
-![armadillo-blue](/assets/images/armadillo.png)
+<img src="/assets/images/armadillo.png" alt="armadillo-blue" width="200" height="200" />
 
 Bison: associated with redish colours
 
-![bison-red](/assets/images/bison.png)
+<img src="/assets/images/bison.png" alt="bison-red" width="200" height="200" />
 
 Cow: associated with greenish colours
 
-![cow-green](/assets/images/cow.png)
+<img src="/assets/images/cow.png" alt="cow-green" width="200" height="200" />
 
 Dolphin: associated with yellowish colours
 
-![dolphin-yellow](/assets/images/dolphin.png)
+<img src="/assets/images/dolphin.png" alt="dolphin-yellow" width="200" height="200" />
 
 <!-- == export: colour-details / end == -->
