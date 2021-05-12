@@ -545,23 +545,15 @@ $ export userToken=<GITHUB_USER_TOKEN_FROM_STEP>
 
 In order to speed up the deployment, it is recommended to install Istio before going ahead with GitOps configuartion.
 
-The next step will install Argo CD drive Git repository sync, and that would override Istio installation. The same step is taken for Argo CD itself.
+The next step will install Argo CD driven Git repository sync, and that would re-apply Istio installation spec. The same step is taken for Argo CD itself.
 
 ```bash
 {
-    kubectl apply \
-        --context kind-armadillo \
-        -f ./clusters/armadillo/istio/installation/generated-manifests/1.7.8/without-revision/istio-control-plane-install.yaml \
-        -f ./clusters/armadillo/istio/installation/generated-manifests/1.7.8/without-revision/istio-multicluster-gateways-install.yaml \
-        -f ./clusters/armadillo/istio/installation/generated-manifests/1.7.8/without-revision/istio-external-gateways-install.yaml \
-        -f ./clusters/armadillo/istio/installation/generated-manifests/1.7.8/without-revision/istio-management-gateway-install.yaml
+    kustomize build ./clusters/armadillo/istio/installation/generated-manifests \
+        | kubectl apply -f - --context kind-armadillo
 
-    kubectl apply \
-        --context kind-bison \
-        -f ./clusters/bison/istio/installation/generated-manifests/1.7.8/without-revision/istio-control-plane-install.yaml \
-        -f ./clusters/bison/istio/installation/generated-manifests/1.7.8/without-revision/istio-multicluster-gateways-install.yaml \
-        -f ./clusters/bison/istio/installation/generated-manifests/1.7.8/without-revision/istio-external-gateways-install.yaml \
-        -f ./clusters/bison/istio/installation/generated-manifests/1.7.8/without-revision/istio-management-gateway-install.yaml
+    kustomize build ./clusters/bison/istio/installation/generated-manifests \
+        | kubectl apply -f - --context kind-bison
 }
 ```
 
