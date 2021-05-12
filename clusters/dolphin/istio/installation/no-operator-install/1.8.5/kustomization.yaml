@@ -1,8 +1,0 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
-  - ./istio-control-plane-install.yaml
-  - ./istio-external-gateways-install.yaml
-  - ./istio-multicluster-gateways-install.yaml
-  - ./istio-management-gateway-install.yaml
