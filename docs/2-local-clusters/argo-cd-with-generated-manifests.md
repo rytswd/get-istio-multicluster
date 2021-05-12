@@ -4,6 +4,8 @@
 
 Argo CD based setup uses the power of GitOps to wire up many components at once.
 
+This setup would create 2 local KinD clusters, `armadillo` and `bison`.
+
 The components included in each cluster is:
 
 - Istio Control Plane (`istiod`)
@@ -30,7 +32,7 @@ Istio versions supported in this setup:
 - v1.8.5
 - v1.9.4 (To be confirmed)
 
-Also, this step supports Istio canary upgrade. You can find more in [`/clusters/armadillo/istio/installation/generated-manifests/kustomization.yaml`](/clusters/armadillo/istio/installation/generated-manifests/kustomization.yaml).
+Also, this setup supports Istio canary upgrade. You can find more in [`/clusters/armadillo/istio/installation/generated-manifests/kustomization.yaml`](/clusters/armadillo/istio/installation/generated-manifests/kustomization.yaml).
 
 ## 📚 Other Setup Steps
 
@@ -531,7 +533,7 @@ $ export userToken=<GITHUB_USER_TOKEN_FROM_STEP>
 }
 ```
 
-**NOTE**: `kubectl patch` against `argocd-secret` updates the login password to `admin`.
+**NOTE**: `kubectl patch` against `argocd-secret` updates the login password to `admin`. This means you can log into Argo CD with username `admin` and password `admin`.
 
 <!-- == imptr: install-argo-cd-details / end == -->
 
@@ -543,23 +545,15 @@ $ export userToken=<GITHUB_USER_TOKEN_FROM_STEP>
 
 In order to speed up the deployment, it is recommended to install Istio before going ahead with GitOps configuartion.
 
-The next step will install Argo CD drive Git repository sync, and that would override Istio installation. The same step is taken for Argo CD itself.
+The next step will install Argo CD driven Git repository sync, and that would re-apply Istio installation spec. The same step is taken for Argo CD itself.
 
 ```bash
 {
-    kubectl apply \
-        --context kind-armadillo \
-        -f ./clusters/armadillo/istio/installation/generated-manifests/1.7.8/without-revision/istio-control-plane-install.yaml \
-        -f ./clusters/armadillo/istio/installation/generated-manifests/1.7.8/without-revision/istio-multicluster-gateways-install.yaml \
-        -f ./clusters/armadillo/istio/installation/generated-manifests/1.7.8/without-revision/istio-external-gateways-install.yaml \
-        -f ./clusters/armadillo/istio/installation/generated-manifests/1.7.8/without-revision/istio-management-gateway-install.yaml
+    kustomize build ./clusters/armadillo/istio/installation/generated-manifests \
+        | kubectl apply -f - --context kind-armadillo
 
-    kubectl apply \
-        --context kind-bison \
-        -f ./clusters/bison/istio/installation/generated-manifests/1.7.8/without-revision/istio-control-plane-install.yaml \
-        -f ./clusters/bison/istio/installation/generated-manifests/1.7.8/without-revision/istio-multicluster-gateways-install.yaml \
-        -f ./clusters/bison/istio/installation/generated-manifests/1.7.8/without-revision/istio-external-gateways-install.yaml \
-        -f ./clusters/bison/istio/installation/generated-manifests/1.7.8/without-revision/istio-management-gateway-install.yaml
+    kustomize build ./clusters/bison/istio/installation/generated-manifests \
+        | kubectl apply -f - --context kind-bison
 }
 ```
 
@@ -833,7 +827,7 @@ The important Custom Resources are:
 
 ---
 
-### 7. Verify
+### 7. Verify Multicluster Communication
 
 <!-- == imptr: verify-with-httpbin / begin from: ../snippets/steps/verify-with-httpbin.md#[curl-httpbin-2-clusters] == -->
 
@@ -896,6 +890,28 @@ _TODO: More to be added_
 </details>
 
 <!-- == imptr: verify-with-httpbin / end == -->
+
+---
+
+### 8. Verify Other Components
+
+Because this step uses Argo CD to wire up other tools at the same time, you can take a further look at Prometheus, Grafana, Argo CD, etc.
+
+**Argo CD**
+
+NOTE: When exiting from the command below with `ctrl-C`, your shell will exit. You would want to have a separate terminal for this.
+
+```bash
+{
+    trap "exit" INT TERM ERR
+    trap 'kill $(jobs -p)' EXIT
+    kubectl port-forward --context kind-armadillo -n argocd svc/argocd-server 8081:443 &
+    kubectl port-forward --context kind-bison -n argocd svc/argocd-server 8082:443 &
+    wait
+}
+```
+
+After running the above, you can visit http://localhost:8081 for Armadillo, and http://localhost:8082 for Bison.
 
 ---
 

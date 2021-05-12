@@ -85,12 +85,6 @@ spec:
                 - amd64
                 - ppc64le
                 - s390x
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                app: armadillo-management-ingressgateway
-            topologyKey: kubernetes.io/hostname
       containers:
       - args:
         - proxy
@@ -150,12 +144,16 @@ spec:
           value: armadillo-management-ingressgateway
         - name: ISTIO_META_OWNER
           value: kubernetes://apis/apps/v1/namespaces/istio-system/deployments/armadillo-management-ingressgateway
+        - name: ISTIO_META_MESH_ID
+          value: get-istio-multicluster
         - name: ISTIO_META_UNPRIVILEGED_POD
           value: "true"
         - name: ISTIO_META_ROUTER_MODE
           value: standard
+        - name: ISTIO_META_NETWORK
+          value: armadillo
         - name: ISTIO_META_CLUSTER_ID
-          value: Kubernetes
+          value: armadillo
         image: docker.io/istio/proxyv2:1.9.4
         name: istio-proxy
         ports:
