@@ -73,7 +73,7 @@ EOF
     cp ./generated-manifests/"$ISTIO_VERSION"/without-revision/*.yaml \
         ./generated-manifests/"$ISTIO_VERSION"/without-revision-before-retiring/
     mkdir ./generated-manifests/"$ISTIO_VERSION"/without-revision-before-retiring/patches
-    cp ./references/patches/delete-duplicate-resources-control-plane.yaml \
+    cp ./references/patches/delete-duplicate-resources-control-plane-1.7.yaml \
         ./generated-manifests/"$ISTIO_VERSION"/without-revision-before-retiring/patches/delete-duplicate-resources-control-plane.yaml
     cat >./generated-manifests/"$ISTIO_VERSION"/without-revision-before-retiring/kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
