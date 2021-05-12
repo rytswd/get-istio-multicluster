@@ -533,7 +533,7 @@ $ export userToken=<GITHUB_USER_TOKEN_FROM_STEP>
 }
 ```
 
-**NOTE**: `kubectl patch` against `argocd-secret` updates the login password to `admin`.
+**NOTE**: `kubectl patch` against `argocd-secret` updates the login password to `admin`. This means you can log into Argo CD with username `admin` and password `admin`.
 
 <!-- == imptr: install-argo-cd-details / end == -->
 
@@ -835,7 +835,7 @@ The important Custom Resources are:
 
 ---
 
-### 7. Verify
+### 7. Verify Multicluster Communication
 
 <!-- == imptr: verify-with-httpbin / begin from: ../snippets/steps/verify-with-httpbin.md#[curl-httpbin-2-clusters] == -->
 
@@ -898,6 +898,28 @@ _TODO: More to be added_
 </details>
 
 <!-- == imptr: verify-with-httpbin / end == -->
+
+---
+
+### 8. Verify Other Components
+
+Because this step uses Argo CD to wire up other tools at the same time, you can take a further look at Prometheus, Grafana, Argo CD, etc.
+
+**Argo CD**
+
+NOTE: When exiting from the command below with `ctrl-C`, your shell will exit. You would want to have a separate terminal for this.
+
+```bash
+{
+    trap "exit" INT TERM ERR
+    trap 'kill $(jobs -p)' EXIT
+    kubectl port-forward --context kind-armadillo -n argocd svc/argocd-server 8081:443 &
+    kubectl port-forward --context kind-bison -n argocd svc/argocd-server 8082:443 &
+    wait
+}
+```
+
+After running the above, you can visit http://localhost:8081 for Armadillo, and http://localhost:8082 for Bison.
 
 ---
 

@@ -128,6 +128,6 @@ $ export userToken=<GITHUB_USER_TOKEN_FROM_STEP>
 }
 ```
 
-**NOTE**: `kubectl patch` against `argocd-secret` updates the login password to `admin`.
+**NOTE**: `kubectl patch` against `argocd-secret` updates the login password to `admin`. This means you can log into Argo CD with username `admin` and password `admin`.
 
 <!-- == export: details / end == -->
