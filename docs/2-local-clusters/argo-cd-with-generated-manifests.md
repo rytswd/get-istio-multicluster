@@ -4,6 +4,8 @@
 
 Argo CD based setup uses the power of GitOps to wire up many components at once.
 
+This setup would create 2 local KinD clusters, `armadillo` and `bison`.
+
 The components included in each cluster is:
 
 - Istio Control Plane (`istiod`)
@@ -30,7 +32,7 @@ Istio versions supported in this setup:
 - v1.8.5
 - v1.9.4 (To be confirmed)
 
-Also, this step supports Istio canary upgrade. You can find more in [`/clusters/armadillo/istio/installation/generated-manifests/kustomization.yaml`](/clusters/armadillo/istio/installation/generated-manifests/kustomization.yaml).
+Also, this setup supports Istio canary upgrade. You can find more in [`/clusters/armadillo/istio/installation/generated-manifests/kustomization.yaml`](/clusters/armadillo/istio/installation/generated-manifests/kustomization.yaml).
 
 ## 📚 Other Setup Steps
 
