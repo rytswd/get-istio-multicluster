@@ -20,9 +20,12 @@ bases:
   # # # After 1.8.6 as canary, fully migrate to 1.8.6
   # - ./1.8.6/full-installation
 
-  # For 1.8.5 as stable, with 1.9.4 as canary
-  - ./1.8.5/before-retiring
-  - ./1.9.4/as-canary
+  # # For 1.8.5 as stable, with 1.9.4 as canary
+  # - ./1.8.5/before-retiring
+  # - ./1.9.4/as-canary
+
+  # After 1.9.4 as canary, fully migrate to 1.9.4
+  - ./1.9.4/full-installation
 
 # If you are using purely revision based Istio installation, you need to have
 # Kubernetes Service that works as the default.
