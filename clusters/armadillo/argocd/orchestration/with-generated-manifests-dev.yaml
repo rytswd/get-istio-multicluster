@@ -79,7 +79,7 @@ apps:
     enabled: true
     namespace: armadillo-offerings
     istioSidecar: true
-    istioRevision: 1-8-6
+    istioRevision: 1-8-5
     loadPath: ../other
 #
 # =========================================================================== #
