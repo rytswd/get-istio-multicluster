@@ -1,0 +1,112 @@
+env: staging
+
+# === Application Onboarding with ArgoCD ==================================== #
+#
+#   ArgoCD template setup is going to loop through the items in slice here.
+#   If the `enabled` boolean flag is set to `false`, ArgoCD will ignore.
+#
+#   Additionally, you can specify `namespace`. This may be useful when the
+#   installation requires a specific namespace in place.
+#
+apps:
+  # All the `loadPath` inputs are relative from `clusters/armadillo/argocd/`.
+
+  # Istio related setup
+  - name: istio-with-generated-manifests
+    namespace: istio-system # Namespace gets created by a template setup.
+    enabled: true
+    loadPath: ../istio/installation/generated-manifests
+    ignoreDifferences:
+      # Ignore caBundle diff due to runtime updates to the config
+      - group: admissionregistration.k8s.io
+        kind: MutatingWebhookConfiguration
+        jsonPointers:
+          - /webhooks/0/clientConfig/caBundle
+          - /webhooks/0/failurePolicy
+      - group: admissionregistration.k8s.io
+        kind: ValidatingWebhookConfiguration
+        jsonPointers:
+          - /webhooks/0/clientConfig/caBundle
+          - /webhooks/0/failurePolicy
+  - name: istio-traffic-management-custom-resources
+    enabled: true
+    loadPath: ../istio/traffic-management/istio-resources
+  - name: istio-traffic-management-local
+    enabled: true
+    loadPath: ../istio/traffic-management/local
+  - name: istio-traffic-management-external
+    enabled: true
+    loadPath: ../istio/traffic-management/external
+  - name: istio-traffic-management-multicluster
+    enabled: true
+    loadPath: ../istio/traffic-management/multicluster
+
+  # Observability related setup
+  - name: prometheus
+    enabled: true
+    namespace: prometheus
+    istioSidecar: true
+    loadPath: ../observability/prometheus/operator-usage
+  - name: prometheus-operator
+    enabled: true
+    loadPath: ../observability/prometheus/operator-install
+  - name: grafana
+    enabled: true
+    loadPath: ../observability/grafana/installation
+  - name: grafana-datasources
+    enabled: true
+    loadPath: ../observability/grafana/datasources
+  - name: grafana-dashboards
+    enabled: true
+    loadPath: ../observability/grafana/dashboards
+  - name: jaeger
+    enabled: true
+    loadPath: ../observability/jaeger/operator-usage
+  - name: jaeger-operator
+    enabled: true
+    namespace: jaeger-operator
+    loadPath: ../observability/jaeger/operator-install
+  - name: kiali
+    enabled: true
+    loadPath: ../observability/kiali/operator-usage
+  - name: kiali-operator
+    enabled: true
+    namespace: kiali-operator
+    loadPath: ../observability/kiali/operator-install
+
+  # Other resources
+  - name: other
+    enabled: true
+    namespace: armadillo-offerings
+    istioSidecar: true
+    istioRevision: 1-8-6
+    loadPath: ../other
+#
+# =========================================================================== #
+
+# === ArgoCD Setup ========================================================== #
+#
+# Metadata
+metadata:
+  finalizers:
+    enabled: true
+# Overrides
+spec:
+  source:
+    gitRepoUrl: https://github.com/rytswd/get-istio-multicluster
+    targetRevision: dev
+  destination:
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      prune:
+        # Specifies if resources should be pruned during auto-syncing
+        # ( false by default ).
+        enabled: true
+      selfHeal:
+        # Specifies if partial app sync should be executed when resources
+        # are changed only in target Kubernetes cluster and no git change
+        # detected ( false by default ).
+        enabled: true
+#
+# =========================================================================== #
