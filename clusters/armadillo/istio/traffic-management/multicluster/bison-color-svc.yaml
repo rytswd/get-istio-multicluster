@@ -35,7 +35,6 @@ metadata:
 spec:
   hosts:
     - color-svc.bison-offerings.global
-    # - color-svc.bison-offerings.bison.global
     - color-svc.bison-offerings.svc.cluster.local
   http:
     - match:
@@ -51,6 +50,16 @@ spec:
           percentage:
             value: 50
           httpStatus: 400
+
+    # For testing VirtualService created URI
+    - match:
+        - uri:
+            prefix: /istio
+      rewrite:
+        uri: /random
+      route:
+        - destination:
+            host: color-svc.bison-offerings.global
 
     # Default routing
     - route:
