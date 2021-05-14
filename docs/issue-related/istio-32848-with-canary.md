@@ -28,7 +28,8 @@ This declarative approach is the power of GitOps, but when it comes to starting 
 
 Istio versions supported in this setup:
 
-- v1.8.6
+- v1.8.5
+- v1.8.6 (canary)
 
 ## 📚 Other Setup Steps
 
@@ -96,7 +97,7 @@ Istio versions supported in this setup:
     cd get-istio-multicluster
     # /some/path/at/get-istio-multicluster
 
-    git switch istio-32848
+    git switch istio-32848-with-v1.8.5-and-v1.8.6
 }
 ```
 
@@ -615,7 +616,7 @@ This setup allows declarative setup even for LB IP, and also wiring up multiple 
     kubectl apply -n argocd \
         --context kind-armadillo \
         -f ./init/argo-cd-project.yaml \
-        -f ./init/for-istio-32848.yaml
+        -f ./init/for-istio-32848-with-canary.yaml
 
     popd > /dev/null
 }
@@ -630,7 +631,7 @@ This setup allows declarative setup even for LB IP, and also wiring up multiple 
     kubectl apply -n argocd \
         --context kind-bison \
         -f ./init/argo-cd-project.yaml \
-        -f ./init/for-istio-32848.yaml
+        -f ./init/for-istio-32848-with-canary.yaml
 
     popd > /dev/null
 }
