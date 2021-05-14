@@ -52,6 +52,17 @@ spec:
           percentage:
             value: 50
           httpStatus: 400
+
+    # For testing VirtualService created URI
+    - match:
+        - uri:
+            prefix: /istio
+      rewrite:
+        uri: /status/418
+      route:
+        - destination:
+            host: httpbin.armadillo-offerings.global
+
     # Default routing
     - route:
         - destination:

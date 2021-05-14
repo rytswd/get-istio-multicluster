@@ -6,7 +6,6 @@ metadata:
 spec:
   hosts:
     - httpbin.bison-offerings.global
-    # - httpbin.bison-offerings.bison.global # Can be anything, as long as appropriate EnvoyFilter is in place on target cluster
   location: MESH_INTERNAL
   exportTo:
     - "*" # Temporarily set this to all namespaces
@@ -36,7 +35,6 @@ metadata:
 spec:
   hosts:
     - httpbin.bison-offerings.global
-    # - httpbin.bison-offerings.bison.global
     - httpbin.bison-offerings.svc.cluster.local
   http:
     - match:
@@ -52,6 +50,17 @@ spec:
           percentage:
             value: 50
           httpStatus: 400
+
+    # For testing VirtualService created URI
+    - match:
+        - uri:
+            prefix: /istio
+      rewrite:
+        uri: /status/418
+      route:
+        - destination:
+            host: httpbin.bison-offerings.global
+
     # Default routing
     - route:
         - destination:

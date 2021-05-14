@@ -36,7 +36,6 @@ metadata:
 spec:
   hosts:
     - color-svc.armadillo-offerings.global
-    # - color-svc.armadillo-offerings.armadillo.global
     - color-svc.armadillo-offerings.svc.cluster.local
   http:
     - match:
@@ -52,6 +51,16 @@ spec:
           percentage:
             value: 50
           httpStatus: 400
+
+    # For testing VirtualService created URI
+    - match:
+        - uri:
+            prefix: /istio
+      rewrite:
+        uri: /random
+      route:
+        - destination:
+            host: color-svc.armadillo-offerings.global
 
     # Default routing
     - route:
