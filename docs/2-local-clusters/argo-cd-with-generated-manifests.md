@@ -831,9 +831,9 @@ The important Custom Resources are:
 
 ---
 
-### Extra: Multicluster Communication by Connecting to Kubernetes API
+### Extra: Multicluster Communication by Connecting to Kubernetes API Server
 
-With Istio v1.8, multicluster setup has been revamped.
+Istio v1.8 has had a revamp on multicluster setup, which makes use of Kubernetes API Server to connect to remote Istio Control Plane to get more information about the remote targets.
 
 This setup is rather imperative by nature, and I have not found declarative approach for this.
 
