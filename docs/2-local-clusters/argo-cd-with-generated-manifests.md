@@ -612,6 +612,10 @@ This setup allows declarative setup even for LB IP, and also wiring up multiple 
 
 ### Before 6. Part 2 - Ensure `istiocoredns` setup
 
+#### 🖋 NOTE 🖋
+
+> This setup is only needed for Istio v1.7 or below.
+
 #### 📍 WARNING 📍
 
 > This step is NOT a part of GitOps, because there is no easy way to have it in a declarative manner, due to the cluster IP associated with `istiocoredns` is only confirmed once the Service is created. However, if you are trying to have GitOps setup similar to this repository, you can follow the below instructions, and then place `coredns-configmap.yaml` file as a part of GitOps.  
@@ -822,6 +826,53 @@ The important Custom Resources are:
 `Project` (aka `AppProject`) defines scope. It is crucial to have appropriate access control defined in GitOps solutions, and a lot is handled by `Project`, such as targetted namespace(s), resource whitelist/blacklist, etc. You can think of `Project` as a parent of `Application`, as each `Application` needs at least one `Project`.
 
 <!-- == imptr: use-argo-cd-details / end == -->
+
+</details>
+
+---
+
+### Extra: Multicluster Communication by Connecting to Kubernetes API
+
+With Istio v1.8, multicluster setup has been revamped.
+
+This setup is rather imperative by nature, and I have not found declarative approach for this.
+
+#### Armadillo
+
+```bash
+{
+    # For Armadillo cluster, get Kubernetes API server access for Bison
+    BISON_KUBERNETES_MASTER_CIDR=$(docker network inspect kind | jq -r '.[0].Containers[] | select (.Name == "bison-control-plane") | .IPv4Address')
+    export BISON_KUBERNETES_MASTER=${BISON_KUBERNETES_MASTER_CIDR%/16}
+    echo $BISON_KUBERNETES_MASTER
+
+    istioctl x create-remote-secret \
+        --context="kind-bison" \
+        --name=kind-bison \
+        --server https://$BISON_KUBERNETES_MASTER:6443 | kubectl apply -f - --context kind-armadillo
+}
+```
+
+#### Bison
+
+```bash
+{
+    # For Bison cluster, get Kubernetes API server access for Armadillo
+    ARMADILLO_KUBERNETES_MASTER_CIDR=$(docker network inspect kind | jq -r '.[0].Containers[] | select (.Name == "armadillo-control-plane") | .IPv4Address')
+    export ARMADILLO_KUBERNETES_MASTER=${ARMADILLO_KUBERNETES_MASTER_CIDR%/16}
+    echo $ARMADILLO_KUBERNETES_MASTER
+
+    istioctl x create-remote-secret \
+        --context="kind-armadillo" \
+        --name=kind-armadillo \
+        --server https://$ARMADILLO_KUBERNETES_MASTER:6443 | kubectl apply -f - --context kind-bison
+}
+```
+
+<details>
+<summary>ℹ️ Details</summary>
+
+_To be updated_
 
 </details>
 
