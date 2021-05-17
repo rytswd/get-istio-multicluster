@@ -19,6 +19,7 @@ metadata:
   labels:
     app: bison-multicluster-ingressgateway
     istio: ingressgateway
+    topology.istio.io/network: bison
     release: istio
     istio.io/rev: 1-8-6
     install.operator.istio.io/owning-resource: unknown
@@ -268,6 +269,7 @@ metadata:
     istio.io/rev: 1-8-6
     operator.istio.io/component: IngressGateways
     release: istio
+    topology.istio.io/network: bison
   name: bison-multicluster-ingressgateway
   namespace: istio-system
 spec:
@@ -275,6 +277,7 @@ spec:
     matchLabels:
       app: bison-multicluster-ingressgateway
       istio: ingressgateway
+      topology.istio.io/network: bison
   strategy:
     rollingUpdate:
       maxSurge: 100%
@@ -297,6 +300,7 @@ spec:
         release: istio
         service.istio.io/canonical-name: bison-multicluster-ingressgateway
         service.istio.io/canonical-revision: 1-8-6
+        topology.istio.io/network: bison
     spec:
       affinity:
         nodeAffinity:
@@ -396,6 +400,8 @@ spec:
           value: "true"
         - name: ISTIO_META_ROUTER_MODE
           value: sni-dnat
+        - name: ISTIO_META_REQUESTED_NETWORK_VIEW
+          value: bison
         - name: ISTIO_META_NETWORK
           value: bison
         - name: ISTIO_META_CLUSTER_ID
@@ -526,6 +532,7 @@ metadata:
   labels:
     app: bison-multicluster-ingressgateway
     istio: ingressgateway
+    topology.istio.io/network: bison
     release: istio
     istio.io/rev: 1-8-6
     install.operator.istio.io/owning-resource: unknown
@@ -536,6 +543,7 @@ spec:
     matchLabels:
       app: bison-multicluster-ingressgateway
       istio: ingressgateway
+      topology.istio.io/network: bison
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -636,6 +644,7 @@ metadata:
   labels:
     app: bison-multicluster-ingressgateway
     istio: ingressgateway
+    topology.istio.io/network: bison
     release: istio
     istio.io/rev: 1-8-6
     install.operator.istio.io/owning-resource: unknown
@@ -699,6 +708,7 @@ metadata:
     istio.io/rev: 1-8-6
     operator.istio.io/component: IngressGateways
     release: istio
+    topology.istio.io/network: bison
   name: bison-multicluster-ingressgateway
   namespace: istio-system
 spec:
@@ -732,5 +742,6 @@ spec:
   selector:
     app: bison-multicluster-ingressgateway
     istio: ingressgateway
+    topology.istio.io/network: bison
   type: LoadBalancer
 ---
