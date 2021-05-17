@@ -19,6 +19,7 @@ metadata:
   labels:
     app: armadillo-multicluster-ingressgateway
     istio: ingressgateway
+    topology.istio.io/network: armadillo
     release: istio
     istio.io/rev: 1-8-5
     install.operator.istio.io/owning-resource: unknown
@@ -266,6 +267,7 @@ metadata:
     istio.io/rev: 1-8-5
     operator.istio.io/component: IngressGateways
     release: istio
+    topology.istio.io/network: armadillo
   name: armadillo-multicluster-ingressgateway
   namespace: istio-system
 spec:
@@ -273,6 +275,7 @@ spec:
     matchLabels:
       app: armadillo-multicluster-ingressgateway
       istio: ingressgateway
+      topology.istio.io/network: armadillo
   strategy:
     rollingUpdate:
       maxSurge: 100%
@@ -295,6 +298,7 @@ spec:
         release: istio
         service.istio.io/canonical-name: armadillo-multicluster-ingressgateway
         service.istio.io/canonical-revision: 1-8-5
+        topology.istio.io/network: armadillo
     spec:
       affinity:
         nodeAffinity:
@@ -392,6 +396,8 @@ spec:
           value: get-istio-multicluster
         - name: ISTIO_META_ROUTER_MODE
           value: sni-dnat
+        - name: ISTIO_META_REQUESTED_NETWORK_VIEW
+          value: armadillo
         - name: ISTIO_META_NETWORK
           value: armadillo
         - name: ISTIO_META_CLUSTER_ID
@@ -522,6 +528,7 @@ metadata:
   labels:
     app: armadillo-multicluster-ingressgateway
     istio: ingressgateway
+    topology.istio.io/network: armadillo
     release: istio
     istio.io/rev: 1-8-5
     install.operator.istio.io/owning-resource: unknown
@@ -532,6 +539,7 @@ spec:
     matchLabels:
       app: armadillo-multicluster-ingressgateway
       istio: ingressgateway
+      topology.istio.io/network: armadillo
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -632,6 +640,7 @@ metadata:
   labels:
     app: armadillo-multicluster-ingressgateway
     istio: ingressgateway
+    topology.istio.io/network: armadillo
     release: istio
     istio.io/rev: 1-8-5
     install.operator.istio.io/owning-resource: unknown
@@ -695,6 +704,7 @@ metadata:
     istio.io/rev: 1-8-5
     operator.istio.io/component: IngressGateways
     release: istio
+    topology.istio.io/network: armadillo
   name: armadillo-multicluster-ingressgateway
   namespace: istio-system
 spec:
@@ -728,5 +738,6 @@ spec:
   selector:
     app: armadillo-multicluster-ingressgateway
     istio: ingressgateway
+    topology.istio.io/network: armadillo
   type: LoadBalancer
 ---
