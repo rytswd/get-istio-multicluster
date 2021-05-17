@@ -2,7 +2,7 @@
 
 This repository started as a personal note, and it contains many files that work together to provide Istio multicluster setup.
 
-When setting up Istio multiclutser, there are already more than handful of Istio configurations you will need to juggle with; and the situation only gets more complex as you try to integrate other system such as Prometheus, Argo CD, etc.
+When setting up Istio multicluster, there are already more than handful of Istio configurations you will need to juggle with; and the situation only gets more complex as you try to integrate other system such as Prometheus, Argo CD, etc.
 
 By using this repository, you can get a sense of how those configurations and installation specs can be structured, and thus getting this repo handy on your local is a good approach for seeing Istio multicluster in action at first.
 
