@@ -3,9 +3,9 @@ apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
   # https://github.com/kubernetes-sigs/kind/releases
   - role: control-plane
-    image: kindest/node:v1.17.17@sha256:66f1d0d91a88b8a001811e2f1054af60eef3b669a9a74f9b6db871f2f1eeed00
+    image: kindest/node:v1.21.1@sha256:69860bda5563ac81e3c0057d654b5253219618a22ec3a346306239bba8cfa1a6
   - role: worker
-    image: kindest/node:v1.17.17@sha256:66f1d0d91a88b8a001811e2f1054af60eef3b669a9a74f9b6db871f2f1eeed00
+    image: kindest/node:v1.21.1@sha256:69860bda5563ac81e3c0057d654b5253219618a22ec3a346306239bba8cfa1a6
     kubeadmConfigPatches:
       - |
         kind: InitConfiguration
@@ -13,14 +13,14 @@ nodes:
           kubeletExtraArgs:
             node-labels: "ingress-ready=true"
     extraPortMappings:
-      - containerPort: 32012
-        hostPort: 32012
+      - containerPort: 32011
+        hostPort: 32011
         protocol: TCP
-      - containerPort: 32022
-        hostPort: 32022
+      - containerPort: 32021
+        hostPort: 32021
         protocol: TCP
-      - containerPort: 32032
-        hostPort: 32032
+      - containerPort: 32031
+        hostPort: 32031
         protocol: TCP
 kubeadmConfigPatches:
   - |
