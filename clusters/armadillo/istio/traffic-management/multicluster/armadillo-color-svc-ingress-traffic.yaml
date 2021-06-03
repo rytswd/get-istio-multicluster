@@ -16,3 +16,5 @@ spec:
       number: 8800
       protocol: http
   resolution: DNS
+  workloadSelector:
+    app.kubernetes.io/name: color-svc-only-blue
