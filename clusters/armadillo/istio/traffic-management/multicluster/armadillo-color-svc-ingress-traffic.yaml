@@ -16,6 +16,46 @@ spec:
       number: 8800
       protocol: http
   resolution: DNS
-  workloadSelector:
-    labels:
-      app.kubernetes.io/name: color-svc-only-blue
+  # workloadSelector:
+  #   labels:
+  #     app.kubernetes.io/name: color-svc-only-blue
+  endpoints:
+    - color-svc.armadillo-offerings.svc.cluster.local
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: armadillo-color-svc-multicluster-ingress-routing
+spec:
+  hosts:
+    - color-svc.armadillo-offerings.global
+    - color-svc.armadillo-offerings.armadillo
+  gateways:
+    - istio-system/armadillo-multicluster-ingressgateway
+  http:
+    - match:
+        - uri:
+            prefix: /chaos
+      rewrite:
+        uri: /random
+      route:
+        - destination:
+            host: color-svc.armadillo-offerings.svc.cluster.local
+            port:
+              number: 8800
+      fault:
+        abort:
+          percentage:
+            value: 50
+          httpStatus: 400
+
+    - match:
+        - uri:
+            prefix: /armadillo
+      rewrite:
+        uri: /random
+      route:
+        - destination:
+            host: color-svc.armadillo-offerings.svc.cluster.local
+            port:
+              number: 8800
