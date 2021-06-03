@@ -20,7 +20,7 @@ spec:
   #   labels:
   #     app.kubernetes.io/name: color-svc-only-blue
   endpoints:
-    - color-svc.armadillo-offerings.svc.cluster.local
+    - address: color-svc.armadillo-offerings.svc.cluster.local
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
