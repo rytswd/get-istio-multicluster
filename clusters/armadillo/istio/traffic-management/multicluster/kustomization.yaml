@@ -7,3 +7,5 @@ resources:
   - bison-color-svc.yaml
   - bison-httpbin.yaml
   # - coredns-configmap.yaml
+
+  - armadillo-color-svc-ingress-traffic.yaml
