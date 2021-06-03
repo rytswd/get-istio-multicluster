@@ -16,5 +16,6 @@ spec:
       number: 8800
       protocol: http
   resolution: DNS
-  endpoints:
-    - address: color-svc.armadillo-offerings.svc.cluster.local
+  workloadSelector:
+    labels:
+      app.kubernetes.io/name: color-svc-only-blue
