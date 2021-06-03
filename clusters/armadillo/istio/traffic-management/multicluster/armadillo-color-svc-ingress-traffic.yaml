@@ -7,20 +7,14 @@ spec:
   hosts:
     - color-svc.armadillo-offerings.global
     - color-svc.armadillo-offerings.armadillo
-    # - color-svc.bison-offerings.bison.global # Can be anything, as long as appropriate EnvoyFilter is in place on target cluster
+  addresses:
+    - color-svc.armadillo-offerings.svc.cluster.local
   location: MESH_INTERNAL
-  exportTo:
-    - "*" # Temporarily set this to all namespaces
   ports:
     - name: http-armadillo-color-svc
       number: 8800
       protocol: http
   resolution: DNS
-  # workloadSelector:
-  #   labels:
-  #     app.kubernetes.io/name: color-svc-only-blue
-  endpoints:
-    - address: color-svc.armadillo-offerings.svc.cluster.local
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
