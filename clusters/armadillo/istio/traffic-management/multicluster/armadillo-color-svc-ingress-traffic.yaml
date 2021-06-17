@@ -7,6 +7,7 @@ spec:
   hosts:
     - color-svc.armadillo-offerings.global
     - color-svc.armadillo-offerings.armadillo
+    - color-svc.armadillo-offerings.svc.cluster.local
   endpoints:
     - address: color-svc.armadillo-offerings.svc.cluster.local
   location: MESH_INTERNAL
