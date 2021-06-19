@@ -6,7 +6,7 @@ metadata:
 spec:
   hosts:
     - color-svc.armadillo-offerings.global
-    - some-svc.armadillo-offerings.svc.cluster.local
+    - some-svc.armadillo-offerings.global
     # - color-svc.armadillo-offerings.armadillo.global # Can be anything, as long as appropriate EnvoyFilter is in place on target cluster
   location: MESH_INTERNAL
   exportTo:
