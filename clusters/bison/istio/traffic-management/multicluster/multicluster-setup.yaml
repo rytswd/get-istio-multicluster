@@ -11,7 +11,7 @@ spec:
     app: bison-multicluster-ingressgateway
   servers:
     - hosts:
-        # - "*.global"
+        - "*.global"
         - "*.local"
       port:
         name: tls

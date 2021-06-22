@@ -11,7 +11,7 @@ spec:
     app: armadillo-multicluster-ingressgateway
   servers:
     - hosts:
-        # - "*.global"
+        - "*.global"
         - "*.local"
       port:
         name: tls
