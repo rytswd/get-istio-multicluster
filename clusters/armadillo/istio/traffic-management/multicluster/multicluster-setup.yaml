@@ -110,14 +110,14 @@ spec:
     labels:
       app: armadillo-multicluster-ingressgateway # As there are multiple ingressGateway, this ensures correct one being used
 
-# ---
-# apiVersion: networking.istio.io/v1beta1
-# kind: DestinationRule
-# metadata:
-#   name: multicluster-traffic-from-armadillo
-#   namespace: istio-system
-# spec:
-#   host: "*.global"
-#   trafficPolicy:
-#     tls:
-#       mode: ISTIO_MUTUAL
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: multicluster-traffic-from-armadillo
+  namespace: istio-system
+spec:
+  host: "*.global"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
