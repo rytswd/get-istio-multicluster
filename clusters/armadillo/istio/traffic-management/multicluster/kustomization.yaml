@@ -9,3 +9,4 @@ resources:
   # - coredns-configmap.yaml
 
   - armadillo-color-svc-ingress-traffic.yaml
+  - armadillo-httpbin-ingress-traffic.yaml
