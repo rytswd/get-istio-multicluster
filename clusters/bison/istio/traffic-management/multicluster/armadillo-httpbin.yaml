@@ -1,31 +1,27 @@
-# ---
-# apiVersion: networking.istio.io/v1beta1
-# kind: ServiceEntry
-# metadata:
-#   name: armadillo-httpbin
-# spec:
-#   hosts:
-#     - httpbin.armadillo-offerings.global
-#     # - httpbin.armadillo-offerings.armadillo.global # Can be anything, as long as appropriate EnvoyFilter is in place on target cluster
-#   location: MESH_INTERNAL
-#   exportTo:
-#     - "*" # Temporarily set this to all namespaces
-#   ports:
-#     - name: http-armadillo
-#       number: 8000
-#       protocol: http
-#   resolution: STATIC
-#   addresses:
-#     - 240.0.0.1
-#   endpoints:
-#     - address: 172.18.101.150
-#       network: external
-#       ports:
-#         http-armadillo: 15443
-#     # Taking out Egress mapping for now
-#     # - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
-#     #   ports:
-#     #     http-armadillo: 15443
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: armadillo-httpbin
+spec:
+  hosts:
+    - httpbin.armadillo-offerings.global
+    # - httpbin.armadillo-offerings.armadillo.global # Can be anything, as long as appropriate EnvoyFilter is in place on target cluster
+  location: MESH_INTERNAL
+  exportTo:
+    - "*" # Temporarily set this to all namespaces
+  ports:
+    - name: http-armadillo
+      number: 8000
+      protocol: http
+  resolution: STATIC
+  addresses:
+    - 240.0.0.1
+  endpoints:
+    - address: 172.18.101.150 # This IP is assigned as the loadBalancerIP for IngressGateway
+      network: external
+      ports:
+        http-armadillo: 15443
 ---
 # VirtualService definition on Armadillo side won't be able to handle the chaos setup.
 # TODO: Check if this can be handled at IngressGateway instead
@@ -35,8 +31,8 @@ metadata:
   name: armadillo-httpbin-routing
 spec:
   hosts:
-    # - httpbin.armadillo-offerings.global
-    - httpbin.armadillo-offerings.svc.cluster.local
+    - httpbin.armadillo-offerings.global
+    # - httpbin.armadillo-offerings.svc.cluster.local
   http:
     - match:
         - uri:
@@ -45,8 +41,8 @@ spec:
         uri: /status/418
       route:
         - destination:
-            # host: httpbin.armadillo-offerings.global
-            host: httpbin.armadillo-offerings.svc.cluster.local # Use cluster.local based multicluster
+            host: httpbin.armadillo-offerings.global
+            # host: httpbin.armadillo-offerings.svc.cluster.local # Use cluster.local based multicluster
       fault:
         abort:
           percentage:
@@ -61,11 +57,11 @@ spec:
         uri: /status/418
       route:
         - destination:
-            # host: httpbin.armadillo-offerings.global
-            host: httpbin.armadillo-offerings.svc.cluster.local # Use cluster.local based multicluster
+            host: httpbin.armadillo-offerings.global
+            # host: httpbin.armadillo-offerings.svc.cluster.local # Use cluster.local based multicluster
 
     # Default routing
     - route:
         - destination:
-            # host: httpbin.armadillo-offerings.global
-            host: httpbin.armadillo-offerings.svc.cluster.local # Use cluster.local based multicluster
+            host: httpbin.armadillo-offerings.global
+            # host: httpbin.armadillo-offerings.svc.cluster.local # Use cluster.local based multicluster

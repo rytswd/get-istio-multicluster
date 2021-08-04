@@ -19,14 +19,10 @@ spec:
   addresses:
     - 240.0.0.2
   endpoints:
-    - address: 172.18.101.150
+    - address: 172.18.101.150 # This IP is assigned as the loadBalancerIP for IngressGateway
       network: external
       ports:
         http-armadillo: 15443
-    # Taking out Egress mapping for now
-    # - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
-    #   ports:
-    #     http-armadillo: 15443
 ---
 # VirtualService definition on Armadillo side won't be able to handle the chaos setup.
 # TODO: Check if this can be handled at IngressGateway instead
