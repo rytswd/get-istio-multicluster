@@ -8,5 +8,6 @@ resources:
   - bison-httpbin.yaml
   # - coredns-configmap.yaml
 
+  # Cluster local services, but exposed to other cluster
   - armadillo-color-svc-ingress-traffic.yaml
   - armadillo-httpbin-ingress-traffic.yaml

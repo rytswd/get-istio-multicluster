@@ -6,3 +6,7 @@ resources:
 
   - armadillo-color-svc.yaml
   - armadillo-httpbin.yaml
+
+  # Cluster local services, but exposed to other cluster
+  - bison-color-svc-ingress-traffic.yaml
+  - bison-httpbin-ingress-traffic.yaml

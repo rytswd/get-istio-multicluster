@@ -1,0 +1,17 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: bison-httpbin
+spec:
+  hosts:
+    - httpbin.bison-offerings.global
+    - httpbin.bison-offerings.bison
+  endpoints:
+    - address: httpbin.bison-offerings.svc.cluster.local
+  location: MESH_INTERNAL
+  ports:
+    - name: http-bison-httpbin
+      number: 8000
+      protocol: http
+  resolution: DNS

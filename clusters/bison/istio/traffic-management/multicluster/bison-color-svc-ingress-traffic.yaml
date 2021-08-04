@@ -1,0 +1,17 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: bison-color-svc
+spec:
+  hosts:
+    - color-svc.bison-offerings.global
+    - color-svc.bison-offerings.bison
+  endpoints:
+    - address: color-svc.bison-offerings.svc.cluster.local
+  location: MESH_INTERNAL
+  ports:
+    - name: http-bison-color-svc
+      number: 8800
+      protocol: http
+  resolution: DNS
