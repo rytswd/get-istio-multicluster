@@ -1,30 +1,26 @@
-# ---
-# apiVersion: networking.istio.io/v1beta1
-# kind: ServiceEntry
-# metadata:
-#   name: bison-httpbin
-# spec:
-#   hosts:
-#     - httpbin.bison-offerings.global
-#   location: MESH_INTERNAL
-#   exportTo:
-#     - "*" # Temporarily set this to all namespaces
-#   ports:
-#     - name: http-bison
-#       number: 8000
-#       protocol: http
-#   resolution: STATIC
-#   addresses:
-#     - 240.0.0.1
-#   endpoints:
-#     - address: 172.18.102.150
-#       network: external
-#       ports:
-#         http-bison: 15443
-#     # Taking out Egress mapping for now
-#     # - address: REPLACE_WITH_EGRESS_GATEWAY_CLUSTER_IP
-#     #   ports:
-#     #     http-bison: 15443
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: bison-httpbin
+spec:
+  hosts:
+    - httpbin.bison-offerings.global
+  location: MESH_INTERNAL
+  exportTo:
+    - "*" # Temporarily set this to all namespaces
+  ports:
+    - name: http-bison
+      number: 8000
+      protocol: http
+  resolution: STATIC
+  addresses:
+    - 240.0.0.1
+  endpoints:
+    - address: 172.18.102.150 # This IP is assigned as the loadBalancerIP for IngressGateway
+      network: external
+      ports:
+        http-bison: 15443
 ---
 # VirtualService definition on Bison side won't be able to handle the chaos setup.
 # TODO: Check if this can be handled at IngressGateway instead
@@ -34,7 +30,7 @@ metadata:
   name: bison-httpbin-routing
 spec:
   hosts:
-    # - httpbin.bison-offerings.global
+    - httpbin.bison-offerings.global
     - httpbin.bison-offerings.svc.cluster.local
   http:
     - match:
@@ -44,8 +40,8 @@ spec:
         uri: /status/418
       route:
         - destination:
-            # host: httpbin.bison-offerings.global
-            host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
+            host: httpbin.bison-offerings.global
+            # host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
       fault:
         abort:
           percentage:
@@ -60,11 +56,11 @@ spec:
         uri: /status/418
       route:
         - destination:
-            # host: httpbin.bison-offerings.global
-            host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
+            host: httpbin.bison-offerings.global
+            # host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
 
     # Default routing
     - route:
         - destination:
-            # host: httpbin.bison-offerings.global
-            host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
+            host: httpbin.bison-offerings.global
+            # host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
