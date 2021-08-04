@@ -2,12 +2,11 @@
 apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
-  name: armadillo-color-svc
+  name: armadillo-httpbin
 spec:
   hosts:
     - httpbin.armadillo-offerings.global
     - httpbin.armadillo-offerings.armadillo
-    - httpbin-test.armadillo-offerings.svc.cluster.local
   endpoints:
     - address: httpbin.armadillo-offerings.svc.cluster.local
   location: MESH_INTERNAL
