@@ -53,8 +53,8 @@ spec:
       match:
         context: GATEWAY
         # If necessary, Istio version can be specified here.
-        # proxy:
-        #   proxyVersion: ^1\.7.*
+        proxy:
+          proxyVersion: ^1\.7.*
         listener:
           filterChain:
             filter:
