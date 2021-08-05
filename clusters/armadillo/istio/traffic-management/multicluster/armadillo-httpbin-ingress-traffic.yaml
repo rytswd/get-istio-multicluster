@@ -2,7 +2,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
-  name: armadillo-httpbin
+  name: armadillo-httpbin-ingress-traffic
 spec:
   hosts:
     - httpbin.armadillo-offerings.global

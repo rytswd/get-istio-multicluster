@@ -2,7 +2,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
-  name: bison-color-svc
+  name: bison-color-svc-ingress-traffic
 spec:
   hosts:
     - color-svc.bison-offerings.global

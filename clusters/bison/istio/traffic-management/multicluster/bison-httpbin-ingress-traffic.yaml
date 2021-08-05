@@ -2,7 +2,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
-  name: bison-httpbin
+  name: bison-httpbin-ingress-traffic
 spec:
   hosts:
     - httpbin.bison-offerings.global

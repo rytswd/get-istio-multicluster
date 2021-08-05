@@ -2,7 +2,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
-  name: armadillo-color-svc
+  name: armadillo-color-svc-ingress-traffic
 spec:
   hosts:
     - color-svc.armadillo-offerings.global
