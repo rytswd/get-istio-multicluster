@@ -22,7 +22,7 @@ jobs:
         run: brew install upsidr/tap/importer
 
       - name: Run Importer against all *.md files
-        run: find . -name '*.md' -exec importer generate {} \;
+        run: find . -name '*.md' -exec importer update {} \;
       - name: Check if any change compared to the branch HEAD
         run: |
           git status --short
