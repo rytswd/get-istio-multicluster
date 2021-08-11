@@ -12,6 +12,7 @@ spec:
   servers:
     - hosts:
         - "*.global"
+        - "*.armadillo"
         - "*.local"
       port:
         name: tls
