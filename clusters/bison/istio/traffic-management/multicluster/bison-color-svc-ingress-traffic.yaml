@@ -16,14 +16,14 @@ spec:
       protocol: http
   resolution: DNS
 ---
-# ⚠️ NOTE ⚠️ This does not work.
-# It seems that VirtualService traffic update needs to take place at the source, not at the destination.
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: bison-color-svc-multicluster-ingress
   namespace: bison-offerings
 spec:
+  # ⚠️ NOTE ⚠️ This does not work.
+  # It seems that VirtualService traffic update needs to take place at the source, not at the destination.
   hosts:
     - color-svc.bison-offerings.bison
     - color-svc.bison-offerings.svc.cluster.local
