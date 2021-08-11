@@ -5,7 +5,7 @@ metadata:
   name: armadillo-color-svc-ingress-traffic
 spec:
   hosts:
-    - color-svc.armadillo-offerings.global
+    # - color-svc.armadillo-offerings.global
     - color-svc.armadillo-offerings.armadillo
   endpoints:
     - address: color-svc.armadillo-offerings.svc.cluster.local

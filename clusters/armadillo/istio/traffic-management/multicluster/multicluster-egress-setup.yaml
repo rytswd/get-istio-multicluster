@@ -9,6 +9,7 @@ spec:
   trafficPolicy:
     tls:
       mode: ISTIO_MUTUAL
+
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule

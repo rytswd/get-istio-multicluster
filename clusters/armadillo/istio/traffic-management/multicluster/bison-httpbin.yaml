@@ -5,7 +5,13 @@ metadata:
   name: bison-httpbin
 spec:
   hosts:
+    # v1.8.5 or below:
+    #   Host information could be anything, as long as appropriate EnvoyFilter is in place in the target cluster.
+    # v1.8.6 and after:
+    #   Host information could be anything, as long as the same host information is handled by ServiceEntry in the target cluster as well.
+    # In both setup, DestinationRule to ensure ISTIO_MUTUAL is required.
     - httpbin.bison-offerings.global
+    - httpbin.bison-offerings.bison
   location: MESH_INTERNAL
   exportTo:
     - "*" # Temporarily set this to all namespaces

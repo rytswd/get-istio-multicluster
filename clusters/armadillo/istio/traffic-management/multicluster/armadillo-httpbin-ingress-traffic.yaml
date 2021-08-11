@@ -5,7 +5,6 @@ metadata:
   name: armadillo-httpbin-ingress-traffic
 spec:
   hosts:
-    - httpbin.armadillo-offerings.global
     - httpbin.armadillo-offerings.armadillo
   endpoints:
     - address: httpbin.armadillo-offerings.svc.cluster.local
