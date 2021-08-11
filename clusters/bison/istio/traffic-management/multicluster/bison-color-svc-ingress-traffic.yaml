@@ -15,3 +15,41 @@ spec:
       number: 8800
       protocol: http
   resolution: DNS
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: bison-color-svc-multicluster-ingress
+  namespace: bison-offerings
+spec:
+  hosts:
+    - color-svc.bison-offerings.global
+    - color-svc.bison-offerings.bison
+  gateways:
+    - istio-system/bison-multicluster-ingressgateway
+  http:
+    - match:
+        - uri:
+            prefix: /chaos
+      rewrite:
+        uri: /random
+      route:
+        - destination:
+            host: color-svc.bison-offerings.svc.cluster.local
+            port:
+              number: 8800
+      fault:
+        abort:
+          percentage:
+            value: 50
+          httpStatus: 400
+    - match:
+        - uri:
+            prefix: /bison
+      rewrite:
+        uri: /random
+      route:
+        - destination:
+            host: color-svc.bison-offerings.svc.cluster.local
+            port:
+              number: 8800
