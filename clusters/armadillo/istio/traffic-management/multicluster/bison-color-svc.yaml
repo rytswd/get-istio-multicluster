@@ -6,6 +6,7 @@ metadata:
 spec:
   hosts:
     - color-svc.bison-offerings.global
+    - color-svc.bison-offerings.bison
     # - color-svc.bison-offerings.bison.global # Can be anything, as long as appropriate EnvoyFilter is in place on target cluster
   location: MESH_INTERNAL
   exportTo:
