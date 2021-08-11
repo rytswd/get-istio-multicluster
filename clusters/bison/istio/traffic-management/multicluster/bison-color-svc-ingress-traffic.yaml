@@ -23,7 +23,9 @@ metadata:
   namespace: bison-offerings
 spec:
   hosts:
-    - "*"
+    # - "*"
+    - color-svc.bison-offerings.bison
+    - color-svc.bison-offerings.svc.cluster.local
   gateways:
     - istio-system/bison-multicluster-ingressgateway
   http:
