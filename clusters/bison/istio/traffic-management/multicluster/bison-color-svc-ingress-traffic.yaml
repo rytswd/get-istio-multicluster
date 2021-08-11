@@ -22,7 +22,7 @@ metadata:
   name: bison-color-svc-multicluster-ingress
   namespace: bison-offerings
 spec:
-  # ⚠️ NOTE ⚠️ This does not work.
+  # !! NOTE !! : This does not work.
   # It seems that VirtualService traffic update needs to take place at the source, not at the destination.
   hosts:
     - color-svc.bison-offerings.bison
