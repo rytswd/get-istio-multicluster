@@ -13,7 +13,7 @@ spec:
 
   # 🍷 TODO 🍷: Ingress Gateway is definitely receiving the traffic, but it's not routed to the endpoint target.
   # This seems to be caused by either gateway matching is not working, or host informaiton not matching.
-  # The internal mesch sidecar routing works.
+  # The internal mesh sidecar routing works.
   # Also, adding a star in the host field does nothing. It seems to imply that the gateway is not being matched.
 
   gateways:
