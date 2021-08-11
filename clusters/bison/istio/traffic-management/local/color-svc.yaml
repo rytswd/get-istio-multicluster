@@ -33,6 +33,7 @@ spec:
     - "*"
   gateways:
     - istio-system/bison-external-ingressgateway
+    - istio-system/bison-multicluster-ingressgateway
   http:
     - match:
         - uri:
