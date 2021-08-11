@@ -122,3 +122,14 @@ spec:
   trafficPolicy:
     tls:
       mode: ISTIO_MUTUAL
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: multicluster-traffic-to-armadillo
+  namespace: istio-system
+spec:
+  host: "*.armadillo"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
