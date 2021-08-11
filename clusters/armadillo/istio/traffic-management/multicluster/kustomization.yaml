@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - multicluster-ingress-setup.yaml
   - multicluster-egress-setup.yaml
-  - multicluster-setup.yaml
+  # - multicluster-setup.yaml # Testing removal of EnvoyFilter
 
   - bison-color-svc.yaml
   - bison-httpbin.yaml
