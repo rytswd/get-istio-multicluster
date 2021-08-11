@@ -1,27 +1,4 @@
 ---
-apiVersion: networking.istio.io/v1beta1
-kind: Gateway
-metadata:
-  name: armadillo-multicluster-ingressgateway
-  namespace: istio-system
-  labels:
-    app: armadillo-multicluster-ingressgateway
-spec:
-  selector:
-    app: armadillo-multicluster-ingressgateway
-  servers:
-    - hosts:
-        - "*.global"
-        - "*.armadillo"
-        - "*.local"
-      port:
-        name: tls
-        number: 15443
-        protocol: TLS
-      tls:
-        mode: AUTO_PASSTHROUGH
-
----
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
@@ -110,15 +87,3 @@ spec:
   workloadSelector:
     labels:
       app: armadillo-multicluster-ingressgateway # As there are multiple ingressGateway, this ensures correct one being used
-
----
-apiVersion: networking.istio.io/v1beta1
-kind: DestinationRule
-metadata:
-  name: multicluster-traffic-from-armadillo
-  namespace: istio-system
-spec:
-  host: "*.global"
-  trafficPolicy:
-    tls:
-      mode: ISTIO_MUTUAL

@@ -1,26 +1,4 @@
 ---
-apiVersion: networking.istio.io/v1beta1
-kind: Gateway
-metadata:
-  name: bison-multicluster-ingressgateway
-  namespace: istio-system
-  labels:
-    app: bison-multicluster-ingressgateway
-spec:
-  selector:
-    app: bison-multicluster-ingressgateway
-  servers:
-    - hosts:
-        - "*.global"
-        - "*.local"
-      port:
-        name: tls
-        number: 15443
-        protocol: TLS
-      tls:
-        mode: AUTO_PASSTHROUGH
-
----
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
@@ -109,27 +87,3 @@ spec:
   workloadSelector:
     labels:
       app: bison-multicluster-ingressgateway # As there are multiple ingressGateway, this ensures correct one being used
-
----
-apiVersion: networking.istio.io/v1beta1
-kind: DestinationRule
-metadata:
-  name: multicluster-traffic-from-bison
-  namespace: istio-system
-spec:
-  host: "*.global"
-  trafficPolicy:
-    tls:
-      mode: ISTIO_MUTUAL
-
----
-apiVersion: networking.istio.io/v1beta1
-kind: DestinationRule
-metadata:
-  name: multicluster-traffic-to-armadillo
-  namespace: istio-system
-spec:
-  host: "*.armadillo"
-  trafficPolicy:
-    tls:
-      mode: ISTIO_MUTUAL
