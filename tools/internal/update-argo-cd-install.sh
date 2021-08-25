@@ -3,7 +3,7 @@
 __tools_dir=$(dirname "$0")/..
 __root_dir="$__tools_dir"/..
 
-ARGO_CD_VERSION=2.0.1
+ARGO_CD_VERSION=2.1.0
 read -r -p "Which Argo CD version do you want to use? (e.g. 2.0.1, 2.1.0-rc3): " selected_version
 if [[ $selected_version != "" ]]; then
     ARGO_CD_VERSION=$selected_version
