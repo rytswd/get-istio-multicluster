@@ -47,22 +47,22 @@ for e in "armadillo" "bison" "dolphin"; do
     istioctl manifest generate \
         --revision "$__revision" \
         -f ./operator-usage/istio-control-plane.yaml \
-        -s values.global.jwtPolicy=first-party-jwt \
+        -s values.global.jwtPolicy=third-party-jwt \
         >./generated-manifests/"$ISTIO_VERSION"/full-installation/istio-control-plane-install.yaml
     istioctl manifest generate \
         --revision "$__revision" \
         -f ./operator-usage/istio-external-gateways.yaml \
-        -s values.global.jwtPolicy=first-party-jwt \
+        -s values.global.jwtPolicy=third-party-jwt \
         >./generated-manifests/"$ISTIO_VERSION"/full-installation/istio-external-gateways-install.yaml
     istioctl manifest generate \
         --revision "$__revision" \
         -f ./operator-usage/istio-multicluster-gateways.yaml \
-        -s values.global.jwtPolicy=first-party-jwt \
+        -s values.global.jwtPolicy=third-party-jwt \
         >./generated-manifests/"$ISTIO_VERSION"/full-installation/istio-multicluster-gateways-install.yaml
     istioctl manifest generate \
         --revision "$__revision" \
         -f ./operator-usage/istio-management-gateway.yaml \
-        -s values.global.jwtPolicy=first-party-jwt \
+        -s values.global.jwtPolicy=third-party-jwt \
         >./generated-manifests/"$ISTIO_VERSION"/full-installation/istio-management-gateway-install.yaml
 
     cat >./generated-manifests/"$ISTIO_VERSION"/full-installation/kustomization.yaml <<EOF
