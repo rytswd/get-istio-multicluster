@@ -79,7 +79,7 @@ apps:
     enabled: true
     namespace: bison-offerings
     istioSidecar: true
-    istioRevision: 1-10-3
+    istioRevision: 1-8-6
     loadPath: ../other
 #
 # =========================================================================== #
