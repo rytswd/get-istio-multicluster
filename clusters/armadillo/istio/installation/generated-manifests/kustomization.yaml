@@ -41,7 +41,7 @@ bases:
   # After 1.10.3 as canary, fully migrate to 1.10.3
   # - ./1.10.3/full-installation
 
-# # If you are using purely revision based Istio installation, you need to have
-# # Kubernetes Service that works as the default.
-# resources:
-#   - ./istiod-svc.yaml
+# If you are using purely revision based Istio installation, you need to have
+# Kubernetes Service that works as the default.
+resources:
+  - ./istiod-svc.yaml
