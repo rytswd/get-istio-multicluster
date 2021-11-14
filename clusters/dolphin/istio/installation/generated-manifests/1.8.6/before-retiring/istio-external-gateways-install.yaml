@@ -119,7 +119,7 @@ spec:
               memory: 128Mi
           env:
           - name: JWT_POLICY
-            value: first-party-jwt
+            value: third-party-jwt
           - name: PILOT_CERT_PROVIDER
             value: istiod
           - name: CA_ADDR
@@ -179,6 +179,9 @@ spec:
             mountPath: /etc/istio/config
           - mountPath: /var/run/secrets/istio
             name: istiod-ca-cert
+          - name: istio-token
+            mountPath: /var/run/secrets/tokens
+            readOnly: true
           - name: gatewaysdsudspath
             mountPath: /var/run/ingress_gateway
           - mountPath: /var/lib/istio/data
@@ -210,6 +213,13 @@ spec:
         emptyDir: {}
       - name: istio-data
         emptyDir: {}
+      - name: istio-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              path: istio-token
+              expirationSeconds: 43200
+              audience: istio-ca
       - name: config-volume
         configMap:
           name: istio-1-8-6
@@ -348,7 +358,7 @@ spec:
         - dolphin-external-ingressgateway
         env:
         - name: JWT_POLICY
-          value: first-party-jwt
+          value: third-party-jwt
         - name: PILOT_CERT_PROVIDER
           value: istiod
         - name: CA_ADDR
@@ -449,6 +459,9 @@ spec:
           name: config-volume
         - mountPath: /var/run/secrets/istio
           name: istiod-ca-cert
+        - mountPath: /var/run/secrets/tokens
+          name: istio-token
+          readOnly: true
         - mountPath: /var/run/ingress_gateway
           name: gatewaysdsudspath
         - mountPath: /var/lib/istio/data
@@ -486,6 +499,13 @@ spec:
         name: gatewaysdsudspath
       - emptyDir: {}
         name: istio-data
+      - name: istio-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: istio-ca
+              expirationSeconds: 43200
+              path: istio-token
       - configMap:
           name: istio-1-8-6
           optional: true
