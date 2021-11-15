@@ -5,7 +5,7 @@ metadata:
   name: bison-color-svc-ingress-traffic
 spec:
   hosts:
-    # - color-svc.bison-offerings.global
+    - color-svc.bison-offerings.global
     - color-svc.bison-offerings.bison
   endpoints:
     - address: color-svc.bison-offerings.svc.cluster.local
