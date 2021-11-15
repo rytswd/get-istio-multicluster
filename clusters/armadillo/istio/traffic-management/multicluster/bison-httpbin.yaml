@@ -36,6 +36,7 @@ metadata:
   name: bison-httpbin-routing
 spec:
   hosts:
+    - httpbin.bison-offerings.bison
     - httpbin.bison-offerings.global
     - httpbin.bison-offerings.svc.cluster.local
   http:
