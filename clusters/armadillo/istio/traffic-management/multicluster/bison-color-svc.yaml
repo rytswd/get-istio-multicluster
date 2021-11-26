@@ -6,10 +6,14 @@ metadata:
 spec:
   hosts:
     # v1.8.5 or below:
-    #   Host information could be anything, as long as appropriate EnvoyFilter is in place in the target cluster.
+    #   Host information could be anything, as long as appropriate EnvoyFilter
+    #   is in place in the target cluster.
     # v1.8.6 and after:
-    #   Host information could be anything, as long as the same host information is handled by ServiceEntry in the target cluster as well.
-    # In both setup, DestinationRule to ensure ISTIO_MUTUAL is required.
+    #   Host information could be anything, as long as the same host
+    #   information is handled by ServiceEntry in the target cluster as well.
+    #
+    # In both setup, it is required to have DestinationRule in the source
+    # cluster, so that the traffic will be based on ISTIO_MUTUAL.
     - color-svc.bison-offerings.global
     - color-svc.bison-offerings.bison
   location: MESH_INTERNAL

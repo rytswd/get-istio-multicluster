@@ -6,10 +6,14 @@ metadata:
 spec:
   hosts:
     # v1.8.5 or below:
-    #   Host information could be anything, as long as appropriate EnvoyFilter is in place in the target cluster.
+    #   Host information could be anything, as long as appropriate EnvoyFilter
+    #   is in place in the target cluster.
     # v1.8.6 and after:
-    #   Host information could be anything, as long as the same host information is handled by ServiceEntry in the target cluster as well.
-    # In both setup, DestinationRule to ensure ISTIO_MUTUAL is required.
+    #   Host information could be anything, as long as the same host
+    #   information is handled by ServiceEntry in the target cluster as well.
+    #
+    # In both setup, it is required to have DestinationRule in the source
+    # cluster, so that the traffic will be based on ISTIO_MUTUAL.
     - httpbin.bison-offerings.global
     - httpbin.bison-offerings.bison
   location: MESH_INTERNAL
@@ -28,45 +32,45 @@ spec:
       ports:
         http-bison: 15443
 ---
-# VirtualService definition on Bison side won't be able to handle the chaos setup.
-# TODO: Check if this can be handled at IngressGateway instead
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: bison-httpbin-routing
-spec:
-  hosts:
-    - httpbin.bison-offerings.global
-    - httpbin.bison-offerings.svc.cluster.local
-  http:
-    - match:
-        - uri:
-            prefix: /chaos
-      rewrite:
-        uri: /status/418
-      route:
-        - destination:
-            host: httpbin.bison-offerings.global
-            # host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
-      fault:
-        abort:
-          percentage:
-            value: 50
-          httpStatus: 400
+# # VirtualService definition on Bison side won't be able to handle the chaos setup.
+# # TODO: Check if this can be handled at IngressGateway instead
+# apiVersion: networking.istio.io/v1alpha3
+# kind: VirtualService
+# metadata:
+#   name: bison-httpbin-routing
+# spec:
+#   hosts:
+#     - httpbin.bison-offerings.global
+#     - httpbin.bison-offerings.svc.cluster.local
+#   http:
+#     - match:
+#         - uri:
+#             prefix: /chaos
+#       rewrite:
+#         uri: /status/418
+#       route:
+#         - destination:
+#             host: httpbin.bison-offerings.global
+#             # host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
+#       fault:
+#         abort:
+#           percentage:
+#             value: 50
+#           httpStatus: 400
 
-    # For testing VirtualService created URI
-    - match:
-        - uri:
-            prefix: /istio
-      rewrite:
-        uri: /status/418
-      route:
-        - destination:
-            host: httpbin.bison-offerings.global
-            # host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
+#     # For testing VirtualService created URI
+#     - match:
+#         - uri:
+#             prefix: /istio
+#       rewrite:
+#         uri: /status/418
+#       route:
+#         - destination:
+#             host: httpbin.bison-offerings.global
+#             # host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
 
-    # Default routing
-    - route:
-        - destination:
-            host: httpbin.bison-offerings.global
-            # host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
+#     # Default routing
+#     - route:
+#         - destination:
+#             host: httpbin.bison-offerings.global
+#             # host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
