@@ -32,45 +32,46 @@ spec:
       ports:
         http-bison: 15443
 ---
-# # VirtualService definition on Bison side won't be able to handle the chaos setup.
-# # TODO: Check if this can be handled at IngressGateway instead
-# apiVersion: networking.istio.io/v1alpha3
-# kind: VirtualService
-# metadata:
-#   name: bison-httpbin-routing
-# spec:
-#   hosts:
-#     - httpbin.bison-offerings.global
-#     - httpbin.bison-offerings.svc.cluster.local
-#   http:
-#     - match:
-#         - uri:
-#             prefix: /chaos
-#       rewrite:
-#         uri: /status/418
-#       route:
-#         - destination:
-#             host: httpbin.bison-offerings.global
-#             # host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
-#       fault:
-#         abort:
-#           percentage:
-#             value: 50
-#           httpStatus: 400
+# VirtualService definition on Bison side won't be able to handle the chaos setup.
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: bison-httpbin-routing
+spec:
+  gateways:
+    - istio-system/armadillo-multicluster-ingressgateway
+  hosts:
+    - httpbin.bison-offerings.global
+    # - httpbin.bison-offerings.svc.cluster.local
+  http:
+    - match:
+        - uri:
+            prefix: /chaos
+      rewrite:
+        uri: /status/418
+      route:
+        - destination:
+            host: httpbin.bison-offerings.global
+            # host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
+      fault:
+        abort:
+          percentage:
+            value: 50
+          httpStatus: 400
 
-#     # For testing VirtualService created URI
-#     - match:
-#         - uri:
-#             prefix: /istio
-#       rewrite:
-#         uri: /status/418
-#       route:
-#         - destination:
-#             host: httpbin.bison-offerings.global
-#             # host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
+    # For testing VirtualService created URI
+    - match:
+        - uri:
+            prefix: /istio
+      rewrite:
+        uri: /status/418
+      route:
+        - destination:
+            host: httpbin.bison-offerings.global
+            # host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
 
-#     # Default routing
-#     - route:
-#         - destination:
-#             host: httpbin.bison-offerings.global
-#             # host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster
+    # Default routing
+    - route:
+        - destination:
+            host: httpbin.bison-offerings.global
+            # host: httpbin.bison-offerings.svc.cluster.local # Use cluster.local based multicluster

@@ -33,12 +33,13 @@ spec:
         http-armadillo: 15443
 ---
 # VirtualService definition on Armadillo side won't be able to handle the chaos setup.
-# TODO: Check if this can be handled at IngressGateway instead
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: armadillo-httpbin-routing
 spec:
+  gateways:
+    - istio-system/bison-multicluster-ingressgateway
   hosts:
     - httpbin.armadillo-offerings.global
     # - httpbin.armadillo-offerings.svc.cluster.local
