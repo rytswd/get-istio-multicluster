@@ -1,0 +1,22 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: armadillo-multicluster-ingressgateway
+  namespace: istio-system
+  labels:
+    app: armadillo-multicluster-ingressgateway
+spec:
+  selector:
+    app: armadillo-multicluster-ingressgateway
+  servers:
+    - hosts:
+        - "*.global"
+        - "*.armadillo"
+        - "*.local"
+      port:
+        name: tls
+        number: 15443
+        protocol: TLS
+      tls:
+        mode: AUTO_PASSTHROUGH

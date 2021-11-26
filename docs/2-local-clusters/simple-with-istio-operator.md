@@ -92,15 +92,15 @@ For more information about using this repo, you can check out the full documenta
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/v1.18/config-2-nodes-port-320x1.yaml --name armadillo
-    kind create cluster --config ./tools/kind-config/v1.18/config-2-nodes-port-320x2.yaml --name bison
+    kind create cluster --config ./tools/kind-config/v1.21/config-2-nodes-port-320x1.yaml --name armadillo
+    kind create cluster --config ./tools/kind-config/v1.21/config-2-nodes-port-320x2.yaml --name bison
 }
 ```
 
 <details>
 <summary>ℹ️ Details</summary>
 
-KinD clusters are created with 2 almost identical configurations. The configuration ensures the Kubernetes version is v1.18 with 2 nodes in place (1 for control plane, 1 for worker).
+KinD clusters are created with 2 almost identical configurations. The configuration ensures the Kubernetes version is v1.21 with 2 nodes in place (1 for control plane, 1 for worker).
 
 The difference between the configuration is the open port setup. Because clusters needs to talk to each other, we need them to be externally available. With KinD, external IP does not get assigned by default, and for this demo, we are using NodePort for the entry points, effectively mocking the multi-network setup.
 
@@ -108,6 +108,8 @@ As you can see `istioctl-input.yaml` in each cluster, the NodePort used are:
 
 - Armadillo will set up Istio IngressGateway with 32021 NodePort
 - Bison will set up Istio IngressGateway with 32022 NodePort
+
+Also, because we are using Kubernetes v1.21, we can simply rely on third party JWT for Kubernetes access. With older versions of Kubernetes, you may need to adjust the Istio installation spec with the first party JWT. You can find more about this in the [official documentation about account tokens](https://istio.io/latest/docs/ops/best-practices/security/#configure-third-party-service-account-tokens) and [Istio v1.10 change notes](https://istio.io/latest/news/releases/1.10.x/announcing-1.10/change-notes/).
 
 </details>
 
@@ -281,7 +283,7 @@ Each command used above is associated with some comments to clarify what they do
 
 <!-- == imptr: install-metallb-details / begin from: ../snippets/steps/set-up-metallb.md#[details] == -->
 
-MetalLB allows associating external IP to LoadBalancer Service even in environment such as KinD. The actual installation is simple and straightforward - with the default installation spec, you need to create a namespace `metallb-system` and deploy all the components to that namespace.
+[MetalLB](https://metallb.universe.tf/) allows associating external IP to LoadBalancer Service even in environment such as KinD. The actual installation is simple and straightforward - with the default installation spec, you need to create a namespace `metallb-system` and deploy all the components to that namespace.
 
 ```bash
     kubectl apply --context kind-armadillo \

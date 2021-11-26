@@ -6,9 +6,9 @@ bases:
   # # When doing this, you will need to label namespace with `istio-injection: enabled`
   # - ./1.7.8/without-revision
 
-  # For 1.7.8 as stable, with 1.8.5 as canary
-  - ./1.7.8/without-revision-before-retiring
-  - ./1.8.5/as-canary
+  # # For 1.7.8 as stable, with 1.8.5 as canary
+  # - ./1.7.8/without-revision-before-retiring
+  # - ./1.8.5/as-canary
 
   # # After 1.8.5 as canary, fully migrate to 1.8.5
   # - ./1.8.5/full-installation
@@ -17,11 +17,31 @@ bases:
   # - ./1.8.5/before-retiring
   # - ./1.8.6/as-canary
 
-  # # For 1.8.5 as stable, with 1.9.4 as canary
-  # - ./1.8.5/before-retiring
-  # - ./1.9.4/as-canary
+  # After 1.8.6 as canary, fully migrate to 1.8.6
+  - ./1.8.6/full-installation
 
-# # If you are using purely revision based Istio installation, you need to have
-# # Kubernetes Service that works as the default.
-# resources:
-#   - ./istiod-svc.yaml
+  # # For 1.8.6 as stable, with 1.9.5 as canary
+  # - ./1.8.6/before-retiring
+  # - ./1.9.5/as-canary
+
+  # # After 1.9.5 as canary, fully migrate to 1.9.5
+  # - ./1.9.5/full-installation
+
+  # # For 1.9.5 as stable, with 1.9.6 as canary
+  # - ./1.9.5/before-retiring
+  # - ./1.9.6/as-canary
+
+  # # After 1.9.6 as canary, fully migrate to 1.9.6
+  # - ./1.9.6/full-installation
+
+  # # For 1.9.6 as stable, with 1.10.3 as canary
+  # - ./1.9.6/before-retiring
+  # - ./1.10.3/as-canary
+
+  # After 1.10.3 as canary, fully migrate to 1.10.3
+  # - ./1.10.3/full-installation
+
+# If you are using purely revision based Istio installation, you need to have
+# Kubernetes Service that works as the default.
+resources:
+  - ./istiod-svc.yaml

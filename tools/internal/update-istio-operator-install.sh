@@ -1,10 +1,14 @@
 #!/bin/bash
 
 ISTIO_VERSION=1.9.4
+read -r -p "Which Istio version do you want to use? (e.g. 1.9.4, 1.10.0-rc.0): " selected_version
+if [[ $selected_version != "" ]]; then
+    ISTIO_VERSION=$selected_version
+fi
 
 __tools_dir=$(dirname "$0")/..
 __root_dir="$__tools_dir"/..
-__revision=$(echo $ISTIO_VERSION | tr '.' '-')
+__revision=$(echo "$ISTIO_VERSION" | tr '.' '-')
 
 __temp_dir=$(mktemp -d)
 pushd "$__temp_dir" >/dev/null || {

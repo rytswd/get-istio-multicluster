@@ -1,0 +1,22 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: bison-multicluster-ingressgateway
+  namespace: istio-system
+  labels:
+    app: bison-multicluster-ingressgateway
+spec:
+  selector:
+    app: bison-multicluster-ingressgateway
+  servers:
+    - hosts:
+        - "*.global"
+        - "*.bison"
+        - "*.local"
+      port:
+        name: tls
+        number: 15443
+        protocol: TLS
+      tls:
+        mode: AUTO_PASSTHROUGH

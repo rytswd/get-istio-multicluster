@@ -9,7 +9,6 @@ spec:
   gateways:
     - mesh
     - istio-system/armadillo-external-ingressgateway
-    # - istio-system/armadillo-multicluster-ingressgateway
   http:
     - match:
         - uri:

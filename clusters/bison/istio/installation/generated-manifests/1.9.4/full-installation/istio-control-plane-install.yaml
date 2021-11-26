@@ -4618,7 +4618,7 @@ data:
           "enabled": true
         },
         "namespace": "istio-system",
-        "network": "armadillo",
+        "network": "bison",
         "omitSidecarInjectorConfigMap": false,
         "oneNamespace": false,
         "operatorManageWebhooks": false,

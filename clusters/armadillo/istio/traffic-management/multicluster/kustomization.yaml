@@ -2,8 +2,14 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - multicluster-setup.yaml
+  - multicluster-ingress-setup.yaml
+  - multicluster-egress-setup.yaml
+  # - multicluster-setup.yaml # Testing removal of EnvoyFilter
 
   - bison-color-svc.yaml
   - bison-httpbin.yaml
   # - coredns-configmap.yaml
+
+  # Cluster local services, but exposed to other cluster
+  - armadillo-color-svc-ingress-traffic.yaml
+  - armadillo-httpbin-ingress-traffic.yaml

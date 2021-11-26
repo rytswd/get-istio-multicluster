@@ -137,15 +137,15 @@ As to how the token works, you can find more in [the official documentation of G
 
 ```bash
 {
-    kind create cluster --config ./tools/kind-config/v1.18/config-2-nodes-port-320x1.yaml --name armadillo
-    kind create cluster --config ./tools/kind-config/v1.18/config-2-nodes-port-320x2.yaml --name bison
+    kind create cluster --config ./tools/kind-config/v1.21/config-2-nodes-port-320x1.yaml --name armadillo
+    kind create cluster --config ./tools/kind-config/v1.21/config-2-nodes-port-320x2.yaml --name bison
 }
 ```
 
 <details>
 <summary>ℹ️ Details</summary>
 
-KinD clusters are created with 2 almost identical configurations. The configuration ensures the Kubernetes version is v1.18 with 2 nodes in place (1 for control plane, 1 for worker).
+KinD clusters are created with 2 almost identical configurations. The configuration ensures the Kubernetes version is v1.21 with 2 nodes in place (1 for control plane, 1 for worker).
 
 The difference between the configuration is the open port setup. Because clusters needs to talk to each other, we need them to be externally available. With KinD, external IP does not get assigned by default, and for this demo, we are using NodePort for the entry points, effectively mocking the multi-network setup.
 
@@ -153,6 +153,8 @@ As you can see `istioctl-input.yaml` in each cluster, the NodePort used are:
 
 - Armadillo will set up Istio IngressGateway with 32021 NodePort
 - Bison will set up Istio IngressGateway with 32022 NodePort
+
+Also, because we are using Kubernetes v1.21, we can simply rely on third party JWT for Kubernetes access. With older versions of Kubernetes, you may need to adjust the Istio installation spec with the first party JWT. You can find more about this in the [official documentation about account tokens](https://istio.io/latest/docs/ops/best-practices/security/#configure-third-party-service-account-tokens) and [Istio v1.10 change notes](https://istio.io/latest/news/releases/1.10.x/announcing-1.10/change-notes/).
 
 </details>
 
@@ -343,7 +345,7 @@ This is an extremely important aspect to consider when setting up production env
 
 <!-- == imptr: install-metallb-details / begin from: ../snippets/steps/set-up-metallb.md#[details] == -->
 
-MetalLB allows associating external IP to LoadBalancer Service even in environment such as KinD. The actual installation is simple and straightforward - with the default installation spec, you need to create a namespace `metallb-system` and deploy all the components to that namespace.
+[MetalLB](https://metallb.universe.tf/) allows associating external IP to LoadBalancer Service even in environment such as KinD. The actual installation is simple and straightforward - with the default installation spec, you need to create a namespace `metallb-system` and deploy all the components to that namespace.
 
 ```bash
     kubectl apply --context kind-armadillo \
@@ -612,6 +614,10 @@ This setup allows declarative setup even for LB IP, and also wiring up multiple 
 
 ### Before 6. Part 2 - Ensure `istiocoredns` setup
 
+#### 🖋 NOTE 🖋
+
+> This setup is only needed for Istio v1.7 or below.
+
 #### 📍 WARNING 📍
 
 > This step is NOT a part of GitOps, because there is no easy way to have it in a declarative manner, due to the cluster IP associated with `istiocoredns` is only confirmed once the Service is created. However, if you are trying to have GitOps setup similar to this repository, you can follow the below instructions, and then place `coredns-configmap.yaml` file as a part of GitOps.  
@@ -822,6 +828,53 @@ The important Custom Resources are:
 `Project` (aka `AppProject`) defines scope. It is crucial to have appropriate access control defined in GitOps solutions, and a lot is handled by `Project`, such as targetted namespace(s), resource whitelist/blacklist, etc. You can think of `Project` as a parent of `Application`, as each `Application` needs at least one `Project`.
 
 <!-- == imptr: use-argo-cd-details / end == -->
+
+</details>
+
+---
+
+### Extra: Multicluster Communication by Connecting to Kubernetes API Server
+
+Istio v1.8 has had a revamp on multicluster setup, which makes use of Kubernetes API Server to connect to remote Istio Control Plane to get more information about the remote targets.
+
+This setup is rather imperative by nature, and I have not found declarative approach for this.
+
+#### Armadillo
+
+```bash
+{
+    # For Armadillo cluster, get Kubernetes API server access for Bison
+    BISON_KUBERNETES_MASTER_CIDR=$(docker network inspect kind | jq -r '.[0].Containers[] | select (.Name == "bison-control-plane") | .IPv4Address')
+    export BISON_KUBERNETES_MASTER=${BISON_KUBERNETES_MASTER_CIDR%/16}
+    echo $BISON_KUBERNETES_MASTER
+
+    istioctl x create-remote-secret \
+        --context="kind-bison" \
+        --name=kind-bison \
+        --server https://$BISON_KUBERNETES_MASTER:6443 | kubectl apply -f - --context kind-armadillo
+}
+```
+
+#### Bison
+
+```bash
+{
+    # For Bison cluster, get Kubernetes API server access for Armadillo
+    ARMADILLO_KUBERNETES_MASTER_CIDR=$(docker network inspect kind | jq -r '.[0].Containers[] | select (.Name == "armadillo-control-plane") | .IPv4Address')
+    export ARMADILLO_KUBERNETES_MASTER=${ARMADILLO_KUBERNETES_MASTER_CIDR%/16}
+    echo $ARMADILLO_KUBERNETES_MASTER
+
+    istioctl x create-remote-secret \
+        --context="kind-armadillo" \
+        --name=kind-armadillo \
+        --server https://$ARMADILLO_KUBERNETES_MASTER:6443 | kubectl apply -f - --context kind-bison
+}
+```
+
+<details>
+<summary>ℹ️ Details</summary>
+
+_To be updated_
 
 </details>
 

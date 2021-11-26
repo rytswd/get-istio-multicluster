@@ -1,0 +1,16 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: armadillo-httpbin-ingress-traffic
+spec:
+  hosts:
+    - httpbin.armadillo-offerings.armadillo
+  endpoints:
+    - address: httpbin.armadillo-offerings.svc.cluster.local
+  location: MESH_INTERNAL
+  ports:
+    - name: http-armadillo-httpbin
+      number: 8000
+      protocol: http
+  resolution: DNS

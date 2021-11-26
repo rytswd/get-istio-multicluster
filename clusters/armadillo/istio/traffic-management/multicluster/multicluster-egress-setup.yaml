@@ -1,0 +1,23 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: multicluster-traffic-from-armadillo
+  namespace: istio-system
+spec:
+  host: "*.global"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: multicluster-traffic-to-bison
+  namespace: istio-system
+spec:
+  host: "*.bison"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL

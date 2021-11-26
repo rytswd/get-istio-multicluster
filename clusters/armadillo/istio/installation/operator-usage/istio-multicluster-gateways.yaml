@@ -25,7 +25,16 @@ spec:
         name: armadillo-multicluster-ingressgateway
         label:
           app: armadillo-multicluster-ingressgateway
+          topology.istio.io/network: armadillo
         k8s:
+          env:
+            # sni-dnat adds the clusters required for AUTO_PASSTHROUGH mode
+            - name: ISTIO_META_ROUTER_MODE
+              value: "sni-dnat"
+            # traffic through this gateway should be routed inside the network
+            - name: ISTIO_META_REQUESTED_NETWORK_VIEW
+              value: armadillo
+
           service:
             # This is assuming that you are using MetalLB with KinD. Your KinD
             # network may be differently set up, and in that case, you would
