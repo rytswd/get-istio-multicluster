@@ -50,7 +50,7 @@ MetalLB allows using LoadBalancer in KinD clusters.
 
 <!-- == export: details / begin == -->
 
-MetalLB allows associating external IP to LoadBalancer Service even in environment such as KinD. The actual installation is simple and straightforward - with the default installation spec, you need to create a namespace `metallb-system` and deploy all the components to that namespace.
+[MetalLB](https://metallb.universe.tf/) allows associating external IP to LoadBalancer Service even in environment such as KinD. The actual installation is simple and straightforward - with the default installation spec, you need to create a namespace `metallb-system` and deploy all the components to that namespace.
 
 ```bash
     kubectl apply --context kind-armadillo \
