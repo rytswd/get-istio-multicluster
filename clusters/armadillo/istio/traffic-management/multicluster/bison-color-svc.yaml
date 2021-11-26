@@ -70,26 +70,25 @@ spec:
     - route:
         - destination:
             host: color-svc.bison-offerings.global
-
----
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: bison-color-svc-routing-external
-spec:
-  hosts:
-    - "*"
-  gateways:
-    # Traffic handling for external IngressGateway mapping
-    - istio-system/armadillo-external-ingressgateway
-  http:
-    - match:
-        - uri:
-            prefix: /bison
-      rewrite:
-        uri: /random
-      route:
-        - destination:
-            host: color-svc.bison-offerings.global
-            port:
-              number: 8800
+# ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: VirtualService
+# metadata:
+#   name: bison-color-svc-routing-external
+# spec:
+#   hosts:
+#     - "*"
+#   gateways:
+#     # Traffic handling for external IngressGateway mapping
+#     - istio-system/armadillo-external-ingressgateway
+#   http:
+#     - match:
+#         - uri:
+#             prefix: /bison
+#       rewrite:
+#         uri: /random
+#       route:
+#         - destination:
+#             host: color-svc.bison-offerings.global
+#             port:
+#               number: 8800

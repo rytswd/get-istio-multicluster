@@ -33,7 +33,6 @@ spec:
         http-armadillo: 15443
 ---
 # VirtualService definition on Armadillo side won't be able to handle the chaos setup.
-# TODO: Check if this can be handled at IngressGateway instead
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -71,26 +70,25 @@ spec:
     - route:
         - destination:
             host: color-svc.armadillo-offerings.global
-
----
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: armadillo-color-svc-routing-external
-spec:
-  hosts:
-    - "*"
-  gateways:
-    - istio-system/bison-external-ingressgateway
-  http:
-    # Traffic handling for external IngressGateway mapping
-    - match:
-        - uri:
-            prefix: /armadillo
-      rewrite:
-        uri: /random
-      route:
-        - destination:
-            host: color-svc.armadillo-offerings.global
-            port:
-              number: 8800
+# ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: VirtualService
+# metadata:
+#   name: armadillo-color-svc-routing-external
+# spec:
+#   hosts:
+#     - "*"
+#   gateways:
+#     - istio-system/bison-external-ingressgateway
+#   http:
+#     # Traffic handling for external IngressGateway mapping
+#     - match:
+#         - uri:
+#             prefix: /armadillo
+#       rewrite:
+#         uri: /random
+#       route:
+#         - destination:
+#             host: color-svc.armadillo-offerings.global
+#             port:
+#               number: 8800
